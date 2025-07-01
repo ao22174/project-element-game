@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e38537a08437b4293ad6459a81c3ac, type: 3}
+  m_Name: BlunderBuss
+  m_EditorClassIdentifier: 
+  weaponName: Blunderbuss
+  damage: 1
+  weaponType: 0
+  elementType: 0
+  cooldown: 2
+  weaponPrefab: {fileID: 4319457250997465452, guid: d3e73c1570a92a444a83c71a0b871532, type: 3}
+  projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
+  projectileSpeed: 10
+  projectileCount: 5
+  spreadAngle: 20
+  projectileLifetime: 3

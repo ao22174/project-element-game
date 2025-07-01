@@ -1,0 +1,28 @@
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Mm]emoryCaptures/
+
+# OS-specific
+.DS_Store
+*.swp
+*.tmp
+*.bak
+*.pid
+*.suo
+*.user
+*.userprefs
+*.unityproj
+*.booproj
+
+# IDE-specific
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.sln.*
+*.user
+*.unityproj

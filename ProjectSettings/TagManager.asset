@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - Weapon
+  - Structure
+  - Spawnpoint
+  - Rooms
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Floor
+    uniqueID: 2716474109
+    locked: 0
+  - name: Player
+    uniqueID: 2249733623
+    locked: 0
+  - name: PlayerWeapon
+    uniqueID: 2681680865
+    locked: 0
+  - name: Bullets
+    uniqueID: 473985399
+    locked: 0
+  m_RenderingLayers:
+  - Default
