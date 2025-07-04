@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53bd74d98ca12854f9d979308278bad7, type: 3}
+  m_Name: TBLR
+  m_EditorClassIdentifier: 
+  type: 1
+  prefab: {fileID: 5107636912701733734, guid: ab55f16ae7fbaf6488b4caf573e1065f, type: 3}
+  doors:
+  - localPosition: {x: 0, y: 5}
+    direction: 0
+  - localPosition: {x: 0, y: -5}
+    direction: 1
+  - localPosition: {x: -5, y: 0}
+    direction: 2
+  - localPosition: {x: 5, y: 0}
+    direction: 3
+  gridSize: {x: 10, y: 10}
