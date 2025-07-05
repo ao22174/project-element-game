@@ -32,6 +32,8 @@ public class DungeonManager : MonoBehaviour
 
     public RoomData startRoom;
     public LayerMask roomMask;
+    private List<Vector3> debugOverlapPositions = new List<Vector3>();
+private List<Vector2> debugOverlapSizes = new List<Vector2>();
     public void Start()
     {
         currentRoomCount += 1;
@@ -40,6 +42,17 @@ public class DungeonManager : MonoBehaviour
         usedRooms.Add(start);
         TryGenerateRoom(start);
     }
+    private void OnDrawGizmos()
+{
+    Gizmos.color = Color.red;
+    if (debugOverlapPositions != null && debugOverlapSizes != null)
+    {
+        for (int i = 0; i < debugOverlapPositions.Count; i++)
+        {
+            Gizmos.DrawWireCube(debugOverlapPositions[i], debugOverlapSizes[i]);
+        }
+    }
+}
 
     public void TryGenerateRoom(RoomInstance room)
     {
@@ -47,20 +60,32 @@ public class DungeonManager : MonoBehaviour
         {
             //CHECK IF ALREADY CONNECTED
             if (door.isConnected) continue;
-            
+            RoomData connectingRoom;
             Vector2 doorWorldPos = room.gridPosition + door.localPosition;
-            RoomData connectingRoom = FindConnectingRoom(door.direction);
+            if (room.baseData.type == RoomType.Start)
+            {
+                connectingRoom = northRooms[1];
+            }
+            else
+            {
+                connectingRoom = FindConnectingRoom(door.direction);
 
+            }
             Vector2 newDoorGridPos = doorWorldPos + (DirectionOffset(door.direction) * connectingRoom.gridSize / 2);
 
 
             //CHECK FOR COLLISION
             Vector3 worldPos = newDoorGridPos; // assuming 1:1 grid to world
             Vector2 roomSize = connectingRoom.gridSize; // Add this property to RoomData
+            debugOverlapPositions.Add(worldPos);
+            debugOverlapSizes.Add(roomSize);
             Collider2D hit = Physics2D.OverlapBox(worldPos, roomSize, 0f, roomMask);
-            if (hit != null) continue;
-            
-
+            Debug.Log("Checking overlap at: " + worldPos + " with size: " + roomSize);
+            if (hit != null)
+            {
+                Debug.Log("Collision");
+                continue;
+            }
             RoomInstance connectingInstance = CreateRoomInstance(connectingRoom, newDoorGridPos);
             door.isConnected = true;
 

@@ -8,6 +8,7 @@ TagManager:
   - Structure
   - Spawnpoint
   - Rooms
+  - RoomGen
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - RoomGen
   - 
   - 
   - 
@@ -56,6 +57,9 @@ TagManager:
     locked: 0
   - name: Bullets
     uniqueID: 473985399
+    locked: 0
+  - name: RoomGen
+    uniqueID: 1740721329
     locked: 0
   m_RenderingLayers:
   - Default
