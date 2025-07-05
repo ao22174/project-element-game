@@ -10,17 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53bd74d98ca12854f9d979308278bad7, type: 3}
-  m_Name: TBLR 1
+  m_Name: T
   m_EditorClassIdentifier: 
   type: 1
-  prefab: {fileID: 5107636912701733734, guid: ab55f16ae7fbaf6488b4caf573e1065f, type: 3}
+  prefab: {fileID: 5858415629255027465, guid: 27d6a15395e1988468568133950abff9, type: 3}
   doors:
   - localPosition: {x: 0, y: 5}
     direction: 0
-  - localPosition: {x: 0, y: -5}
-    direction: 1
-  - localPosition: {x: -5, y: 0}
-    direction: 2
-  - localPosition: {x: 5, y: 0}
-    direction: 3
   gridSize: {x: 10, y: 10}

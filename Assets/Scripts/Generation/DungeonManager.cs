@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Mono.Cecil.Cil;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -12,6 +13,10 @@ using UnityEngine.Rendering;
 //Spawn in the rooms that fit the ideal level design
 //Connect rooms with hallways, if possible try and make the hallways simple by aligning the spawned room doors with the rooms initial door, if not, calcaulte the pathfinding algorithm
 //to generate a hallway that bends
+
+
+//TODO
+//graph generation system
 public class DungeonManager : MonoBehaviour
 {
     public int RoomLimit = 10;
@@ -26,6 +31,7 @@ public class DungeonManager : MonoBehaviour
     public RoomData[] westRooms;
 
     public RoomData startRoom;
+    public LayerMask roomMask;
     public void Start()
     {
         currentRoomCount += 1;
@@ -37,31 +43,32 @@ public class DungeonManager : MonoBehaviour
 
     public void TryGenerateRoom(RoomInstance room)
     {
-        Debug.Log("Entered here");
         foreach (var door in room.doors)
         {
-            Debug.Log(door.direction);
-            if (door.isConnected)
-            {
-                Debug.Log("locked cannot generate");
-                continue;
-            }
+            //CHECK IF ALREADY CONNECTED
+            if (door.isConnected) continue;
+            
             Vector2 doorWorldPos = room.gridPosition + door.localPosition;
             RoomData connectingRoom = FindConnectingRoom(door.direction);
 
             Vector2 newDoorGridPos = doorWorldPos + (DirectionOffset(door.direction) * connectingRoom.gridSize / 2);
-            Debug.Log("calcaution = " + doorWorldPos + " + " + DirectionOffset(door.direction) + " + " + connectingRoom.gridSize / 2);
+
+
+            //CHECK FOR COLLISION
+            Vector3 worldPos = newDoorGridPos; // assuming 1:1 grid to world
+            Vector2 roomSize = connectingRoom.gridSize; // Add this property to RoomData
+            Collider2D hit = Physics2D.OverlapBox(worldPos, roomSize, 0f, roomMask);
+            if (hit != null) continue;
+            
+
             RoomInstance connectingInstance = CreateRoomInstance(connectingRoom, newDoorGridPos);
-
-
             door.isConnected = true;
-            Debug.Log(connectingInstance.baseData.name + " Instantiating at " + newDoorGridPos);
+
             Instantiate(connectingRoom.prefab, newDoorGridPos, Quaternion.identity);
             foreach (var connectingInstanceDoor in connectingInstance.doors)
             {
                 if (Opposite(connectingInstanceDoor.direction) == door.direction)
                 {
-                    Debug.Log(connectingInstanceDoor.direction + " is now locked");
                     connectingInstanceDoor.isConnected = true;
                 }
             }
@@ -69,9 +76,9 @@ public class DungeonManager : MonoBehaviour
             currentRoomCount += 1;
             if (currentRoomCount <= 10)
             {
-                Debug.Log("Attempting to generate room");
                 TryGenerateRoom(connectingInstance);
             }
+
         }
     }
     RoomInstance CreateRoomInstance(RoomData baseData, Vector2 gridPosition)
@@ -131,23 +138,31 @@ public class DungeonManager : MonoBehaviour
     public RoomData FindConnectingRoom(DoorDirection doorDirection)
     {
         RoomData selectedRoom = null;
+
         switch (Opposite(doorDirection))
         {
             case DoorDirection.North:
                 int rand = Random.Range(0, northRooms.Length);
                 selectedRoom = northRooms[rand];
+                if (currentRoomCount >= 5) selectedRoom = northRooms[0];
                 break;
             case DoorDirection.South:
                 rand = Random.Range(0, southRooms.Length);
                 selectedRoom = southRooms[rand];
+                if (currentRoomCount >= 5) selectedRoom = southRooms[0];
+
                 break;
             case DoorDirection.East:
                 rand = Random.Range(0, eastRooms.Length);
                 selectedRoom = eastRooms[rand];
+                if (currentRoomCount >= 5) selectedRoom = eastRooms[0];
+
                 break;
             case DoorDirection.West:
                 rand = Random.Range(0, westRooms.Length);
                 selectedRoom = westRooms[rand];
+                if (currentRoomCount >= 5) selectedRoom = westRooms[0];
+
                 break;
         }
         return selectedRoom;

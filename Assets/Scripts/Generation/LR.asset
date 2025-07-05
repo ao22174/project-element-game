@@ -15,7 +15,7 @@ MonoBehaviour:
   type: 0
   prefab: {fileID: 3967918346977799198, guid: da17becb337c04546a2ecf0fa72e56c8, type: 3}
   doors:
-  - localPosition: {x: -5, y: 10}
+  - localPosition: {x: -5, y: 0}
     direction: 3
   - localPosition: {x: 5, y: 0}
     direction: 2

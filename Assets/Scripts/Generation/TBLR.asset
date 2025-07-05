@@ -19,8 +19,8 @@ MonoBehaviour:
     direction: 0
   - localPosition: {x: 0, y: -5}
     direction: 1
-  - localPosition: {x: -5, y: 0}
-    direction: 2
   - localPosition: {x: 5, y: 0}
+    direction: 2
+  - localPosition: {x: -5, y: 0}
     direction: 3
   gridSize: {x: 10, y: 10}
