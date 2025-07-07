@@ -7,8 +7,9 @@ public class WeaponPickupSpawner : MonoBehaviour
     [SerializeField] private WeaponData[] testWeaponDataPool;
 
 //Just a test, we can do without it
-    public void OnPrevious(InputAction.CallbackContext context)
+    public void OnDash(InputAction.CallbackContext context)
     {
+        Debug.Log("wowzer");    
         if (context.started)
         {
             SpawnWeaponPickup();
