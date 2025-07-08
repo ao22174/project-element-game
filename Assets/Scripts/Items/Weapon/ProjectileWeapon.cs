@@ -47,7 +47,7 @@ public class ProjectileWeapon : Weapon
             Debug.DrawRay(projectileSpawn, direction * 5f, Color.red, 2f);
             if (bullet != null)
             {
-                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, damage, projectileLifetime);
+                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, damage, projectileLifetime, OwnedBy.Player);
             }
         }
         

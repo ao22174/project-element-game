@@ -1,18 +1,27 @@
 using UnityEngine;
+
+public enum OwnedBy
+{
+    Player,
+    Enemy,
+    All
+}
 public class ProjectileBullet : MonoBehaviour
 {
     private Vector2 direction;
     private float speed;
     private float damage;
     private float lifetime;
+    public OwnedBy bulletOwner;
 
-    public void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime)
+    public void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, OwnedBy bulletOwner)
     {
         transform.position = startPosition;
         this.direction = direction;
         this.speed = speed;
         this.damage = damage;
         this.lifetime = lifetime;
+        this.bulletOwner = bulletOwner;
         Destroy(gameObject, lifetime);
     }
 
@@ -21,13 +30,27 @@ public class ProjectileBullet : MonoBehaviour
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
     }
 
-//TODO - make this trigger based on layering, not through tags
+    //TODO - make this trigger based on layering, not through tags
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Structure"))
         {
             Destroy(gameObject);
+        }
+        if (collision.CompareTag("Player") && bulletOwner == OwnedBy.Enemy)
+        {
 
+            Player player = collision.gameObject.GetComponent<Player>();
+            if (player.isInvincible) return;
+            player.HealthModify(-damage);
+            Destroy(gameObject);
+        }
+        else if (collision.CompareTag("Enemy") && bulletOwner == OwnedBy.Player)
+        {
+
+            Entity entity = collision.gameObject.GetComponentInParent<Entity>();
+            entity.HitBullet(damage, direction);
+            Destroy(gameObject);
         }
     }
 }

@@ -6,6 +6,7 @@ namespace ElementProject
     public class EnemySpawner : MonoBehaviour
     {
         [Serialize] public EntityData[] entityDatas;
+        public RoomInstance spawnRoom;
         public Vector2[] spawnPoints;
         public bool spawned = false;
         void Start()
@@ -27,9 +28,12 @@ namespace ElementProject
             {
                 Vector2 SpawnPosition = (Vector2)this.transform.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
                 GameObject newSpawn = Instantiate(entityDatas[0].enemyPrefab, SpawnPosition, Quaternion.identity);
-                newSpawn.GetComponent<Entity>().entityData = entityDatas[0];
+                Entity entity = newSpawn.GetComponent<Entity>();
+                entity.entityData = entityDatas[0];
+                entity.currentRoom = spawnRoom;
+                
             }
-            spawned = true;
+            spawned = true; 
         }
     }
 }

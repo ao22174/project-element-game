@@ -1,8 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using NUnit.Framework;
 using UnityEngine;
+using Pathfinding;
+using UnityEditor.Callbacks;
 
+/*
+Plan of Cleanup
+
+
+*/
 public class WanderState : State
 {
     private float wanderTimer;
@@ -11,6 +19,11 @@ public class WanderState : State
     private float decisionCooldown = 2f; // Time between direction changes
 
     private float shootCooldownTimer;
+    int currentWaypoint = 0;
+    bool reachedEnd = false;
+    public bool attacked;
+
+    public float nextWaypointDistance = 0.15f;
     private bool canShoot => shootCooldownTimer >= entity.entityData.attackCooldown;
 
     public WanderState(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName) { }
@@ -21,7 +34,16 @@ public class WanderState : State
         wanderTimer = 0f;
         spawnPosition = entity.transform.position;
         entity.spawnPosition = entity.transform.position;
-        PickNewDirection();
+
+    }
+
+    public void OnPathComplete(Path p)
+    {
+        if (!p.error)
+        {
+            entity.path = p;
+            currentWaypoint = 0;
+        }
     }
     public override void Exit()
     {
@@ -31,29 +53,45 @@ public class WanderState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        wanderTimer += Time.deltaTime;
         shootCooldownTimer += Time.deltaTime;
+        float playerDist = Vector2.Distance(entity.player.position, entity.transform.position);
 
-        if (wanderTimer >= decisionCooldown)
+        if (playerDist > entity.entityData.attackRange + 0.5f || !PlayerInSight())
         {
-            PickNewDirection();
-            wanderTimer = 0f;
+            if (entity.path == null)
+            {
+                Debug.Log("Path is null");
+                return;
+            }
+            if (currentWaypoint >= entity.path.vectorPath.Count)
+            {
+                reachedEnd = true;
+            }
+            else
+            {
+                reachedEnd = false;
+            }
+            Vector2 direction = ((Vector2)entity.path.vectorPath[currentWaypoint] - entity.rb.position).normalized;
+            Vector2 force = direction * entity.entityData.movementSpeed;
+
+            entity.rb.linearVelocity = force;
+
+            float waypointDistance = Vector2.Distance(entity.rb.position, entity.path.vectorPath[currentWaypoint]);
+            if (waypointDistance < nextWaypointDistance)
+            {
+                Debug.Log("next waypoint!");
+                currentWaypoint++;
+            }
         }
-
-        if (Vector2.Distance(entity.transform.position, spawnPosition) > entity.entityData.wanderRadius)
+        else if (playerDist <= entity.entityData.attackRange && PlayerInSight())
         {
-            // Walk back toward center
-            wanderDirection = (spawnPosition - (Vector2)entity.transform.position).normalized;
-            entity.wanderDirection = wanderDirection; // <— for gizmo use
-        }
+            entity.rb.linearVelocity = Vector2.zero;
 
-        entity.rb.linearVelocity = wanderDirection * entity.entityData.movementSpeed;
-
-        if (PlayerInSight() && canShoot)
-        {
-            Shoot();
-            shootCooldownTimer = 0f;
+            if (PlayerInSight() && canShoot)
+            {
+                Shoot();
+                shootCooldownTimer = 0f;
+            }
         }
     }
 
@@ -62,6 +100,7 @@ public class WanderState : State
         if (entity.player == null) return false;
 
         float dist = Vector2.Distance(entity.player.position, entity.transform.position);
+        Debug.Log(dist);
         if (dist > entity.entityData.attackRange) return false;
 
         if (entity.entityData.usesLineOfSight)
@@ -72,33 +111,8 @@ public class WanderState : State
                                                 entity.entityData.obstacleMask);
             return hit.collider == null;
         }
-
+        Debug.Log("CanShoot");
         return true;
-    }
-    private void PickNewDirection()
-    {
-        Vector2 toPlayer = entity.player.position - entity.transform.position;
-
-        for (int i = 0; i < 5; i++)
-        {
-            Vector2 candidate = Random.insideUnitCircle.normalized * 0.5f;
-
-            // Slightly bias away from direct path to player
-            if (entity.player != null)
-            {
-                candidate -= toPlayer.normalized * 0.3f;
-                candidate.Normalize();
-            }
-
-            RaycastHit2D hit = Physics2D.Raycast(entity.transform.position, candidate, 1f, entity.entityData.obstacleMask);
-            if (!hit)
-            {
-                wanderDirection = candidate;
-                return;
-            }
-        }
-
-        wanderDirection = Vector2.zero;
     }
     private void Shoot()
     {
@@ -106,6 +120,7 @@ public class WanderState : State
 
         Vector2 direction = (entity.player.position - entity.transform.position).normalized;
         GameObject bullet = GameObject.Instantiate(entity.entityData.projectilePrefab, entity.transform.position, Quaternion.identity);
-        bullet.GetComponent<Rigidbody2D>().linearVelocity = direction * entity.entityData.projectileSpeed;
+        ProjectileBullet bulletProj = bullet.GetComponent<ProjectileBullet>();
+        bulletProj.Initialize(entity.transform.position, direction, entity.entityData.projectileSpeed, entity.entityData.damage, 1f, OwnedBy.Enemy);
     }
 }

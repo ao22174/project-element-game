@@ -41,7 +41,7 @@ MonoBehaviour:
   deathSFX: {fileID: 0}
   obstacleMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   stopAtWalls: 1
   usesPathfinding: 0
   isBoss: 0

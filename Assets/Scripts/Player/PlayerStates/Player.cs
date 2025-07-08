@@ -38,6 +38,8 @@ public class Player : MonoBehaviour
     //WeaponVisuals
     [SerializeField] public Transform weaponHoldPoint;
     private GameObject? currentWeaponVisual;
+    public float currentHealth;
+    public bool isInvincible;
 
 
     private void Awake()
@@ -63,6 +65,7 @@ public class Player : MonoBehaviour
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
         FacingDirection = 1;
+        currentHealth = 10;
     }
 
     private void Update()
@@ -87,6 +90,23 @@ public class Player : MonoBehaviour
                 weaponPickup.onPickup(this);
             }
         }
+    }
+    public void HealthModify(float health)
+    {
+        currentHealth += health;
+        ActivateIFrames(0.5f);
+    }
+    public void ActivateIFrames(float duration)
+    {
+        if (isInvincible) return;
+        StartCoroutine(IFrameCoroutine(duration));
+    }
+
+    private IEnumerator IFrameCoroutine(float duration)
+    {
+        isInvincible = true;
+        yield return new WaitForSeconds(duration);
+        isInvincible = false;
     }
 
     private void FlipTowardsMouse(Vector2 mousePosition)
@@ -142,19 +162,19 @@ public class Player : MonoBehaviour
     }
 
     private void RotateWeaponTowardMouse(Vector2 mousePos)
-{
-    if (currentWeaponVisual == null) return;
+    {
+        if (currentWeaponVisual == null) return;
 
-    Vector2 direction = (mousePos - (Vector2)weaponHoldPoint.position).normalized;
-    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Vector2 direction = (mousePos - (Vector2)weaponHoldPoint.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
-    // Rotate the weapon holder (not the visual)
-    weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
+        // Rotate the weapon holder (not the visual)
+        weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
 
-    // Flip weapon visual's local scale on Y to mirror the sprite only
-    bool flip = (angle > 90 || angle < -90);
-    currentWeaponVisual.transform.localScale = new Vector3(1, flip ? -1 : 1, 1);
-}
+        // Flip weapon visual's local scale on Y to mirror the sprite only
+        bool flip = (angle > 90 || angle < -90);
+        currentWeaponVisual.transform.localScale = new Vector3(1, flip ? -1 : 1, 1);
+    }
 
     private void FixedUpdate()
     {
@@ -177,5 +197,5 @@ public class Player : MonoBehaviour
         Debug.Log(currentWeaponVisual?.transform.Find("fireOrigin").transform.position);
         return currentWeaponVisual?.transform.Find("fireOrigin");
     }
-    }
+}
 

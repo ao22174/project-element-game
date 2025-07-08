@@ -7,14 +7,11 @@ public class WeaponPickupSpawner : MonoBehaviour
     [SerializeField] private WeaponData[] testWeaponDataPool;
 
 //Just a test, we can do without it
-    public void OnDash(InputAction.CallbackContext context)
+    public void OnTriggerEnter2D(UnityEngine.Collider2D collision)
     {
-        Debug.Log("wowzer");    
-        if (context.started)
-        {
+        
             SpawnWeaponPickup();
 
-        }
     }
 
     void SpawnWeaponPickup()
