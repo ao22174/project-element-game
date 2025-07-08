@@ -6,8 +6,14 @@ using UnityEngine;
 
 public class Entity : MonoBehaviour
 {
+    //Data reference
     public EntityData entityData;
+    //StateMachine Reference
+    public FiniteStateMachine attackStateMachine;
+    public EntityAttackIdleState attackIdleState;
+    public EntityAttackState attackState;
     public FiniteStateMachine stateMachine;
+    public StationaryState stationaryState;
     public Rigidbody2D rb { get; private set; }
     public Animator anim { get; private set; }
     public GameObject aliveGO { get; private set; }
@@ -31,10 +37,17 @@ public class Entity : MonoBehaviour
         stateMachine = new FiniteStateMachine();
         wanderState = new WanderState(this, stateMachine, "isWandering");
         idleState = new IdleState(this, stateMachine, "isWandering");
+
+        attackStateMachine = new FiniteStateMachine();
+        attackIdleState = new EntityAttackIdleState(this, attackStateMachine, "attackIdling");
+        attackState = new EntityAttackState(this, attackStateMachine, "attacking");
+        stationaryState = new StationaryState(this, stateMachine, "Stationary");
+
         seeker = GetComponent<Seeker>();
         currentHealth = entityData.healthPoints;
 
         stateMachine.Initialize(idleState);
+        attackStateMachine.Initialize(attackIdleState);
         InvokeRepeating("UpdatePath", 0f, 0.5f);
     }
 
@@ -63,19 +76,37 @@ public class Entity : MonoBehaviour
             path = p;
         }
     }
+    public bool PlayerInSight()
+    {
+        if (player == null) return false;
 
-    [HideInInspector] public Vector2 spawnPosition;
-    [HideInInspector] public Vector2 wanderDirection;
+        float dist = Vector2.Distance(player.position, transform.position);
+        Debug.Log(dist);
+        if (dist > entityData.attackRange) return false;
+
+        if (entityData.usesLineOfSight)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position,
+                                                player.position - transform.position,
+                                                dist,
+                                                entityData.obstacleMask);
+            return hit.collider == null;
+        }
+        return true;
+    }
 
 
     public virtual void Update()
     {
-        
+
         stateMachine.currentState.LogicUpdate();
+        attackStateMachine.currentState.LogicUpdate();
     }
     public virtual void FixedUpdate()
     {
         stateMachine.currentState.PhysicsUpdate();
+                attackStateMachine.currentState.PhysicsUpdate();
+
     }
     
 

@@ -40,6 +40,8 @@ public class Player : MonoBehaviour
     private GameObject? currentWeaponVisual;
     public float currentHealth;
     public bool isInvincible;
+    public HeartDisplay heartDisplay;
+    public float maxHealth = 100;
 
 
     private void Awake()
@@ -65,7 +67,8 @@ public class Player : MonoBehaviour
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
         FacingDirection = 1;
-        currentHealth = 10;
+        currentHealth = 100;
+        heartDisplay.SetHearts(currentHealth, maxHealth);
     }
 
     private void Update()
@@ -94,6 +97,7 @@ public class Player : MonoBehaviour
     public void HealthModify(float health)
     {
         currentHealth += health;
+        heartDisplay.SetHearts(currentHealth, maxHealth);
         ActivateIFrames(0.5f);
     }
     public void ActivateIFrames(float duration)

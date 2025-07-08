@@ -7,7 +7,6 @@ using UnityEngine;
         }
     public override void Enter()
     {
-        Debug.Log("enterintg IdleStateWeapon");
         base.Enter();
     }
     public override void Exit()
@@ -19,7 +18,6 @@ using UnityEngine;
         base.LogicUpdate();
         if (player.InputHandler.FireInput && player.AttackState.CanFire())
         {
-            Debug.Log("Entering attack State");
             stateMachine.ChangeState(player.AttackState);
         }
     }
