@@ -10,6 +10,5 @@ public class RoomData : ScriptableObject
 {
     public RoomType type;
     public GameObject prefab;
-    public List<DoorInfo> doors = new List<DoorInfo>();
-    public Vector2 gridSize;
+    public Vector2Int gridSize;
 }

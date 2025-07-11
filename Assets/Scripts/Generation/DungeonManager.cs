@@ -1,195 +1,324 @@
 using System.Collections.Generic;
-using Mono.Cecil.Cil;
+using System.Data.Common;
+using Pathfinding;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.Tilemaps;
 
-// Rework dungeon plans
-// 1. Give designations to each room, making sure that each room is recognizable 
-// 2. redesign the generation system, limiting the number of spawns
-
-//Steps on how i should handle this
-//decide which rooms to spawn in beforehand
-//Spawn in the rooms that fit the ideal level design
-//Connect rooms with hallways, if possible try and make the hallways simple by aligning the spawned room doors with the rooms initial door, if not, calcaulte the pathfinding algorithm
-//to generate a hallway that bends
-
-
-//TODO
-//graph generation system
+//PLANS, generate room, connect that room into system, choose a random door, generate next room, add these rooms 
 public class DungeonManager : MonoBehaviour
 {
-    public int RoomLimit = 10;
-    public Dictionary<RoomType, int> maxRoomCountByType;
-    public int currentRoomCount = 0;
-    [SerializeField]
-    public List<RoomInstance> usedRooms = new List<RoomInstance>(10);
+    public RoomData[] Rooms;
+    private bool startingRoomUsed = false;
+    public List<RoomInstance> roomInstances = new List<RoomInstance>();
+    public Dictionary<Vector2Int, RoomInstance> macroGrid = new();
 
-    public RoomData[] northRooms;
-    public RoomData[] southRooms;
-    public RoomData[] eastRooms;
-    public RoomData[] westRooms;
+    public Vector2Int macroGridSize = new Vector2Int(4, 4);
+    public int roomCount = 8;
+    public TileBase floorTile;
+    public TileBase wallTile;
 
-    public RoomData startRoom;
-    public LayerMask roomMask;
-    private List<Vector3> debugOverlapPositions = new List<Vector3>();
-private List<Vector2> debugOverlapSizes = new List<Vector2>();
-    public void Start()
+    public RoomData startingRoom;
+    public RoomData finalRoom;
+    public List<RectInt> attemptedRoomBounds = new List<RectInt>();
+    public int attempts;
+    public GameObject hallwayUp;
+    public GameObject hallwaySide;
+    private int minX = int.MaxValue;
+    private int maxX = int.MinValue;
+    private int minY = int.MaxValue;
+    private int maxY = int.MinValue;
+
+    void UpdateBounds(RectInt roomBounds)
     {
-        currentRoomCount += 1;
-        RoomInstance start = CreateRoomInstance(startRoom, Vector2.zero);
-        Instantiate(start.baseData.prefab, Vector3.zero, Quaternion.identity);
-        usedRooms.Add(start);
-        TryGenerateRoom(start);
+        minX = Mathf.Min(minX, roomBounds.xMin);
+        maxX = Mathf.Max(maxX, roomBounds.xMax);
+        minY = Mathf.Min(minY, roomBounds.yMin);
+        maxY = Mathf.Max(maxY, roomBounds.yMax);
+        Debug.Log(minX + ", " + maxX + " : " + minY + ", " + maxY);
     }
-    private void OnDrawGizmos()
-{
-    Gizmos.color = Color.red;
-    if (debugOverlapPositions != null && debugOverlapSizes != null)
+
+    private enum TileType
     {
-        for (int i = 0; i < debugOverlapPositions.Count; i++)
+        Wall,
+        Floor
+    }
+    void Start()
+    {
+        Generate();
+        CloseUnconnectedDoors();
+        ConfigureAStarGrid(); // then resize and scan A*
+        // ConnectRooms();
+        // RenderMap();
+    }
+
+    Vector2Int CalculateNextSpawnPosition(DoorAnchor chosenDoor, RoomData nextRoom)
+    {
+        //TODO calculate the next spawn room by using the chosenDoorposition and Direction, if so you bufferIt, and spawn the next room after it
+        Vector2Int nextDoorPosition = chosenDoor.GetPosition() + (DoorDirToMacro(chosenDoor) * 2);
+        return nextDoorPosition - nextRoom.prefab.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(chosenDoor)).GetLocalPosition();
+    }
+    void CloseUnconnectedDoors()
+    {
+        foreach (RoomInstance room in roomInstances)
         {
-            Gizmos.DrawWireCube(debugOverlapPositions[i], debugOverlapSizes[i]);
+            foreach (DoorAnchor door in room.doorAnchors)
+            {
+                if (door.isConnected)
+                    continue;
+
+                Vector2Int localPos = door.GetLocalPosition(); // Assumes grid position in world space
+                Vector3Int tilePos;
+                Tilemap wallMap = room.worldObject.transform.Find("WallTilemap").GetComponent<Tilemap>();
+                Tilemap floorMap = room.worldObject.transform.Find("FloorTilemap").GetComponent<Tilemap>();
+
+                if (door.direction == DoorDirection.North) tilePos = new Vector3Int(localPos.x, localPos.y - 1, 0);
+                else if (door.direction == DoorDirection.East) tilePos = new Vector3Int(localPos.x - 1, localPos.y, 0);
+                else tilePos = new Vector3Int(localPos.x, localPos.y, 0);
+
+
+                // Optionally clear the floor under the door
+                floorMap.SetTile(tilePos, null);
+
+                // Set wall tile
+                wallMap.SetTile(tilePos, wallTile);
+            }
         }
     }
-}
 
-    public void TryGenerateRoom(RoomInstance room)
+    void SpawnHallwayBetween(DoorAnchor from, DoorAnchor to)
     {
-        foreach (var door in room.doors)
+        Vector2Int posA = from.GetPosition();
+        Vector2Int posB = to.GetPosition();
+
+        Vector2Int bottomLeft = Vector2Int.Min(posA, posB);
+
+        GameObject hallwayPrefab = null;
+        Quaternion rotation = Quaternion.identity;
+
+        // Determine direction of hallway
+        if (posA.x == posB.x) // Vertical (N <-> S)
         {
-            //CHECK IF ALREADY CONNECTED
-            if (door.isConnected) continue;
-            RoomData connectingRoom;
-            Vector2 doorWorldPos = room.gridPosition + door.localPosition;
-            if (room.baseData.type == RoomType.Start)
+            hallwayPrefab = hallwayUp;
+            Instantiate(hallwayPrefab, new Vector3(bottomLeft.x - 1, bottomLeft.y, 0), rotation);
+
+        }
+        else if (posA.y == posB.y) // Horizontal (E <-> W)
+        {
+            hallwayPrefab = hallwaySide;
+            Instantiate(hallwayPrefab, new Vector3(bottomLeft.x, bottomLeft.y - 1, 0), rotation);
+
+        }
+        else
+        {
+            Debug.LogWarning("Unsupported diagonal hallway!");
+            return;
+        }
+
+    }
+    Vector2Int DoorDirToMacro(DoorAnchor door)
+    {
+
+        return door.direction switch
+        {
+            DoorDirection.North => Vector2Int.up,
+            DoorDirection.South => Vector2Int.down,
+            DoorDirection.East => Vector2Int.right,
+            DoorDirection.West => Vector2Int.left,
+            _ => throw new System.NotImplementedException()
+        };
+    }
+    DoorDirection OppositeDoor(DoorAnchor door)
+    {
+
+        return door.direction switch
+        {
+            DoorDirection.North => DoorDirection.South,
+            DoorDirection.South => DoorDirection.North,
+            DoorDirection.East => DoorDirection.West,
+            DoorDirection.West => DoorDirection.East,
+            _ => throw new System.NotImplementedException()
+        };
+    }
+
+        void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+
+            foreach (RectInt rect in attemptedRoomBounds)
             {
-                connectingRoom = northRooms[1];
+                Vector3 center = new Vector3(rect.x + rect.width / 2f, rect.y + rect.height / 2f, 0);
+                Vector3 size = new Vector3(rect.width, rect.height, 1f);
+                Gizmos.DrawWireCube(center, size);
             }
-            else
-            {
-                connectingRoom = FindConnectingRoom(door.direction);
 
+            // Optional: draw placed room bounds in green
+            Gizmos.color = Color.green;
+            foreach (RoomInstance room in roomInstances)
+            {
+                Vector3 center = new Vector3(room.bounds.x + room.bounds.width / 2f, room.bounds.y + room.bounds.height / 2f, 0);
+                Vector3 size = new Vector3(room.bounds.width, room.bounds.height, 1f);
+                Gizmos.DrawWireCube(center, size);
             }
-            Vector2 newDoorGridPos = doorWorldPos + (DirectionOffset(door.direction) * connectingRoom.gridSize / 2);
+        }
+        void Generate()
+        {
+            attempts = 0;
 
-
-            //CHECK FOR COLLISION
-            Vector3 worldPos = newDoorGridPos; // assuming 1:1 grid to world
-            Vector2 roomSize = connectingRoom.gridSize; // Add this property to RoomData
-            debugOverlapPositions.Add(worldPos);
-            debugOverlapSizes.Add(roomSize);
-            Collider2D hit = Physics2D.OverlapBox(worldPos, roomSize, 0f, roomMask);
-            Debug.Log("Checking overlap at: " + worldPos + " with size: " + roomSize);
-            if (hit != null)
+            GenerateStartingRoom();
+            while (roomInstances.Count < roomCount - 1 && attempts < 200)
             {
-                Debug.Log("Collision");
+                RoomInstance randomPreviousRoom;
+
+                // Choose from all rooms except starting room if it’s already used once
+                if (!startingRoomUsed)
+                {
+                    randomPreviousRoom = roomInstances[Random.Range(0, roomInstances.Count)];
+                    startingRoomUsed = true;
+                }
+                else
+                {
+                    randomPreviousRoom = roomInstances[Random.Range(1, roomInstances.Count)];
+                    if (!randomPreviousRoom.HasUnconnectedDoor())
+                    {
+                        attempts++;
+                        continue;
+                    }
+                }
+                List<DoorAnchor> availableDoors = randomPreviousRoom.GetAvailableDoors();
+                if (availableDoors.Count == 0)
+                {
+                    attempts++;
+                    continue; // Skip this room
+                }
+
+                DoorAnchor randomDoorAnchor = availableDoors[Random.Range(0, availableDoors.Count)]; Vector2Int currentMacroPos = randomPreviousRoom.macroGridPos + DoorDirToMacro(randomDoorAnchor);
+                if (macroGrid.ContainsKey(currentMacroPos))
+                {
+                    Debug.Log(randomPreviousRoom.macroGridPos + DoorDirToMacro(randomDoorAnchor) + "is Already occupied");
+                    continue;
+                }
+
+                RoomData selectedRoomData = Rooms[Random.Range(0, Rooms.Length)];
+                DoorAnchor connectingDoor = selectedRoomData.prefab.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(randomDoorAnchor));
+
+                Vector2Int worldPos = CalculateNextSpawnPosition(randomDoorAnchor, selectedRoomData);
+                RectInt bounds = new RectInt(worldPos.x, worldPos.y, selectedRoomData.gridSize.x, selectedRoomData.gridSize.y);
+                attemptedRoomBounds.Add(bounds);
+                bool overlaps = false;
+                foreach (RoomInstance overlayedRoom in roomInstances)
+                {
+                    if (overlayedRoom.bounds.Overlaps(bounds))
+                    {
+                        overlaps = true;
+                        break;
+                    }
+                }
+
+                if (overlaps)
+                {
+                    attempts++;
+                    continue;
+                }
+                GameObject roomObj = Instantiate(selectedRoomData.prefab, (Vector3Int)worldPos, Quaternion.identity);
+                randomDoorAnchor.isConnected = true;
+                DoorAnchor doorAdjacent = roomObj.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(randomDoorAnchor));
+                doorAdjacent.isConnected = true;
+                SpawnHallwayBetween(randomDoorAnchor, doorAdjacent);
+                RoomInstance currentRoom = new RoomInstance(selectedRoomData, bounds, roomObj, currentMacroPos);
+                macroGrid[currentMacroPos] = currentRoom;
+                roomInstances.Add(currentRoom);
+                UpdateBounds(bounds);
+            }
+            GenerateFinalRoom();
+
+        }
+    
+
+    public void GenerateFinalRoom()
+    {
+        attempts = 0;
+        while (attempts < 200)
+        {
+            RoomInstance randomRoom = roomInstances[Random.Range(1, roomInstances.Count)];
+            if (!randomRoom.HasUnconnectedDoor())
+            {
+                attempts++;
                 continue;
             }
-            RoomInstance connectingInstance = CreateRoomInstance(connectingRoom, newDoorGridPos);
-            door.isConnected = true;
-
-            Instantiate(connectingRoom.prefab, newDoorGridPos, Quaternion.identity);
-            foreach (var connectingInstanceDoor in connectingInstance.doors)
+            DoorAnchor randomDoor = randomRoom.doorAnchors[Random.Range(0, randomRoom.doorAnchors.Count)];
+            Vector2Int currentMacroPos = randomRoom.macroGridPos + DoorDirToMacro(randomDoor);
+            if (macroGrid.ContainsKey(currentMacroPos) || macroGrid.ContainsKey(currentMacroPos + DoorDirToMacro(randomDoor)))
             {
-                if (Opposite(connectingInstanceDoor.direction) == door.direction)
+                Debug.Log(randomRoom.macroGridPos + DoorDirToMacro(randomDoor) + "is Already occupied");
+                continue;
+            }
+            DoorAnchor connectingDoor = finalRoom.prefab.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(randomDoor));
+            Vector2Int worldPos = CalculateNextSpawnPosition(randomDoor, finalRoom);
+            RectInt bounds = new RectInt(worldPos.x, worldPos.y, finalRoom.gridSize.x, finalRoom.gridSize.y);
+            attemptedRoomBounds.Add(bounds);
+            bool overlaps = false;
+            foreach (RoomInstance overlayedRoom in roomInstances)
+            {
+                if (overlayedRoom.bounds.Overlaps(bounds))
                 {
-                    connectingInstanceDoor.isConnected = true;
+                    overlaps = true;
+                    break;
                 }
             }
-            usedRooms.Add(connectingInstance);
-            currentRoomCount += 1;
-            if (currentRoomCount <= 10)
+
+            if (overlaps)
             {
-                TryGenerateRoom(connectingInstance);
+                attempts++;
+                continue;
             }
-
-        }
-    }
-    RoomInstance CreateRoomInstance(RoomData baseData, Vector2 gridPosition)
-    {
-        RoomInstance instance = new RoomInstance
-        {
-            baseData = baseData,
-            gridPosition = gridPosition,
-        };
-
-        foreach (var door in baseData.doors)
-        {
-            instance.doors.Add(new DoorInstance
-            {
-                direction = door.direction,
-                localPosition = door.localPosition,
-                isConnected = false
-            });
+            GameObject roomObj = Instantiate(finalRoom.prefab, (Vector3Int)worldPos, Quaternion.identity);
+            randomDoor.isConnected = true;
+            DoorAnchor doorAdjacent = roomObj.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(randomDoor));
+            doorAdjacent.isConnected = true;
+            SpawnHallwayBetween(randomDoor, doorAdjacent);
+            RoomInstance currentRoom = new RoomInstance(finalRoom, bounds, roomObj, currentMacroPos);
+            macroGrid[currentMacroPos] = currentRoom;
+            roomInstances.Add(currentRoom);
+            UpdateBounds(bounds);
+            break;
         }
 
-        return instance;
+
+
     }
-    Vector2Int DirectionOffset(DoorDirection dir)
+    void GenerateStartingRoom()
     {
-        return dir switch
-        {
-            DoorDirection.North => new Vector2Int(0, 1),
-            DoorDirection.South => new Vector2Int(0, -1),
-            DoorDirection.East => new Vector2Int(1, 0),
-            DoorDirection.West => new Vector2Int(-1, 0),
-            _ => Vector2Int.zero
-        };
+        GameObject roomObj = Instantiate(startingRoom.prefab, Vector3.zero, Quaternion.identity);
+        RectInt bounds = new RectInt(0, 0, startingRoom.gridSize.x, startingRoom.gridSize.y);
+        Vector2Int macroPos = new Vector2Int(macroGridSize.x / 2, macroGridSize.y / 2);
+        RoomInstance instance = new RoomInstance(startingRoom, bounds, roomObj, macroPos);
+        macroGrid[macroPos] = instance;
+        roomInstances.Add(instance);
+        UpdateBounds(bounds);
     }
+    void ConfigureAStarGrid()
+{
+    GridGraph graph = AstarPath.active.data.gridGraph;
 
-    public DoorDirection Opposite(DoorDirection direction)
+    int width = maxX - minX;
+    int depth = maxY - minY;
+    float nodeSize = graph.nodeSize;
+
+    Vector3 center = new Vector3(
+        minX + width / 2f,
+        minY + depth / 2f,
+        0f
+    );
+
+    graph.center = center;
+    graph.SetDimensions(width*4, depth*4, nodeSize);
+
+    AstarPath.active.Scan(); // Apply changes and scan
+}
+    bool CheckIfAvailable(Vector2Int macroPos)
     {
-        DoorDirection oppositeDirection = DoorDirection.North;
-        switch (direction)
-        {
-            case DoorDirection.North:
-                oppositeDirection = DoorDirection.South;
-                break;
-            case DoorDirection.South:
-                oppositeDirection = DoorDirection.North;
-                break;
-            case DoorDirection.East:
-                oppositeDirection = DoorDirection.West;
-                break;
-            case DoorDirection.West:
-                oppositeDirection = DoorDirection.East;
-                break;
-
-        }
-        return oppositeDirection;
-    }
-
-    public RoomData FindConnectingRoom(DoorDirection doorDirection)
-    {
-        RoomData selectedRoom = null;
-
-        switch (Opposite(doorDirection))
-        {
-            case DoorDirection.North:
-                int rand = Random.Range(0, northRooms.Length);
-                selectedRoom = northRooms[rand];
-                if (currentRoomCount >= 5) selectedRoom = northRooms[0];
-                break;
-            case DoorDirection.South:
-                rand = Random.Range(0, southRooms.Length);
-                selectedRoom = southRooms[rand];
-                if (currentRoomCount >= 5) selectedRoom = southRooms[0];
-
-                break;
-            case DoorDirection.East:
-                rand = Random.Range(0, eastRooms.Length);
-                selectedRoom = eastRooms[rand];
-                if (currentRoomCount >= 5) selectedRoom = eastRooms[0];
-
-                break;
-            case DoorDirection.West:
-                rand = Random.Range(0, westRooms.Length);
-                selectedRoom = westRooms[rand];
-                if (currentRoomCount >= 5) selectedRoom = westRooms[0];
-
-                break;
-        }
-        return selectedRoom;
+        return !macroGrid.ContainsKey(macroPos);
     }
 }

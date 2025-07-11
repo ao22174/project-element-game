@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ElementProject;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,8 +23,7 @@ public class Entity : MonoBehaviour
     public IdleState idleState;
     public Seeker seeker;
     public Path path;
-    public RoomInstance currentRoom;
-
+    public EnemySpawner enemySpawner;
     public float currentHealth;
 
 
@@ -64,7 +64,7 @@ public class Entity : MonoBehaviour
         rb.AddForce(direction.normalized * 20f);
         if (currentHealth <= 0)
         {
-            Debug.Log("I DIE");
+            enemySpawner.UpdateAlive(this);
             Destroy(this.gameObject);
         }
     }
@@ -81,7 +81,6 @@ public class Entity : MonoBehaviour
         if (player == null) return false;
 
         float dist = Vector2.Distance(player.position, transform.position);
-        Debug.Log(dist);
         if (dist > entityData.attackRange) return false;
 
         if (entityData.usesLineOfSight)

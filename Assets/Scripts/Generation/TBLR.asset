@@ -13,14 +13,5 @@ MonoBehaviour:
   m_Name: TBLR
   m_EditorClassIdentifier: 
   type: 1
-  prefab: {fileID: 5107636912701733734, guid: ab55f16ae7fbaf6488b4caf573e1065f, type: 3}
-  doors:
-  - localPosition: {x: 0, y: 5}
-    direction: 0
-  - localPosition: {x: 0, y: -5}
-    direction: 1
-  - localPosition: {x: 5, y: 0}
-    direction: 2
-  - localPosition: {x: -5, y: 0}
-    direction: 3
+  prefab: {fileID: 7436160177397495665, guid: c1585afaaec6c8c45b12201600c6262b, type: 3}
   gridSize: {x: 10, y: 10}

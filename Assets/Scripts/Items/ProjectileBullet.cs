@@ -40,7 +40,7 @@ public class ProjectileBullet : MonoBehaviour
         if (collision.CompareTag("Player") && bulletOwner == OwnedBy.Enemy)
         {
 
-            Player player = collision.gameObject.GetComponent<Player>();
+            Player player = collision.gameObject.GetComponentInParent<Player>();
             if (player.isInvincible) return;
             player.HealthModify(-damage);
             Destroy(gameObject);

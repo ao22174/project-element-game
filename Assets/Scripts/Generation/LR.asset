@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: LR
   m_EditorClassIdentifier: 
   type: 0
-  prefab: {fileID: 3967918346977799198, guid: da17becb337c04546a2ecf0fa72e56c8, type: 3}
+  prefab: {fileID: 6455015801404208537, guid: 073f84233b725814d89d75574a8c43d7, type: 3}
   doors:
-  - localPosition: {x: -5, y: 0}
+  - localPosition: {x: -2, y: 2.5}
     direction: 3
-  - localPosition: {x: 5, y: 0}
+  - localPosition: {x: 3, y: -2.5}
     direction: 2
-  gridSize: {x: 10, y: 10}
+  gridSize: {x: 5, y: 9}

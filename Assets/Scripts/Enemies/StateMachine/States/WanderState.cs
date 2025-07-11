@@ -56,6 +56,7 @@ public class WanderState : State
         if (playerDist > entity.entityData.attackRange + 0.5f || !entity.PlayerInSight())
         {
             if (entity.path == null) return;
+            if (currentWaypoint > entity.path.vectorPath.Count) return;
             Vector2 direction = ((Vector2)entity.path.vectorPath[currentWaypoint] - entity.rb.position).normalized;
             Vector2 force = direction * entity.entityData.movementSpeed;
 
