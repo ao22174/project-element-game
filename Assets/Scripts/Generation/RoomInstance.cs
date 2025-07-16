@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using ElementProject;
 
 public class RoomInstance
 {
@@ -8,8 +9,9 @@ public class RoomInstance
     public RectInt bounds;                  // Grid bounds of the carved room
     public GameObject worldObject;          // Instantiated prefab in the scene
     public List<DoorAnchor> doorAnchors; // Door anchor positions and connection states
-    public Vector2Int macroGridPos; 
-
+    public List<Door> doors;
+    public Vector2Int macroGridPos;
+    public RoomPrefab prefab;
     public RoomInstance(RoomData data, RectInt bounds, GameObject obj, Vector2Int macroGridPos)
     {
         this.data = data;
@@ -19,7 +21,7 @@ public class RoomInstance
 
         doorAnchors = new();
 
-        RoomPrefab prefab = obj.GetComponent<RoomPrefab>();
+        prefab = obj.GetComponent<RoomPrefab>();
         if (prefab != null)
         {
             foreach (var pair in prefab.doorAnchors)
@@ -27,7 +29,6 @@ public class RoomInstance
                 doorAnchors.Add(pair);
             }
         }
-
     }
     public List<DoorAnchor> GetAvailableDoors()
     {

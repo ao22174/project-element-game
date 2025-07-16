@@ -18,13 +18,20 @@ public class DungeonManager : MonoBehaviour
     public int roomCount = 8;
     public TileBase floorTile;
     public TileBase wallTile;
+    public GameObject sideDoorObj;
 
     public RoomData startingRoom;
     public RoomData finalRoom;
+    public GameObject doorObj;
     public List<RectInt> attemptedRoomBounds = new List<RectInt>();
     public int attempts;
     public GameObject hallwayUp;
     public GameObject hallwaySide;
+    public TileBase doorVisualTile;
+    public TileBase doorFrameTile;
+
+    public TileBase doorFrameTileSide;
+    public TileBase doorVisualTileSide;
     private int minX = int.MaxValue;
     private int maxX = int.MinValue;
     private int minY = int.MaxValue;
@@ -63,15 +70,63 @@ public class DungeonManager : MonoBehaviour
     {
         foreach (RoomInstance room in roomInstances)
         {
+            Tilemap wallMap = room.worldObject.transform.Find("WallTilemap").GetComponent<Tilemap>();
+            Tilemap floorMap = room.worldObject.transform.Find("FloorTilemap").GetComponent<Tilemap>();
+            Tilemap wallVisualMap = room.worldObject.transform.Find("WallVisualTilemap").GetComponent<Tilemap>();
+           
             foreach (DoorAnchor door in room.doorAnchors)
             {
-                if (door.isConnected)
-                    continue;
+                 Vector2Int localPos = door.GetLocalPosition(); // Assumes grid position in world space
+                    Vector3Int tilePos =new Vector3Int(localPos.x , localPos.y, 0) ;
 
-                Vector2Int localPos = door.GetLocalPosition(); // Assumes grid position in world space
-                Vector3Int tilePos;
-                Tilemap wallMap = room.worldObject.transform.Find("WallTilemap").GetComponent<Tilemap>();
-                Tilemap floorMap = room.worldObject.transform.Find("FloorTilemap").GetComponent<Tilemap>();
+
+                if (door.isConnected)
+                {
+                    Vector3 doorPos;
+                    GameObject newDoor = null;
+
+                    switch (door.direction)
+                    {
+
+                        case DoorDirection.North:
+                            doorPos = new Vector3(door.GetPosition().x + 0.5f, door.GetPosition().y - 0.5f, 0);
+                            newDoor = Instantiate(doorObj, doorPos, Quaternion.identity);
+                            tilePos = new Vector3Int(localPos.x, localPos.y - 1, 0);
+                            floorMap.SetTile(tilePos, floorTile);
+                            wallVisualMap.SetTile(tilePos, doorVisualTile);
+                            wallMap.SetTile(tilePos, doorFrameTile);
+
+                            break;
+                        case DoorDirection.South:
+                            doorPos = new Vector3(door.GetPosition().x + 0.5f, door.GetPosition().y + 0.5f, 0);
+                            newDoor = Instantiate(doorObj, doorPos, Quaternion.identity);
+                            tilePos = new Vector3Int(localPos.x, localPos.y, 0);
+                            floorMap.SetTile(tilePos, floorTile);
+                            wallVisualMap.SetTile(tilePos, doorVisualTile);
+                            wallMap.SetTile(tilePos, doorFrameTile);
+                            break;
+                        case DoorDirection.East:
+                            doorPos = new Vector3(door.GetPosition().x - 0.5f, door.GetPosition().y + 0.5f, 0);
+                            newDoor = Instantiate(sideDoorObj, doorPos, Quaternion.identity);
+                            tilePos = new Vector3Int(localPos.x - 1, localPos.y, 0);
+                            floorMap.SetTile(tilePos, floorTile);
+                            wallVisualMap.SetTile(tilePos, doorVisualTileSide);
+                            wallMap.SetTile(tilePos, doorFrameTileSide);
+                            break;
+                        case DoorDirection.West:
+                            doorPos = new Vector3(door.GetPosition().x + 0.5f, door.GetPosition().y + 0.5f, 0);
+                            newDoor = Instantiate(sideDoorObj, doorPos, Quaternion.identity);
+                            tilePos = new Vector3Int(localPos.x, localPos.y, 0);
+                            floorMap.SetTile(tilePos, floorTile);
+                            wallVisualMap.SetTile(tilePos, doorVisualTileSide);
+                            wallMap.SetTile(tilePos, doorFrameTileSide);
+                            break;
+                    }
+                    room.prefab.doors.Add(newDoor.GetComponent<Door>());
+
+                    continue;
+                }
+
 
                 if (door.direction == DoorDirection.North) tilePos = new Vector3Int(localPos.x, localPos.y - 1, 0);
                 else if (door.direction == DoorDirection.East) tilePos = new Vector3Int(localPos.x - 1, localPos.y, 0);
@@ -83,6 +138,7 @@ public class DungeonManager : MonoBehaviour
 
                 // Set wall tile
                 wallMap.SetTile(tilePos, wallTile);
+                wallVisualMap.SetTile(tilePos, null);
             }
         }
     }

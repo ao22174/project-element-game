@@ -4,6 +4,9 @@ using UnityEngine;
 public class RoomPrefab : MonoBehaviour
 {
     public List<DoorAnchor> doorAnchors;
+    public List<Door> doors;
+
+    public List<EnemySpawner> spawners;
     public DoorAnchor GetDoor(DoorDirection dir)
     {
         DoorAnchor selectedDoor = null;

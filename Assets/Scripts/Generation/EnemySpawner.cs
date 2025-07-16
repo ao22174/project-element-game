@@ -2,8 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-namespace ElementProject
-{
+
     public class EnemySpawner : MonoBehaviour
     {
         [Serialize] public EntityData[] entityDatas;
@@ -14,8 +13,11 @@ namespace ElementProject
         public int enemiesPerRound;
         public int roundCount;
 
+        RoomPrefab room;
+
         void Start()
         {
+            room = gameObject.GetComponentInParent<RoomPrefab>();
             spawned = false;
             roundCount = 0;
         }
@@ -24,6 +26,10 @@ namespace ElementProject
         {
             if (collision.gameObject.CompareTag("Player") && spawned == false)
             {
+            foreach (Door door in room.doors)
+            {
+                door.Close();
+                }
                 SpawnEnemy(enemiesPerRound);
                 roundCount++;
             }
@@ -35,8 +41,17 @@ namespace ElementProject
             if (entities.Count / enemiesPerRound < 0.67f && roundCount < Rounds)
             {
                 SpawnEnemy(enemiesPerRound);
-                roundCount++;        
+                roundCount++;
             }
+
+        if (roundCount >= Rounds && entities.Count == 0)
+        {
+            foreach (Door door in room.doors)
+            {
+                door.Open();
+                }
+            }
+            
             
         }
         public void SpawnEnemy(int numberOfEnemies)
@@ -67,4 +82,3 @@ namespace ElementProject
             spawned = true;
         }
     }
-}

@@ -62,5 +62,8 @@ TagManager:
   - name: RoomGen
     uniqueID: 1740721329
     locked: 0
+  - name: New Layer 6
+    uniqueID: 2030977135
+    locked: 0
   m_RenderingLayers:
   - Default

@@ -765,12 +765,18 @@ MonoBehaviour:
   roomCount: 8
   floorTile: {fileID: 11400000, guid: 04dae90b2aff5094c8c73c5050fd86b7, type: 2}
   wallTile: {fileID: 11400000, guid: 952657f0241fcd0449ad691ad9917e6a, type: 2}
+  sideDoorObj: {fileID: 2506588567764297217, guid: b1133b6bc585ccc4fa339e2c18b7ff49, type: 3}
   startingRoom: {fileID: 11400000, guid: 7f93be7a3b203f542b4cf3c21135fef1, type: 2}
   finalRoom: {fileID: 11400000, guid: e4a556d9be296504487ff41f63d8bb67, type: 2}
+  doorObj: {fileID: 4005298321079925533, guid: 89f483afdd8be564dab2a40a927132b5, type: 3}
   attemptedRoomBounds: []
   attempts: 200
   hallwayUp: {fileID: 1348567428619831129, guid: 8898dbb49d81fa14e9ad63b9bd6c442b, type: 3}
   hallwaySide: {fileID: 5972056787665734576, guid: 8acaf4acbb6e0f24c9155cf193df2538, type: 3}
+  doorVisualTile: {fileID: 11400000, guid: 31cd521a8e4f43b449126c9c578ec217, type: 2}
+  doorFrameTile: {fileID: 11400000, guid: 1828500062af64f4d8a2414e08221dfa, type: 2}
+  doorFrameTileSide: {fileID: 11400000, guid: 142bb1b66be23554faed3f3f4bc88a78, type: 2}
+  doorVisualTileSide: {fileID: 11400000, guid: c2cfe514d3b8c9b42adcf58c460d6ef6, type: 2}
 --- !u!4 &1714846471
 Transform:
   m_ObjectHideFlags: 0
