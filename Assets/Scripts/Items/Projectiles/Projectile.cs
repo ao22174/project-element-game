@@ -7,10 +7,10 @@ public enum OwnedBy
 }
 public abstract class Projectile : MonoBehaviour
 {
-    private Vector2 direction;
-    private float speed;
-    private float damage;
-    private float lifetime;
+    protected Vector2 direction;
+    protected float speed;
+    protected float damage;
+    protected float lifetime;
     public OwnedBy bulletOwner;
 
     public virtual void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, OwnedBy bulletOwner)

@@ -3,22 +3,6 @@ using UnityEngine;
 
 public class ProjectileFreezer : Projectile
 {
-    private Vector2 direction;
-    private float speed;
-    private float damage;
-    private float lifetime;
-    public OwnedBy bulletOwner;
-
-    public void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, OwnedBy bulletOwner)
-    {
-        transform.position = startPosition;
-        this.direction = direction;
-        this.speed = speed;
-        this.damage = damage;
-        this.lifetime = lifetime;
-        this.bulletOwner = bulletOwner;
-        Destroy(gameObject, lifetime);
-    }
 
     protected override void HandleCollision(Collider2D collision)
     {
