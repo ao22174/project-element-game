@@ -1,12 +1,17 @@
 using UnityEngine;
+using UnityEngine.Scripting;
 
 public class IcicleBuff : Buff
 {
     public override string BuffName => "Icicle";
 
-    public override void OnApply(GameObject target)
+
+    public GameObject iciclePrefab;
+
+    public override void OnAttack(GameObject target, ref float damage)
     {
-        base.OnApply(target);
+        base.OnAttack(target, ref damage);
         
+
     }
 }

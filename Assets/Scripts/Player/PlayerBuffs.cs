@@ -3,25 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class PlayerBuffs : MonoBehaviour
+public class PlayerBuffs
 {
+    public Player player;
+    public GameObject gameObject;
     private Dictionary<string, Buff> activeBuffs = new();
+    public bool HasBuff(string name) => activeBuffs.ContainsKey(name);
+
+    public int GetStackCount(string name)
+    {
+        return activeBuffs.TryGetValue(name, out var buff) ? buff.stackCount : 0;
+    }
+    public PlayerBuffs(Player player, GameObject gameObject)
+    {
+        this.player = player;
+        this.gameObject = gameObject;
+    }
 
     public void AddBuff(Buff newBuff)
-    {
-        string name = newBuff.BuffName;
+{
+    string name = newBuff.BuffName;
 
-        if (activeBuffs.ContainsKey(name))
-        {
-            activeBuffs[name].stackCount++;
-        }
-        else
-        {
-            Buff clone = (Buff)Activator.CreateInstance(newBuff.GetType());
-            clone.OnApply(gameObject);
-            activeBuffs[name] = clone;
-        }
+    if (activeBuffs.ContainsKey(name))
+    {
+        activeBuffs[name].stackCount++;
     }
+    else
+    {
+        Buff clone = (Buff)Activator.CreateInstance(newBuff.GetType());
+        clone.buffData = newBuff.buffData; // Assign the data
+        clone.OnApply(gameObject);
+        activeBuffs[name] = clone;
+    }
+}
 
     public void RemoveBuff(string name)
     {
@@ -43,8 +57,14 @@ public class PlayerBuffs : MonoBehaviour
         foreach (var buff in activeBuffs.Values)
             buff.OnHitEnemy(gameObject, enemy);
     }
+    public void OnDash()
+    {
+        foreach (var buff in activeBuffs.Values)
+            buff.OnDash();
+    }
 
-    void Update()
+
+    public void OnUpdate()
     {
         foreach (var buff in activeBuffs.Values)
             buff.OnUpdate(gameObject);

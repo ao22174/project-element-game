@@ -43,6 +43,8 @@ public class Player : MonoBehaviour
     public HeartDisplay heartDisplay;
     public float maxHealth = 100;
 
+    public PlayerBuffs buffs;
+
 
     private void Awake()
     {
@@ -55,7 +57,7 @@ public class Player : MonoBehaviour
 
         AttackState = new PlayerAttackState(this, AttackStateMachine, playerData, "attack");
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
-
+        buffs = new PlayerBuffs(this, gameObject);
     }
 
     private void Start()

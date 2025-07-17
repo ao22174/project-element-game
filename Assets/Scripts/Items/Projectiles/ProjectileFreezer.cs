@@ -1,12 +1,7 @@
 using UnityEngine;
 
-public enum OwnedBy
-{
-    Player,
-    Enemy,
-    All
-}
-public class ProjectileBullet : MonoBehaviour
+
+public class ProjectileFreezer : Projectile
 {
     private Vector2 direction;
     private float speed;
@@ -25,13 +20,7 @@ public class ProjectileBullet : MonoBehaviour
         Destroy(gameObject, lifetime);
     }
 
-    private void Update()
-    {
-        transform.position += (Vector3)(direction * speed * Time.deltaTime);
-    }
-
-    //TODO - make this trigger based on layering, not through tags
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected override void HandleCollision(Collider2D collision)
     {
         if (collision.CompareTag("Structure"))
         {
