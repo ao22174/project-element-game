@@ -1,6 +1,8 @@
 # PersonalGameProject
  This is a solo bolo project that I, Kyle Verzosa, will be working on as a side-project for the next few months. The game idea I currently have is a roguelike rpg that features inspired elements from hit games such as Enter the Gungeon and Binding of Isaac, as well as inspiration from other games such as Genshin Impact.
 
+ Current Version : PRE MVP (For any progress changes, see the MVP branch)
+
  ## Features
  - Character movement
  - Basic level generation
