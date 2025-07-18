@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2259469639148819193}
   - component: {fileID: 76526245834963760}
   - component: {fileID: 5544666634292053241}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Enemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -51,10 +51,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   entityData: {fileID: 11400000, guid: d26e70e9ebdfba649adf06e628a7cb03, type: 2}
   seeker: {fileID: 76526245834963760}
-  currentRoom: {fileID: 0}
+  enemySpawner: {fileID: 0}
   currentHealth: 0
-  spawnPosition: {x: 0, y: 0}
-  wanderDirection: {x: 0, y: 0}
 --- !u!212 &2021464117515897585
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -211,7 +209,7 @@ GameObject:
   m_Component:
   - component: {fileID: 384370620242367500}
   - component: {fileID: 1037232532475113547}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: BoxCoolider
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -249,7 +247,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

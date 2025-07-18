@@ -3,7 +3,12 @@ using UnityEngine;
 
 public class ProjectileFreezer : Projectile
 {
-
+    public float duration;
+    public void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, float duration, OwnedBy bulletOwner)
+    {
+        base.Initialize(startPosition, direction, speed, damage, lifetime, bulletOwner);
+        this.duration = duration;
+    }
     protected override void HandleCollision(Collider2D collision)
     {
         if (collision.CompareTag("Structure"))
@@ -22,6 +27,7 @@ public class ProjectileFreezer : Projectile
         {
 
             Entity entity = collision.gameObject.GetComponentInParent<Entity>();
+            entity.EnterFreezeState(duration);
             entity.HitBullet(damage, direction);
             Destroy(gameObject);
         }

@@ -104,6 +104,8 @@ MonoBehaviour:
   - {fileID: 6565770477175163122}
   - {fileID: 2217264404416116121}
   - {fileID: 4196763118740451768}
+  doors: []
+  spawners: []
 --- !u!156049354 &6061157828047896609
 Grid:
   m_ObjectHideFlags: 0
@@ -207,9 +209,9 @@ GameObject:
   - component: {fileID: 536259080665746051}
   - component: {fileID: 6685586292371444015}
   - component: {fileID: 4746953592169801882}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WallTilemap
-  m_TagString: Untagged
+  m_TagString: Structure
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1242,7 +1244,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: -2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 261562482876880592}
@@ -1370,8 +1372,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1740721329
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}

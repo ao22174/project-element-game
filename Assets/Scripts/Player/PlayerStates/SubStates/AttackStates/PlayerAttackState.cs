@@ -19,11 +19,11 @@ public class PlayerAttackState : PlayerState
     }
     public override void LogicUpdate()
     {
-        //This is during the attack, so acting as a trigger for the gun, returing back to an unfired weapon when the weapon is used.
-        //Weaponbehaviour is kept within the weapons
+        
         base.LogicUpdate();
         fireDirection = player.GetFireOrigin().transform.right;
         player.currentWeapon.Attack(fireDirection);
+        player.buffs.OnAttack(player.gameObject, player.currentWeapon.data.damage,fireDirection);
         fireEndTime = Time.time;
     
         stateMachine.ChangeState(player.AttackIdleState);

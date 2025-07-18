@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 using ElementProject.gameEnums;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+
+[Serializable]
 
 public enum BehaviourType
 {
@@ -19,6 +23,11 @@ public class EntityData : ScriptableObject
     public ElementType elementType;
     public BehaviourType behaviourType;
     public RuntimeAnimatorController animator;
+    [Header("Conditions")]
+    public float freezeResistance = 0.8f;
+    public float stunResistance = 0.6f;    
+    public float poisonResistance = 0.4f;
+    
 
     [Header("Health & Combat")]
     public float healthPoints = 10f;
@@ -49,6 +58,8 @@ public class EntityData : ScriptableObject
     public GameObject deathEffectPrefab;
     public AudioClip attackSFX;
     public AudioClip deathSFX;
+
+    public GameObject iceCube;
 
     [Header("Collision & Environment")]
     public LayerMask obstacleMask;

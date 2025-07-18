@@ -15,6 +15,9 @@ public class Entity : MonoBehaviour
     public EntityAttackState attackState;
     public FiniteStateMachine stateMachine;
     public StationaryState stationaryState;
+
+    public EntityAttackFreezeState attackFrozenState;
+    public FreezeState frozenState;
     public Rigidbody2D rb { get; private set; }
     public Animator anim { get; private set; }
     public GameObject aliveGO { get; private set; }
@@ -42,6 +45,9 @@ public class Entity : MonoBehaviour
         attackIdleState = new EntityAttackIdleState(this, attackStateMachine, "attackIdling");
         attackState = new EntityAttackState(this, attackStateMachine, "attacking");
         stationaryState = new StationaryState(this, stateMachine, "Stationary");
+        attackFrozenState = new EntityAttackFreezeState(this, attackStateMachine, "frozen");
+        frozenState = new FreezeState(this, stateMachine, "frozen");
+        
 
         seeker = GetComponent<Seeker>();
         currentHealth = entityData.healthPoints;
@@ -61,7 +67,6 @@ public class Entity : MonoBehaviour
     public void HitBullet(float damage, Vector2 direction)
     {
         currentHealth -= damage;
-        rb.AddForce(direction.normalized * 20f);
         if (currentHealth <= 0)
         {
             enemySpawner.UpdateAlive(this);
@@ -92,6 +97,16 @@ public class Entity : MonoBehaviour
             return hit.collider == null;
         }
         return true;
+    }
+
+    public void EnterFreezeState(float duration)
+    {
+        frozenState.setDuration(duration);
+        attackFrozenState.setDuration(duration);
+
+        Debug.Log("Freezing for: " + duration + " seconds");
+        stateMachine.ChangeState(frozenState);
+        attackStateMachine.ChangeState(attackFrozenState);
     }
 
 

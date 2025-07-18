@@ -8,7 +8,7 @@ public abstract class Buff
     public virtual void OnApply(GameObject target) { }
     public virtual void OnRemove(GameObject target) { }
     public virtual void OnUpdate(GameObject target) { }
-    public virtual void OnAttack(GameObject target, ref float damage) { }
+    public virtual void OnAttack(GameObject target, float damage, Vector2 direction = default ){ }
     public virtual void OnHitEnemy(GameObject target, GameObject enemy) { }
 
     public virtual void OnDash() { }

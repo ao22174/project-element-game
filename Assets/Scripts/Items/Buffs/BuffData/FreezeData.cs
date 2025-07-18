@@ -2,7 +2,7 @@ using UnityEngine;
 
 [CreateAssetMenu(fileName = "FreezeBuff", menuName = "Buffs/FreezeBuff")]
 
-public class FreezeProjectileData : BuffData
+public class FreezeData : BuffData
 {
     [SerializeField] public GameObject freezeProjectile;
     [SerializeField] public float duration;

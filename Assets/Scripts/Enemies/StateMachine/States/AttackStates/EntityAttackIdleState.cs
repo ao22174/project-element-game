@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public class EntityAttackIdleState : State
 {
@@ -11,6 +12,8 @@ public class EntityAttackIdleState : State
     {
         base.Enter();
     }
+
+
 
     public override void Exit()
     {

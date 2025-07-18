@@ -42,8 +42,11 @@ public class Player : MonoBehaviour
     public bool isInvincible;
     public HeartDisplay heartDisplay;
     public float maxHealth = 100;
+    public WeaponData startingWeapon;
 
     public PlayerBuffs buffs;
+
+    public FreezeData data2;
 
 
     private void Awake()
@@ -58,6 +61,7 @@ public class Player : MonoBehaviour
         AttackState = new PlayerAttackState(this, AttackStateMachine, playerData, "attack");
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
         buffs = new PlayerBuffs(this, gameObject);
+        buffs.AddBuff(data2.CreateBuffInstance());
     }
 
     private void Start()
@@ -71,6 +75,9 @@ public class Player : MonoBehaviour
         FacingDirection = 1;
         currentHealth = 100;
         heartDisplay.SetHearts(currentHealth, maxHealth);
+        weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, this));
+        EquipWeapon(currentWeaponIndex);
+        
     }
 
     private void Update()
@@ -200,7 +207,6 @@ public class Player : MonoBehaviour
     }
     public Transform GetFireOrigin()
     {
-        Debug.Log(currentWeaponVisual?.transform.Find("fireOrigin").transform.position);
         return currentWeaponVisual?.transform.Find("fireOrigin");
     }
 }

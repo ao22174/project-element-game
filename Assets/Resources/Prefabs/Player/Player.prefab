@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6915125258347941747}
   - component: {fileID: 7910215470746242819}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BoxCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7460655235767545952}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: WeaponHoldPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 2161687805477637657}
   - component: {fileID: 4185433097835877990}
   - component: {fileID: 3998506348632047099}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -273,6 +273,7 @@ MonoBehaviour:
   isInvincible: 0
   heartDisplay: {fileID: 0}
   maxHealth: 100
+  data2: {fileID: 0}
 --- !u!114 &2381681986901670531
 MonoBehaviour:
   m_ObjectHideFlags: 0

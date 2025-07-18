@@ -46,10 +46,10 @@ public class PlayerBuffs
         }
     }
 
-    public void OnAttack(ref float damage)
+    public void OnAttack(GameObject gameObject, float damage, Vector2 direction = default)
     {
         foreach (var buff in activeBuffs.Values)
-            buff.OnAttack(gameObject, ref damage);
+            buff.OnAttack(gameObject, damage, direction);
     }
 
     public void OnHitEnemy(GameObject enemy)
