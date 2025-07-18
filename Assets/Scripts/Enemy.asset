@@ -17,6 +17,9 @@ MonoBehaviour:
   elementType: 0
   behaviourType: 2
   animator: {fileID: 0}
+  freezeResistance: 0.8
+  stunResistance: 0.6
+  poisonResistance: 0.4
   healthPoints: 10
   damage: 1
   attackCooldown: 1
@@ -39,6 +42,7 @@ MonoBehaviour:
   deathEffectPrefab: {fileID: 0}
   attackSFX: {fileID: 0}
   deathSFX: {fileID: 0}
+  iceCube: {fileID: 6404317123687976056, guid: 5d9395a873928684dbe1dd4fa2bd39ea, type: 3}
   obstacleMask:
     serializedVersion: 2
     m_Bits: 128

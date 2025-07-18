@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e38537a08437b4293ad6459a81c3ac, type: 3}
   m_Name: Pistol
   m_EditorClassIdentifier: 
-  weaponName: DefaultWeapon
+  weaponName: Pistol
   damage: 1
   weaponType: 0
   elementType: 0
   cooldown: 1
-  weaponPrefab: {fileID: 0}
-  projectilePrefab: {fileID: 0}
-  projectileSpeed: 0
-  projectileCount: 0
+  weaponPrefab: {fileID: 7221176872778017528, guid: 1bc750a511254344385f47d0a567200e, type: 3}
+  projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
+  projectileSpeed: 3
+  projectileCount: 1
   spreadAngle: 0
-  projectileLifetime: 0
+  projectileLifetime: 5
