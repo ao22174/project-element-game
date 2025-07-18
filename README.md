@@ -5,11 +5,21 @@
  - Character movement
  - Basic level generation
  - Weapon Framework
+ - Buff/Enhancement Framework
+ - Basic Enemy Framework + AI
+ - 
 
  ## TODO/ Roadmap
- - Working towards a functioning game, will require
+ - Working towards a functioning game will require
  - Enemies
  - Stages
  - Roguelike elements (Enhancement Cards)
  - NPCs
  - Element System
+
+## Currently Working On/ Dev notes
+- Currently need to work on the rewards system. Chests and goodies after completing a room that give the player buffs and weapons
+- Need to create animations for the characters and the enemies
+- Need to also rework the proc chance system, to consider the attack speed of the weapon (Currently faster rate weapons benefit from buffs significantly more than slow fire rate weapons);
+- Would like to rework some Enemy systems such as their knockback when shot, i want them to go a certain distance then stop
+- some Reformatting and refactoring needs to be done, specifically in the Generation and the Player Weapon system (It is slowly becoming spaghetti) 
