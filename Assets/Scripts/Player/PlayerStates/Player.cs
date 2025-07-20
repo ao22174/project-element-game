@@ -47,6 +47,7 @@ public class Player : MonoBehaviour
     public PlayerBuffs buffs;
 
     public FreezeData data2;
+    public PlayerStatModifiers stats;
 
 
     private void Awake()
@@ -62,6 +63,7 @@ public class Player : MonoBehaviour
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
         buffs = new PlayerBuffs(this, gameObject);
         buffs.AddBuff(data2.CreateBuffInstance());
+        stats = new PlayerStatModifiers();
     }
 
     private void Start()

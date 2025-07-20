@@ -14,19 +14,21 @@ public class ProjectileWeapon : Weapon
     private GameObject projectilePrefab;
     public ProjectileWeapon(WeaponData data, Player? player) : base(data, player)
     {
-       if (data is ProjectileWeaponData projData)
+        if (data is ProjectileWeaponData projData)
         {
             projectileData = projData;
         }
         else
         {
-        throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
+            throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
         }
         projectileCount = projectileData.projectileCount;
         spreadAngle = projectileData.spreadAngle;
         projectileSpeed = projectileData.projectileSpeed;
         projectileLifetime = projectileData.projectileLifetime;
         projectilePrefab = projectileData.projectilePrefab;
+        stats = player?.stats;
+
     }
 
     public override void Attack(Vector2 direction)
@@ -36,7 +38,7 @@ public class ProjectileWeapon : Weapon
             Debug.Log("Player Does not exist");
             return;
         }
-        float startingSpread = -spreadAngle * (projectileCount-1)/2f;
+        float startingSpread = -spreadAngle * (projectileCount - 1) / 2f;
         projectileSpawn = player.GetFireOrigin().transform.position;
         for (int i = 0; i < projectileCount; i++)
         {
@@ -47,9 +49,10 @@ public class ProjectileWeapon : Weapon
             Debug.DrawRay(projectileSpawn, direction * 5f, Color.red, 2f);
             if (bullet != null)
             {
-                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, damage, projectileLifetime, OwnedBy.Player);
+                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, OwnedBy.Player);
             }
         }
-        
     }
+
+    public override float CalculateDamage() => (damage * (1 + stats.percentAttackBonus) + stats.flatAttackBonus) * (1 + stats.GetDamageBonus(elementType));
 }

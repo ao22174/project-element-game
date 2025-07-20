@@ -1,3 +1,4 @@
+using ElementProject.gameEnums;
 using UnityEngine;
 
 public abstract class Buff
@@ -13,5 +14,10 @@ public abstract class Buff
 
     public virtual void OnDash() { }
 
-    public virtual void OnAttacked(GameObject target, GameObject enemy = null, int damageTaken = 0) {}
+    public virtual void OnApplyElement(GameObject target, ElementType element)
+    {
+        
+    }
+
+    public virtual void OnAttacked(GameObject target, GameObject enemy = null, int damageTaken = 0) { }
 }

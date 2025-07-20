@@ -12,6 +12,8 @@ public abstract class Weapon
     protected ElementType elementType;
     public float cooldown;
     public GameObject weaponPrefab;
+    public PlayerStatModifiers stats;
+
     public Weapon(WeaponData data, Player? player)
     {
         this.data = data;
@@ -31,7 +33,13 @@ public abstract class Weapon
 
 
     public abstract void Attack(Vector2 direction);
-    public void SetOwner(Player? player) => this.player = player;
+
+    public abstract float CalculateDamage();
+    public void SetOwner(Player? player)
+    {
+        this.player = player;
+        stats = player?.stats;
+    }
     public virtual void Drop(Vector2 dropPosition)
     {
         GameObject pickupPrefab = Resources.Load<GameObject>("Prefabs/Weapon/WeaponPickup");
@@ -44,7 +52,7 @@ public abstract class Weapon
         WeaponPickup pickup = pickupGO.GetComponent<WeaponPickup>();
         if (pickup != null)
         {
-        pickup.Initialize(this); // Pass in the current weapon to the pickup
+            pickup.Initialize(this); // Pass in the current weapon to the pickup
         }
     }
 }

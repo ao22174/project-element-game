@@ -32,9 +32,13 @@ public class PlayerAttackState : PlayerState
     {
         base.PhysicsUpdate();
     }
+
+    private float cooldownCalculation => player.currentWeapon.cooldown / (1 +  player.stats.attackSpeedBonus);
+        
+    
     public bool CanFire()
     {
-        return Time.time >= fireEndTime + player.currentWeapon?.cooldown;
+        return Time.time >= fireEndTime + cooldownCalculation;
     }
     }
 

@@ -10,11 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 345f89a6219934643ad050e8e44d66c9, type: 3}
-  m_Name: FreezeBuff
+  m_Name: FrostArrowBuff
   m_EditorClassIdentifier: 
-  buffName: FreezeBuff
-  buffSpirte: {fileID: -282321371128296055, guid: 04500fdf22b1eb742b3803e73aa5afa8, type: 3}
+  buffName: Frost Arrow
+  buffSpirte: {fileID: -8999444735181830803, guid: c8e7612a262e8c440b7d33009fb86453, type: 3}
   type: 0
+  element: 4
+  buffDescription: 'Your weapons have a 20% chance of firing a Frost Arrow, Dealing
+    10 Damage and Freezing the enemy for 4 seconds. (Cooldown: 1 second)'
   freezeProjectile: {fileID: 2224920852630813670, guid: f14258bcf7e1a8d4a8cb23bd6689314f, type: 3}
   duration: 4
   chanceToProc: 0.2
