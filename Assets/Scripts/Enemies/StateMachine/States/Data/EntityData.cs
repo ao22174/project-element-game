@@ -19,10 +19,11 @@ public class EntityData : ScriptableObject
 {
     [Header("Basic Info")]
     public string entityName = "Enemy";
-    public GameObject enemyPrefab;
-    public ElementType elementType;
-    public BehaviourType behaviourType;
-    public RuntimeAnimatorController animator;
+    [SerializeField]public GameObject enemyPrefab;
+    [SerializeField]public ElementType elementType = ElementType.None;
+    [SerializeField]public BehaviourType behaviourType = BehaviourType.Wander;
+    [SerializeField]public RuntimeAnimatorController animator;
+
     [Header("Conditions")]
     public float freezeResistance = 0.8f;
     public float stunResistance = 0.6f;    
@@ -55,14 +56,14 @@ public class EntityData : ScriptableObject
     public bool usesLineOfSight = true;
 
     [Header("Effects & Audio")]
-    public GameObject deathEffectPrefab;
-    public AudioClip attackSFX;
-    public AudioClip deathSFX;
+    [SerializeField]public GameObject deathEffectPrefab;
+    [SerializeField]public AudioClip attackSFX;
+    [SerializeField]public AudioClip deathSFX;
 
-    public GameObject iceCube;
+    [SerializeField]public GameObject iceCube;
 
     [Header("Collision & Environment")]
-    public LayerMask obstacleMask;
+    [SerializeField]public LayerMask obstacleMask;
     public bool stopAtWalls = true;
     public bool usesPathfinding = false;
 

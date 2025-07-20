@@ -6,7 +6,7 @@ public class FreezeState : State
 {
     float frozenTil;
     bool isFrozen => Time.time < frozenTil;
-    GameObject iceCube;
+    GameObject iceCube = null!;
     public FreezeState(Entity entity, FiniteStateMachine stateMachine, string animBoolName) : base(entity, stateMachine, animBoolName)
     {
     }

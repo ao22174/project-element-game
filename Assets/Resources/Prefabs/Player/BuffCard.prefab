@@ -245,8 +245,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 44.4, y: 147.4}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 44.4, y: 155.3}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6061715927897039197
 CanvasRenderer:
@@ -276,7 +276,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -8999444735181830803, guid: c8e7612a262e8c440b7d33009fb86453, type: 3}
+  m_Sprite: {fileID: -223015274466253404, guid: ad169ec67f9957a4bb842a8ccc19249c, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -407,7 +407,7 @@ MonoBehaviour:
   title: {fileID: 4358261340197686838}
   description: {fileID: 4651036066009599994}
   buffImage: {fileID: 1976771058868254581}
-  buffCard: {fileID: 1976771058868254581}
+  buffCard: {fileID: 502304942047667892}
 --- !u!1 &5642423050736599404
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +611,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6476727388869489320, guid: 2f07d5f77fa3bf54f9202d20387c2bd6, type: 3}
+  m_Sprite: {fileID: -7428675527799520605, guid: 5f355ea19c744d0458ee6a2a5753d853, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

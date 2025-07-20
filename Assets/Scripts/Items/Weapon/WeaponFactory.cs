@@ -14,12 +14,13 @@ public static class WeaponFactory
         // Register more weapon types here...
     }
 
-    public static Weapon? CreateWeapon(WeaponData data, Player? player)
+    public static Weapon CreateWeapon(WeaponData data, Player? player)
     {
         var type = data.GetType();
-        if (creators.TryGetValue(type, out var creator))
-            return creator(data, player);
-        Debug.LogWarning($"No weapon creator registered for {type.Name}");
-        return null;
+        if (!creators.TryGetValue(type, out var creator))
+        {
+            throw new NotSupportedException(type + " is not supported currently in the weaponFactory, consider adding implementation");
+        }
+        return creator(data, player);
     }
 }

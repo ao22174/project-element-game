@@ -9,23 +9,22 @@ using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
-    //StateMachines
-    public PlayerStateMachine StateMachine { get; private set; } = null!;
-    public PlayerStateMachine AttackStateMachine { get; private set; } = null!;
-    public PlayerIdleState IdleState { get; private set; } = null!;
-    public PlayerMoveState MoveState { get; private set; } = null!;
-    public PlayerDashState DashState { get; private set; } = null!;
-    public PlayerAttackState AttackState { get; private set; } = null!;
-    public PlayerAttackIdleState AttackIdleState { get; private set; } = null!;
+   //STATE MACHINE LOGIC
+    public PlayerStateMachine StateMachine { get; private set; } 
+    public PlayerStateMachine AttackStateMachine { get; private set; }
+    public PlayerIdleState IdleState { get; private set; } 
+    public PlayerMoveState MoveState { get; private set; } 
+    public PlayerDashState DashState { get; private set; }
+    public PlayerAttackState AttackState { get; private set; }
+    public PlayerAttackIdleState AttackIdleState { get; private set; } 
 
-
+    //ANIMATOR AND INPUT LOGIC
     public Animator Anim { get; private set; }
-    public PlayerInputHandler InputHandler { get; private set; } = null!;
-    private Pickup pickup = null!;
+    public PlayerInputHandler InputHandler { get; private set; }
+    private PickupManager pickup;
 
-    [Serialize] public PlayerData playerData = null!;
-
-    public Rigidbody2D RB { get; private set; } = null!;
+    [Serialize] public PlayerData playerData;
+    public Rigidbody2D RB { get; private set; }
     public int FacingDirection { get; private set; }
     public Vector2 LastInputDirection { get; set; }
 
@@ -37,7 +36,7 @@ public class Player : MonoBehaviour
 
     //WeaponVisuals
     [SerializeField] public Transform weaponHoldPoint;
-    private GameObject? currentWeaponVisual;
+    private GameObject currentWeaponVisual;
     public float currentHealth;
     public bool isInvincible;
     public HeartDisplay heartDisplay;
@@ -45,12 +44,12 @@ public class Player : MonoBehaviour
     public WeaponData startingWeapon;
 
     public PlayerBuffs buffs;
-
-    public FreezeData data2;
     public PlayerStatModifiers stats;
 
 
-    private void Awake()
+   
+
+    private void Start()
     {
         StateMachine = new PlayerStateMachine();
         AttackStateMachine = new PlayerStateMachine();
@@ -61,17 +60,15 @@ public class Player : MonoBehaviour
 
         AttackState = new PlayerAttackState(this, AttackStateMachine, playerData, "attack");
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
-        buffs = new PlayerBuffs(this, gameObject);
-        buffs.AddBuff(data2.CreateBuffInstance());
-        stats = new PlayerStatModifiers();
-    }
 
-    private void Start()
-    {
+        buffs = new PlayerBuffs(this, gameObject);
+        stats = new PlayerStatModifiers();
+
         Anim = GetComponent<Animator>();
         InputHandler = GetComponent<PlayerInputHandler>();
-        pickup = GetComponent<Pickup>();
+        pickup = GetComponent<PickupManager>();
         RB = GetComponent<Rigidbody2D>();
+
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
         FacingDirection = 1;
@@ -84,8 +81,8 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        StateMachine.CurrentState?.LogicUpdate();
-        AttackStateMachine.CurrentState?.LogicUpdate();
+        StateMachine.CurrentState.LogicUpdate();
+        AttackStateMachine.CurrentState.LogicUpdate();
         CheckInteractIsPressed();
         if (currentWeapon != null) RotateWeaponTowardMouse(InputHandler.MousePosition);
         FlipTowardsMouse(InputHandler.MousePosition);
@@ -94,17 +91,20 @@ public class Player : MonoBehaviour
     {
         if (InputHandler.InteractInput)
         {
-            InputHandler.UseInteractInput();
-
             if (pickup.nearbyWeapons.Count > 0)
             {
                 WeaponPickup weaponPickup = pickup.nearbyWeapons[0];
-
-                if (weapons.Count >= 2) weapons[currentWeaponIndex].Drop(this.transform.position);
-                weaponPickup.onPickup(this);
+                if (weapons.Count >= 2) Drop(weapons[currentWeaponIndex],this.transform.position);
+                weaponPickup.PickupWeapon(this);
             }
         }
     }
+
+    public void Drop(Weapon weapon, Vector2 dropPosition)
+    {
+        WeaponPickupFactory.Create(weapon, dropPosition);
+    }
+
     public void HealthModify(float health)
     {
         currentHealth += health;
@@ -209,7 +209,8 @@ public class Player : MonoBehaviour
     }
     public Transform GetFireOrigin()
     {
-        return currentWeaponVisual?.transform.Find("fireOrigin");
+        if (currentWeaponVisual == null) throw new NullReferenceException("fireOrigin is null");
+        return currentWeaponVisual.transform.Find("fireOrigin");
     }
 }
 

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public abstract class Buff
 {
-    public BuffData buffData;
+    public BuffData buffData = null!;
     public int stackCount = 1;
     public abstract string BuffName { get; }
     public virtual void OnApply(GameObject target) { }
@@ -19,5 +19,5 @@ public abstract class Buff
         
     }
 
-    public virtual void OnAttacked(GameObject target, GameObject enemy = null, int damageTaken = 0) { }
+    public virtual void OnAttacked(GameObject target, GameObject? enemy = null, int damageTaken = 0) { }
 }

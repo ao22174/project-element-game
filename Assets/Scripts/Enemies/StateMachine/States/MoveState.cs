@@ -5,15 +5,17 @@ using UnityEngine;
 
 public class MoveState : State
 {
-    protected D_MoveState stateData;
-    public MoveState(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName, D_MoveState stateData) : base(entity, finiteStateMachine, animBoolName)
+    
+    public MoveState(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName)
     {
-        this.stateData = stateData;
+       
     }
+    
 
     public override void Enter()
     {
         base.Enter();
+
     }
     public override void Exit()
     {

@@ -83,7 +83,7 @@ public class DungeonManager : MonoBehaviour
                 if (door.isConnected)
                 {
                     Vector3 doorPos;
-                    GameObject newDoor = null;
+                    GameObject newDoor;
 
                     switch (door.direction)
                     {
@@ -95,6 +95,8 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTile);
                             wallMap.SetTile(tilePos, doorFrameTile);
+                                                room.prefab.doors.Add(newDoor.GetComponent<Door>());
+
 
                             break;
                         case DoorDirection.South:
@@ -104,6 +106,8 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTile);
                             wallMap.SetTile(tilePos, doorFrameTile);
+                                                room.prefab.doors.Add(newDoor.GetComponent<Door>());
+
                             break;
                         case DoorDirection.East:
                             doorPos = new Vector3(door.GetPosition().x - 0.5f, door.GetPosition().y + 0.5f, 0);
@@ -112,6 +116,8 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTileSide);
                             wallMap.SetTile(tilePos, doorFrameTileSide);
+                                                room.prefab.doors.Add(newDoor.GetComponent<Door>());
+
                             break;
                         case DoorDirection.West:
                             doorPos = new Vector3(door.GetPosition().x + 0.5f, door.GetPosition().y + 0.5f, 0);
@@ -120,9 +126,12 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTileSide);
                             wallMap.SetTile(tilePos, doorFrameTileSide);
+                                                room.prefab.doors.Add(newDoor.GetComponent<Door>());
+
+                            break;
+                        default:
                             break;
                     }
-                    room.prefab.doors.Add(newDoor.GetComponent<Door>());
 
                     continue;
                 }
@@ -150,7 +159,7 @@ public class DungeonManager : MonoBehaviour
 
         Vector2Int bottomLeft = Vector2Int.Min(posA, posB);
 
-        GameObject hallwayPrefab = null;
+        GameObject hallwayPrefab;
         Quaternion rotation = Quaternion.identity;
 
         // Determine direction of hallway

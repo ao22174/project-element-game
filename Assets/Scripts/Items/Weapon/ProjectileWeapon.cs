@@ -27,8 +27,6 @@ public class ProjectileWeapon : Weapon
         projectileSpeed = projectileData.projectileSpeed;
         projectileLifetime = projectileData.projectileLifetime;
         projectilePrefab = projectileData.projectilePrefab;
-        stats = player?.stats;
-
     }
 
     public override void Attack(Vector2 direction)
@@ -54,5 +52,6 @@ public class ProjectileWeapon : Weapon
         }
     }
 
-    public override float CalculateDamage() => (damage * (1 + stats.percentAttackBonus) + stats.flatAttackBonus) * (1 + stats.GetDamageBonus(elementType));
+    public override float CalculateDamage() => (damage * (1 + player?.stats.percentAttackBonus ?? 0f) + player?.stats.flatAttackBonus ?? 0f) *
+                                                (1 + player?.stats.GetDamageBonus(elementType) ?? 0f);
 }

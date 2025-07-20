@@ -20,16 +20,19 @@ public class BuffChest : MonoBehaviour
         }
     }
 
+
     private void OpenChest()
     {
         isOpened = true;
+        Debug.Log("Opening");
 
         animator?.SetTrigger("Open");
 
         if (openSound != null)
             AudioSource.PlayClipAtPoint(openSound, transform.position);
 
-        buffSelectionUI.ShowBuffs(() => {
+        buffSelectionUI.ShowBuffs(() =>
+        {
         });
     }
 

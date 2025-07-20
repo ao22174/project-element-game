@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Pickup : MonoBehaviour
+public class PickupManager : MonoBehaviour
 {
     public List<WeaponPickup> nearbyWeapons = new List<WeaponPickup>();
     private void OnTriggerEnter2D(Collider2D collision)

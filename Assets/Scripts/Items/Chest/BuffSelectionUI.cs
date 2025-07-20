@@ -15,7 +15,7 @@ public class BuffSelectionUI : MonoBehaviour
     [SerializeField] public RectTransform chestSpawnPoint;
     public Transform buffCardContainer;   // set to the HorizontalLayoutGroup object
 
-    private Action onBuffSelectedCallback;
+    private Action onBuffSelectedCallback = null!;
 
     private void Awake()
     {
@@ -62,7 +62,7 @@ public class BuffSelectionUI : MonoBehaviour
 
     private void SelectBuff(BuffData buff)
     {
-        Player player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<Player>();
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
         player.buffs.AddBuff(buff.CreateBuffInstance()); // Adjust to your structure
 
         gameObject.SetActive(false);
