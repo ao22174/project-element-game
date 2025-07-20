@@ -1,17 +1,38 @@
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+
+public class CameraMouseOffset : MonoBehaviour
 {
-    public Transform target;          // The character to follow
-    public Vector3 offset = new Vector3(0, 0, -10);  // Adjust this for 2D/3D
-    public float smoothSpeed = 5f;    // Higher = snappier camera
+    public Player player; // Assign the player in inspector
+    public float offsetStrength = 3f; // How far the camera can offset toward the mouse
+    public float followSpeed = 5f;    // Smoothness of camera movement
+
+    private Camera cam;
+
+    void Start()
+    {
+        cam = Camera.main;
+    }
 
     void LateUpdate()
     {
-        if (target == null) return;
+        if (player == null || cam == null) return;
 
-        Vector3 desiredPosition = target.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-        transform.position = smoothedPosition;
+        // Get mouse position in world space
+        Vector3 mouseWorld = player.InputHandler.MousePosition;
+        mouseWorld.z = 0f;
+
+        // Direction vector from player to mouse
+        Vector3 direction = (mouseWorld - player.transform.position).normalized;
+
+        // Offset is scaled direction
+        Vector3 offset = direction * offsetStrength;
+
+        // Desired camera position = player position + slight offset
+        Vector3 targetPos = player.transform.position + offset;
+        targetPos.z = transform.position.z; // Maintain original camera Z
+
+        // Smooth movement
+        transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
     }
 }

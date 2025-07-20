@@ -9,14 +9,14 @@ using UnityEngine.Rendering;
 
 public class Player : MonoBehaviour
 {
-   //STATE MACHINE LOGIC
-    public PlayerStateMachine StateMachine { get; private set; } 
+    //STATE MACHINE LOGIC
+    public PlayerStateMachine StateMachine { get; private set; }
     public PlayerStateMachine AttackStateMachine { get; private set; }
-    public PlayerIdleState IdleState { get; private set; } 
-    public PlayerMoveState MoveState { get; private set; } 
+    public PlayerIdleState IdleState { get; private set; }
+    public PlayerMoveState MoveState { get; private set; }
     public PlayerDashState DashState { get; private set; }
     public PlayerAttackState AttackState { get; private set; }
-    public PlayerAttackIdleState AttackIdleState { get; private set; } 
+    public PlayerAttackIdleState AttackIdleState { get; private set; }
 
     //ANIMATOR AND INPUT LOGIC
     public Animator Anim { get; private set; }
@@ -46,8 +46,14 @@ public class Player : MonoBehaviour
     public PlayerBuffs buffs;
     public PlayerStatModifiers stats;
 
+    public GameObject rightHandTransform;
+    public GameObject leftHandTransform;
 
-   
+    public Transform leftHandAnchor;
+    public Transform rightHandAnchor;
+
+
+
 
     private void Start()
     {
@@ -76,7 +82,7 @@ public class Player : MonoBehaviour
         heartDisplay.SetHearts(currentHealth, maxHealth);
         weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, this));
         EquipWeapon(currentWeaponIndex);
-        
+
     }
 
     private void Update()
@@ -94,7 +100,7 @@ public class Player : MonoBehaviour
             if (pickup.nearbyWeapons.Count > 0)
             {
                 WeaponPickup weaponPickup = pickup.nearbyWeapons[0];
-                if (weapons.Count >= 2) Drop(weapons[currentWeaponIndex],this.transform.position);
+                if (weapons.Count >= 2) Drop(weapons[currentWeaponIndex], this.transform.position);
                 weaponPickup.PickupWeapon(this);
             }
         }
@@ -104,6 +110,8 @@ public class Player : MonoBehaviour
     {
         WeaponPickupFactory.Create(weapon, dropPosition);
     }
+
+
 
     public void HealthModify(float health)
     {
@@ -153,6 +161,19 @@ public class Player : MonoBehaviour
             currentWeaponVisual.transform.localPosition = Vector3.zero;
             currentWeaponVisual.transform.localRotation = Quaternion.identity;
             currentWeaponVisual.transform.localScale = Vector3.one;
+            leftHandAnchor = currentWeaponVisual.transform.Find("LeftHandAnchor");
+            rightHandAnchor = currentWeaponVisual.transform.Find("RightHandAnchor");
+
+            if (leftHandAnchor != null && rightHandAnchor != null)  
+            {
+                leftHandTransform.transform.SetParent(leftHandAnchor, false);
+                rightHandTransform.transform.SetParent(rightHandAnchor, false);
+            }
+            else
+            {
+                Debug.LogWarning("Missing hand anchors on weapon prefab: " + currentWeapon.Weaponname);
+            }
+
         }
         else
         {

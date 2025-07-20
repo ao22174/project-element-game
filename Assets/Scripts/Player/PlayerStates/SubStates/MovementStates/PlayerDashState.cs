@@ -16,9 +16,6 @@ public class PlayerDashState : PlayerState
         base.Enter();
         dashDirection = player.LastInputDirection;  
         dashStartTime = Time.time;
-        player.InputHandler.UseDashInput();
-
-
         player.SetVelocity(playerData.dashSpeed * dashDirection);
     }
     public override void Exit()

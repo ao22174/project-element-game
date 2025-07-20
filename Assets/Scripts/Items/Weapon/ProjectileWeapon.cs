@@ -51,7 +51,7 @@ public class ProjectileWeapon : Weapon
             }
         }
     }
-
-    public override float CalculateDamage() => (damage * (1 + player?.stats.percentAttackBonus ?? 0f) + player?.stats.flatAttackBonus ?? 0f) *
-                                                (1 + player?.stats.GetDamageBonus(elementType) ?? 0f);
+    public override float CalculateDamage() => (damage * (1 + (player != null ? player.stats.percentAttackBonus : 0f)) +
+                                                            (player != null ? player.stats.flatAttackBonus : 0f)) *
+                                                            (1 + (player != null ? player.stats.GetDamageBonus(elementType) : 0f));
 }

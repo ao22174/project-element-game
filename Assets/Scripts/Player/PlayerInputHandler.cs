@@ -12,14 +12,17 @@ public class PlayerInputHandler : MonoBehaviour
     public bool FireInput { get; private set; }
     public bool InteractInput { get; private set; }
     private InputAction interact;
+    private InputAction dash;
     void Start()
     {
         interact = InputSystem.actions.FindAction("Interact");
+        dash = InputSystem.actions.FindAction("Dash");
     }
     void Update()
     {
         MousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         InteractInput = interact.WasPressedThisFrame();
+        DashInput = dash.WasPressedThisFrame();
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -37,9 +40,4 @@ public class PlayerInputHandler : MonoBehaviour
     {
         FireInput = context.ReadValueAsButton(); // Works for hold and release
     }
-
-
-
-    // These are called by gameplay systems after processing the input:
-    public void UseDashInput() => DashInput = false;
 }

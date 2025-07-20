@@ -32,7 +32,6 @@ public class PlayerMoveState : PlayerState
         if(player.InputHandler.DashInput)
         {
             if(player.DashState.CheckIfCanDash())   stateMachine.ChangeState(player.DashState);
-            else player.InputHandler.UseDashInput();
         }
         
 
