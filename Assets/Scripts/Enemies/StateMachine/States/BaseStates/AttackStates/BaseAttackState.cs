@@ -1,10 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using System;
 
-public class EntityAttackIdleState : State
+public class EntityAttackState : State
 {
-    public EntityAttackIdleState(Entity entity, FiniteStateMachine stateMachine, string animBoolName) : base(entity, stateMachine, animBoolName)
+
+    public EntityAttackState(Entity entity, FiniteStateMachine stateMachine, string animBoolName) : base(entity, stateMachine, animBoolName)
     {
     }
 
@@ -12,8 +12,6 @@ public class EntityAttackIdleState : State
     {
         base.Enter();
     }
-
-
 
     public override void Exit()
     {
@@ -23,17 +21,18 @@ public class EntityAttackIdleState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
-        if (entity.PlayerInSight() && entity.attackState.CanFire())
-        {
-            stateMachine.ChangeState(entity.attackState);
-        }
-
+        
+        OnAttack();
+        
     }
+
+    public virtual void OnAttack(){}
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
     }
+
+    
 
 }

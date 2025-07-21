@@ -54,6 +54,7 @@ public class EntityData : ScriptableObject
     public float awarenessRadius = 6f;
     public bool canDodge = false;
     public bool usesLineOfSight = true;
+    public bool hasPathfinding = true;
 
     [Header("Effects & Audio")]
     [SerializeField]public GameObject deathEffectPrefab;

@@ -23,10 +23,10 @@ public class StationaryState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (!entity.PlayerInSight())
-        {
-            stateMachine.ChangeState(entity.wanderState);
-        }
+        // if (!entity.PlayerInSight())
+        // {
+        //     stateMachine.ChangeState(entity.wanderState);
+        // }
         
     }
 

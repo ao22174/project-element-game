@@ -51,6 +51,7 @@ public class Player : MonoBehaviour
 
     public Transform leftHandAnchor;
     public Transform rightHandAnchor;
+    
 
 
 

@@ -27,8 +27,8 @@ public class FreezeState : State
     {
         base.LogicUpdate();
 
-        if (isFrozen) return;
-        stateMachine.ChangeState(entity.idleState);
+        // if (isFrozen) return;
+        // stateMachine.ChangeState(entity.idleState);
         
 
     }

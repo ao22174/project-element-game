@@ -1,70 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
-using ElementProject;
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Entity : MonoBehaviour
-{
-    //Data reference
-    public EntityData entityData;
-    //StateMachine Reference
-    public FiniteStateMachine attackStateMachine;
-    public EntityAttackIdleState attackIdleState;
-    public EntityAttackState attackState;
-    public FiniteStateMachine stateMachine;
-    public StationaryState stationaryState;
 
+public abstract class Entity : MonoBehaviour
+{
+    //--- DATA OF ENEMY --- 
+    public EntityData entityData;
+    //--- STATE MACHINES --- 
+    public FiniteStateMachine attackStateMachine;
+    public FiniteStateMachine stateMachine;
+
+    // --- GLOBAL STATES ---
     public EntityAttackFreezeState attackFrozenState;
     public FreezeState frozenState;
-    public Rigidbody2D rb { get; private set; }
-    public Animator anim { get; private set; }
-    public GameObject aliveGO { get; private set; }
-    public Transform player { get; private set; }
-    public WanderState wanderState;
-    public IdleState idleState;
+    // --- ENEMY CORE ---
+    public Rigidbody2D rb { get; private set; } = null!;
+    public Animator anim { get; private set; } = null!;
+    public GameObject aliveGO { get; private set; } = null!;
+    public Transform player { get; private set; } = null!;
     public Seeker seeker;
     public Path path;
     public EnemySpawner enemySpawner;
+    
+    // --- ENEMY DYNAMIC INFO ---
     public float currentHealth;
+
+    public virtual EntityAttackIdleState GetAttackIdleState() => null;
 
 
     public virtual void Start()
     {
+        // --- ASSIGN STATE MACHINES ---
+        stateMachine = new FiniteStateMachine();
+        attackStateMachine = new FiniteStateMachine();
+
+        attackFrozenState = new EntityAttackFreezeState(this, attackStateMachine, "frozen");
+        frozenState = new FreezeState(this, stateMachine, "frozen");
+
+        // --- ASSIGN CORE ---
         aliveGO = transform.Find("Alive").GameObject();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        stateMachine = new FiniteStateMachine();
-        wanderState = new WanderState(this, stateMachine, "isWandering");
-        idleState = new IdleState(this, stateMachine, "isWandering");
-
-        attackStateMachine = new FiniteStateMachine();
-        attackIdleState = new EntityAttackIdleState(this, attackStateMachine, "attackIdling");
-        attackState = new EntityAttackState(this, attackStateMachine, "attacking");
-        stationaryState = new StationaryState(this, stateMachine, "Stationary");
-        attackFrozenState = new EntityAttackFreezeState(this, attackStateMachine, "frozen");
-        frozenState = new FreezeState(this, stateMachine, "frozen");
-        
-
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         seeker = GetComponent<Seeker>();
+
         currentHealth = entityData.healthPoints;
 
-        stateMachine.Initialize(idleState);
-        attackStateMachine.Initialize(attackIdleState);
-        InvokeRepeating("UpdatePath", 0f, 0.5f);
+        InitializeStates();
+        if (entityData.usesPathfinding)
+            InvokeRepeating("UpdatePath", 0f, 0.5f);
     }
+
+    protected abstract void InitializeStates();
 
     void UpdatePath()
     {
+        Debug.Log("updating");
         if (player == null || seeker == null) return;
-
+        Debug.Log("attemping");
         seeker.StartPath(transform.position, player.position, OnPathComplete);
     }
 
-    public void HitBullet(float damage, Vector2 direction)
+    public virtual void HitBullet(float damage, Vector2 direction)
     {
         currentHealth -= damage;
         if (currentHealth <= 0)
@@ -76,8 +74,10 @@ public class Entity : MonoBehaviour
 
     private void OnPathComplete(Path p)
     {
+        Debug.Log("gets here");
         if (!p.error)
         {
+            Debug.Log("woor");
             path = p;
         }
     }
@@ -112,16 +112,25 @@ public class Entity : MonoBehaviour
 
     public virtual void Update()
     {
+        if (stateMachine.currentState != null && attackStateMachine.currentState != null)
 
-        stateMachine.currentState.LogicUpdate();
-        attackStateMachine.currentState.LogicUpdate();
+        {
+            Debug.Log("updatei");
+            stateMachine.currentState.LogicUpdate();
+            attackStateMachine.currentState.LogicUpdate();
+        }
     }
     public virtual void FixedUpdate()
     {
-        stateMachine.currentState.PhysicsUpdate();
-                attackStateMachine.currentState.PhysicsUpdate();
+        if (stateMachine.currentState != null && attackStateMachine.currentState != null)
+
+        {
+            stateMachine.currentState.PhysicsUpdate();
+        attackStateMachine.currentState.PhysicsUpdate();    
+        }
+        
 
     }
-    
+
 
 }

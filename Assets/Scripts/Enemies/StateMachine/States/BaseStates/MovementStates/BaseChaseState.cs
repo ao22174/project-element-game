@@ -1,10 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml;
-using NUnit.Framework;
+
 using UnityEngine;
 using Pathfinding;
-using UnityEditor.Callbacks;
 
 /*
 Plan of Cleanup
@@ -20,15 +16,14 @@ Plan of Cleanup
 
 
 */
-public class WanderState : State
+public class BaseChaseState : State
 {
 
     int currentWaypoint = 0;
-    public bool attacked;
 
     public float nextWaypointDistance = 0.15f;
 
-    public WanderState(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName) { }
+    public BaseChaseState(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName) { }
 
     public override void Enter()
     {
@@ -51,12 +46,24 @@ public class WanderState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        float playerDist = Vector2.Distance(entity.player.position, entity.transform.position);
+        ChasePlayer();
+    }
 
+    public void ChasePlayer()
+    {
+        float playerDist = Vector2.Distance(entity.player.position, entity.transform.position);
+        Debug.Log("trying to chase");
         if (playerDist > entity.entityData.attackRange + 0.5f || !entity.PlayerInSight())
         {
-            if (entity.path == null) return;
+            Debug.Log("get here");
+            if (entity.path == null)
+            {
+                Debug.Log("path is null");
+                return;
+                }
+            ;
             if (currentWaypoint >= entity.path.vectorPath.Count) return;
+            Debug.Log("moving");
             Vector2 direction = ((Vector2)entity.path.vectorPath[currentWaypoint] - entity.rb.position).normalized;
             Vector2 force = direction * entity.entityData.movementSpeed;
 
@@ -64,7 +71,7 @@ public class WanderState : State
 
             float waypointDistance = Vector2.Distance(entity.rb.position, entity.path.vectorPath[currentWaypoint]);
             if (waypointDistance < nextWaypointDistance) currentWaypoint++;
-            
+
         }
         else if (playerDist <= entity.entityData.attackRange && entity.PlayerInSight())
         {

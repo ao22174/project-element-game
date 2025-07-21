@@ -17,14 +17,16 @@ public class EntityAttackFreezeState : State
     public override void Exit()
     {
         base.Exit();
+        Debug.Log("No longer frozen");
+
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
-        if (isFrozen) return;
-        stateMachine.ChangeState(entity.attackIdleState);
+        // if (isFrozen) return;
+        // stateMachine.ChangeState(entity.attackIdleState);
         
 
     }

@@ -7,6 +7,7 @@ public class FiniteStateMachine
     public State currentState { get; private set; }
     public void Initialize(State startingState)
     {
+        Debug.Log(currentState);
         currentState = startingState;
         currentState.Enter();
     }
