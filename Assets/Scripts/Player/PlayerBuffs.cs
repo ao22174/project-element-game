@@ -32,6 +32,7 @@ public class PlayerBuffs
     {
         Buff clone = (Buff)Activator.CreateInstance(newBuff.GetType());
         clone.buffData = newBuff.buffData; // Assign the data
+            clone.user = player;
         clone.OnApply(gameObject);
         activeBuffs[name] = clone;
     }
@@ -61,6 +62,12 @@ public class PlayerBuffs
     {
         foreach (var buff in activeBuffs.Values)
             buff.OnDash();
+    }
+
+    public void OnKill(GameObject target, Vector2 position)
+    {
+        foreach (var buff in activeBuffs.Values)
+            buff.OnKill(target, position);
     }
 
 

@@ -11,9 +11,9 @@ public class FrostArrowBuff : BuffData
     [SerializeField] public float arrowSpeed = 5f;
 
     [SerializeField] public float coolDown = 1f; 
-    public override Buff CreateBuffInstance()
+    public override Buff CreateBuffInstance(IWeaponUser user)
     {
-        return new IcicleBuff { buffData = this };
+        return new IcicleBuff { buffData = this, user = user };
     }
 
 }

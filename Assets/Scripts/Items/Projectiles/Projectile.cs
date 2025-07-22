@@ -13,14 +13,17 @@ public abstract class Projectile : MonoBehaviour
     protected float lifetime;
     public OwnedBy bulletOwner;
 
-    public virtual void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, OwnedBy bulletOwner)
+    public virtual void Initialize(Vector2 startPosition, Vector2 direction, float speed, float damage, float lifetime, IWeaponUser bulletOwner)
     {
         transform.position = startPosition;
         this.direction = direction.normalized;
         this.speed = speed;
         this.damage = damage;
         this.lifetime = lifetime;
-        this.bulletOwner = bulletOwner;
+        if (bulletOwner is Player) this.bulletOwner = OwnedBy.Player;
+        else if (bulletOwner is Entity) this.bulletOwner = OwnedBy.Enemy;
+        else this.bulletOwner = OwnedBy.All;
+        
 
         Destroy(gameObject, lifetime);
     }

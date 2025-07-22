@@ -1815,7 +1815,7 @@ Transform:
   m_GameObject: {fileID: 4570749973766424783}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 5, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1855,7 +1855,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 5, y: 5}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1880,12 +1880,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   entityDatas:
-  - {fileID: 11400000, guid: d26e70e9ebdfba649adf06e628a7cb03, type: 2}
+  - {fileID: 11400000, guid: 640044ee3e4017b40b8e9ddf7f1f4d6b, type: 2}
   spawned: 0
   Rounds: 3
   entities: []
   enemiesPerRound: 3
   roundCount: 0
+  chest: {fileID: 6226823370978990565, guid: f3dc9a6154df0904eba18670ccc1fc26, type: 3}
 --- !u!1 &4842245970562815870
 GameObject:
   m_ObjectHideFlags: 0
@@ -2029,7 +2030,7 @@ Transform:
   m_GameObject: {fileID: 7436160177397495665}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2075,7 +2076,6 @@ MonoBehaviour:
   - {fileID: 5237976653033211426}
   - {fileID: 109058090599322512}
   doors: []
-  spawners: []
 --- !u!1 &9133524853750000219
 GameObject:
   m_ObjectHideFlags: 0

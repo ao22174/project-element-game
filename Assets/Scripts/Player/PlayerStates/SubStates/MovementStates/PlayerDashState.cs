@@ -1,3 +1,4 @@
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 
@@ -6,8 +7,6 @@ public class PlayerDashState : PlayerState
     private float dashStartTime;
     private Vector2 dashDirection;
     private float dashEndTime;
-
-
     public PlayerDashState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
@@ -44,7 +43,7 @@ public class PlayerDashState : PlayerState
 
     public bool CheckIfCanDash()
     {
-        return Time.time >= dashEndTime + playerData.dashCooldown;
+        return (Time.time >= dashEndTime + playerData.dashCooldown);
     }
 }
 

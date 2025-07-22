@@ -5,17 +5,34 @@ using UnityEngine;
 public abstract class Weapon
 {
     public WeaponData data;
-    protected Player? player;
-    protected float damage;
+    protected IWeaponUser? owner;
+    public float damage;
     public string Weaponname;
     protected WeaponType weaponType;
-    protected ElementType elementType;
+    public ElementType elementType;
     public float cooldown;
+    public bool CanAttack() => Time.time >= attackTime + GetEffectiveCooldown();
+    public float attackTime;
     public GameObject weaponPrefab;
-    public Weapon(WeaponData data, Player? player = null)
+
+    float GetEffectiveCooldown()
+    {
+        if (owner is Player player)
+        {
+            return cooldown / (1+ player.stats.attackSpeedBonus);
+        }
+
+        else if (owner is Entity entity)
+        {
+            return cooldown + entity.entityData.attackCooldown;
+        }
+
+        else return cooldown;
+    }
+    public Weapon(WeaponData data, IWeaponUser? owner = null)
     {
         this.data = data;
-        SetOwner(player);
+        SetOwner(owner);
         Weaponname = data.weaponName;
         damage = data.damage;
         weaponType = data.weaponType;
@@ -25,11 +42,14 @@ public abstract class Weapon
     }
 
 
-    public abstract void Attack(Vector2 direction);
+    public virtual void Attack(Vector2 direction)
+    {
+        
+    }
     
     public abstract float CalculateDamage();
-    public void SetOwner(Player? player)
+    public void SetOwner(IWeaponUser? owner)
     {
-        this.player = player;
+        this.owner = owner;
     }
 }

@@ -12,7 +12,7 @@ public class ProjectileWeapon : Weapon
     private float projectileSpeed;
     private float projectileLifetime;
     private GameObject projectilePrefab;
-    public ProjectileWeapon(WeaponData data, Player? player) : base(data, player)
+    public ProjectileWeapon(WeaponData data, IWeaponUser owner) : base(data, owner)
     {
         if (data is ProjectileWeaponData projData)
         {
@@ -31,13 +31,15 @@ public class ProjectileWeapon : Weapon
 
     public override void Attack(Vector2 direction)
     {
-        if (player == null)
+        base.Attack(direction);
+        if (!CanAttack()) return;
+        attackTime = Time.time;
+        if (owner == null)
         {
-            Debug.Log("Player Does not exist");
-            return;
+
         }
         float startingSpread = -spreadAngle * (projectileCount - 1) / 2f;
-        projectileSpawn = player.GetFireOrigin().transform.position;
+        projectileSpawn = owner.GetFirePoint().transform.position;
         for (int i = 0; i < projectileCount; i++)
         {
             float angle = startingSpread + (spreadAngle * i);
@@ -47,11 +49,27 @@ public class ProjectileWeapon : Weapon
             Debug.DrawRay(projectileSpawn, direction * 5f, Color.red, 2f);
             if (bullet != null)
             {
-                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, OwnedBy.Player);
+                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, owner);
             }
         }
     }
-    public override float CalculateDamage() => (damage * (1 + (player != null ? player.stats.percentAttackBonus : 0f)) +
-                                                            (player != null ? player.stats.flatAttackBonus : 0f)) *
-                                                            (1 + (player != null ? player.stats.GetDamageBonus(elementType) : 0f));
+     
+    public override float CalculateDamage()
+    {
+    float baseDamage = damage;
+
+        if (owner is Player player)
+        {
+            baseDamage = (damage * (1 + (player != null ? player.stats.percentAttackBonus : 0f)) +
+                                                                (player != null ? player.stats.flatAttackBonus : 0f)) *
+                                                                (1 + (player != null ? player.stats.GetDamageBonus(elementType) : 0f));
+        }
+        else if (owner is Entity enemy)
+        {
+            //Enemy Logic not implmented
+            Debug.LogWarning("need to implement enemy damage calculation");
+        }
+
+    return baseDamage;
+}
 }

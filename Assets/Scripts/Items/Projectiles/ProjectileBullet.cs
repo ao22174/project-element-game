@@ -23,7 +23,7 @@ public class ProjectileBullet : Projectile
         {
 
             Entity entity = collision.gameObject.GetComponentInParent<Entity>();
-            entity.HitBullet(damage, direction);
+            entity.Hit(damage, gameObject, bulletOwner);
             Destroy(gameObject);
         }
     }

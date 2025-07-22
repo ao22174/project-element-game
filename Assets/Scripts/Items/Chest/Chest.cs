@@ -12,6 +12,13 @@ public class BuffChest : MonoBehaviour
     private bool isOpened = false;
     private bool playerInRange = false;
 
+    void Start()
+    {
+        Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        inputHandler = player.InputHandler;
+        buffSelectionUI = GameObject.FindGameObjectWithTag("BuffManager").GetComponent<BuffSelectionUI>();
+    }
+
     void Update()
     {
         if (playerInRange && !isOpened && inputHandler.InteractInput)
@@ -31,6 +38,7 @@ public class BuffChest : MonoBehaviour
         if (openSound != null)
             AudioSource.PlayClipAtPoint(openSound, transform.position);
 
+        
         buffSelectionUI.ShowBuffs(() =>
         {
         });

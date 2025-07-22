@@ -17,32 +17,38 @@ public struct ElementDamageBonuses
 }
 public class PlayerStatModifiers
 {
+    //--- ATTACK BOOSTS ---
     public int flatAttackBonus;
     public float percentAttackBonus;
-    public float movementSpeedBonus;
 
+    // --- MOVEMENT BOOSTS ---
+    public float movementSpeedBonus;
+    public int bonusDashes;
+
+    // --- HP ---
     public float flatHPBonus;
+    public float MaxHealth = 100f;
     public float percentHPBonus;
+
+    // --- DEF BOOSTS ---
 
     public int flatDefenseBonus;
     public float percentDefenseBonus;
+    public float stunResistance;           // 0 to 1
+    public float damageReduction;          // 0 to 1
+    public float knockbackResistance;
+
+    // ---  CRIT BOOSTS ---
 
     public float criticalChanceBonus;      // 0.15 = 15%
     public float criticalDamageBonus;      // e.g. 1.5 = 150% damage
 
+    // --- ATTACK SPEED BOOSTS ---
+
     public float attackSpeedBonus;         // Multiplier
-
     public float cooldownReduction;        // 0.2 = 20% reduction
-    public float healthRegenBonus;
 
-    public float stunResistance;           // 0 to 1
-    public float damageReduction;          // 0 to 1
-
-    public float elementalDamageBonus;
-
-    public float lifeStealPercent;
-
-    public float knockbackResistance;
+    // --- MISC BOOSTS --- 
 
     public float experienceBonus;
     public float goldBonus;

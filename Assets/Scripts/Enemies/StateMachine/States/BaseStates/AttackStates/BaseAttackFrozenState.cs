@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -25,8 +26,8 @@ public class EntityAttackFreezeState : State
     {
         base.LogicUpdate();
 
-        // if (isFrozen) return;
-        // stateMachine.ChangeState(entity.attackIdleState);
+        if (isFrozen) return;
+        stateMachine.ChangeState(entity.freezeAttackReturnState);
         
 
     }

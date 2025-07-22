@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6620454ea661124383eb67ffc7602b6, type: 3}
+  m_Name: CorpseBloom
+  m_EditorClassIdentifier: 
+  buffName: CorpseBloom
+  buffSpirte: {fileID: -5965110197927942415, guid: eaf773cb6b34ef4468f8ec594630ee69, type: 3}
+  type: 0
+  element: 1
+  buffDescription: Lorem Ipsum
+  bloom: {fileID: 8970704241102501798, guid: 70c06abab53ca8e44b3bb4a684827f98, type: 3}
+  damage: 30
+  damageRadius: 1
+  detonationTime: 3
+  killsRequired: 3

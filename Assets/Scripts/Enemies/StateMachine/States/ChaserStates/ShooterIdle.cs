@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-public class ChaserIdle : IdleState
+public class ShooterIdle : IdleState
 {
-    private ChaserEntity? chaser;
-    public ChaserIdle(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName)
+    private ShooterEntity? chaser;
+    public ShooterIdle(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName)
     {
-        chaser = entity as ChaserEntity;
+        chaser = entity as ShooterEntity;
         
     }
 

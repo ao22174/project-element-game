@@ -18,5 +18,5 @@ MonoBehaviour:
   element: 6
   buffDescription: RAMP IT UP, for every attack you do, increase your Attack Speed
     by 10%, the Attack speed buff is reset once you reach 100%
-  maxAttackSpeedBeforeReset: 1
-  increments: 0.1
+  maxAttackSpeedBeforeReset: 20
+  increments: 1

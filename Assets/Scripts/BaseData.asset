@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de3c690f884726f49af490815fd83c41, type: 3}
+  m_Name: BaseData
+  m_EditorClassIdentifier: 
+  entityName: Enemy
+  enemyPrefab: {fileID: 3355907355030600115, guid: a56b7f7a56f53b14abdbdea112ab8fac, type: 3}
+  elementType: 0
+  behaviourType: 2
+  animator: {fileID: 0}
+  freezeResistance: 0.8
+  stunResistance: 0.6
+  poisonResistance: 0.4
+  healthPoints: 10
+  damage: 1
+  attackCooldown: 1
+  attackRange: 2
+  usesProjectile: 1
+  projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
+  projectileSpeed: 3
+  aimAtPlayer: 1
+  movementSpeed: 1
+  wanderRadius: 3
+  orbitDistance: 3
+  chargeSpeed: 7
+  chargeCooldown: 3
+  chaseRange: 8
+  aggression: 0.5
+  reactionTime: 0.2
+  awarenessRadius: 6
+  canDodge: 0
+  usesLineOfSight: 1
+  hasPathfinding: 1
+  deathEffectPrefab: {fileID: 0}
+  attackSFX: {fileID: 0}
+  deathSFX: {fileID: 0}
+  iceCube: {fileID: 6404317123687976056, guid: 5d9395a873928684dbe1dd4fa2bd39ea, type: 3}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 128
+  stopAtWalls: 1
+  usesPathfinding: 1
+  isBoss: 0
+  phaseChangeHealthThreshold: 0.5
+  minionsToSummon: []

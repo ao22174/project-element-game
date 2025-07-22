@@ -1,37 +1,88 @@
-using UnityEngine;
 using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
-public class ShooterEntity : Entity
+public class ShooterEntity : Entity, IWeaponUser
 {
-    BaseChaseState wanderState;
-    IdleState idleState;
+    // EXPECTED BEHAVIOUR --- Idle -> (On Sight) -> Idle -> (Out LOS) -> Chase
+    public ShooterChase chaseState;
+    public ShooterIdle chaserIdle;
+    public ShooterAttack chaserAttack;
+    public ShooterAttackIdle chaserAttackIdle;
 
-    StationaryState stationaryState;
+    public ShooterData shooterData;
+    public Transform weaponHoldPoint;
+    public GameObject weaponDisplay;
+    public Weapon weapon;
 
-    public EntityAttackState attackState { get; private set; }
-
-    public EntityAttackIdleState attackIdleState { get; private set; }
-
-    public EntityAttackFreezeState attackFreezeState { get; private set; }
+    public Transform GetFirePoint()
+    {
+        if (weaponDisplay == null) throw new NullReferenceException("fireOrigin is null");
+        return weaponDisplay.transform.Find("fireOrigin");
+    }
 
     public override void Start()
     {
         base.Start();
-        wanderState = new BaseChaseState(this, stateMachine, "isWandering");
-        idleState = new IdleState(this, stateMachine, "isWandering");
+        chaseState = new ShooterChase(this, stateMachine, "Chasing");
+        chaserIdle = new ShooterIdle(this, stateMachine, "Idle");
 
-        attackStateMachine = new FiniteStateMachine();
-        attackIdleState = new EntityAttackIdleState(this, attackStateMachine, "attackIdling");
-        attackState = new EntityAttackState(this, attackStateMachine, "attacking");
-        stationaryState = new StationaryState(this, stateMachine, "Stationary");
-        attackFreezeState = new EntityAttackFreezeState(this, stateMachine, "Frozen");
+        chaserAttack = new ShooterAttack(this, attackStateMachine, "Attacking");
+        chaserAttackIdle = new ShooterAttackIdle(this, attackStateMachine, "AttackIdle");
 
-        stateMachine.Initialize(idleState);
-        attackStateMachine.Initialize(attackIdleState);
+        stateMachine.Initialize(chaserIdle);
+        attackStateMachine.Initialize(chaserAttackIdle);
+
+        shooterData = entityData as ShooterData;
+
+        if (shooterData == null)
+        {
+    Debug.LogError($"Expected ShooterData, got {entityData.GetType()} on {gameObject.name}");
+            return;
+        }
+
+        freezeAttackReturnState = chaserAttackIdle;
+        freezeReturnState = chaserIdle;
+
+        LoadWeapon(UnityEngine.Random.Range(0, shooterData.useableWeapons.Count));
+
     }
 
+    public override void Update()
+    {
+        base.Update();
+    }
+
+    private void LoadWeapon(int index)
+    {
+        weapon = WeaponFactory.CreateWeapon(shooterData.useableWeapons[index], this);
+        weaponDisplay = Instantiate(weapon.weaponPrefab, weaponHoldPoint);
+    }
+
+    private void LookAtEnemy()
+    {
+        //Rotate Enemy to player
+        if (!PlayerInSight()) return;
+
+
+        transform.localScale =new Vector3((player.position.x < transform.position.x) ? -1 : 1, 1, 1);
+
+
+        //Rotate Weapon to player
+        if (weaponDisplay == null) return;
+
+        Vector2 direction = ((Vector2)this.player.position - (Vector2)weaponHoldPoint.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
+
+        bool flip = (angle > 90 || angle < -90);
+        weaponDisplay.transform.localScale = new Vector3(flip ? -1 : 1, flip ? -1 : 1, 1);
+    }
     protected override void InitializeStates()
     {
-        throw new NotImplementedException();
+
     }
+
+
 }

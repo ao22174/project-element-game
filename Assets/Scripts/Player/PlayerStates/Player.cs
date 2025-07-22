@@ -6,8 +6,9 @@ using ElementProject;
 using System;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
+using ElementProject.gameEnums;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IWeaponUser
 {
     //STATE MACHINE LOGIC
     public PlayerStateMachine StateMachine { get; private set; }
@@ -40,7 +41,6 @@ public class Player : MonoBehaviour
     public float currentHealth;
     public bool isInvincible;
     public HeartDisplay heartDisplay;
-    public float maxHealth = 100;
     public WeaponData startingWeapon;
 
     public PlayerBuffs buffs;
@@ -51,13 +51,14 @@ public class Player : MonoBehaviour
 
     public Transform leftHandAnchor;
     public Transform rightHandAnchor;
-    
 
 
 
 
     private void Start()
     {
+
+        // SET STATE MACHINES
         StateMachine = new PlayerStateMachine();
         AttackStateMachine = new PlayerStateMachine();
 
@@ -79,8 +80,8 @@ public class Player : MonoBehaviour
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
         FacingDirection = 1;
-        currentHealth = 100;
-        heartDisplay.SetHearts(currentHealth, maxHealth);
+        currentHealth = stats.MaxHealth;
+        heartDisplay.SetHearts(currentHealth, stats.MaxHealth);
         weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, this));
         EquipWeapon(currentWeaponIndex);
 
@@ -106,6 +107,24 @@ public class Player : MonoBehaviour
             }
         }
     }
+    void OnEnable()
+    {
+        CombatEvents.OnEnemyKilled += HandleEnemyKill;
+    }
+
+    void OnDisable()
+    {
+        CombatEvents.OnEnemyKilled -= HandleEnemyKill;
+    }
+    private void HandleEnemyKill(EnemyDeathInfo info)
+    {
+        Debug.Log("kill");
+        if (info.source == OwnedBy.Player)
+        {
+            Debug.Log("by you");
+            buffs.OnKill(gameObject, info.position);
+        }
+    }
 
     public void Drop(Weapon weapon, Vector2 dropPosition)
     {
@@ -117,7 +136,7 @@ public class Player : MonoBehaviour
     public void HealthModify(float health)
     {
         currentHealth += health;
-        heartDisplay.SetHearts(currentHealth, maxHealth);
+        heartDisplay.SetHearts(currentHealth, stats.MaxHealth);
         ActivateIFrames(0.5f);
     }
     public void ActivateIFrames(float duration)
@@ -151,35 +170,25 @@ public class Player : MonoBehaviour
         currentWeaponIndex = index;
         currentWeapon = weapons[index];
 
-        // Destroy old weapon visual if any
         if (currentWeaponVisual != null)
             Destroy(currentWeaponVisual);
 
-        // Instantiate the weapon prefab instead of creating new GameObject + SpriteRenderer
         if (currentWeapon.weaponPrefab != null)
         {
             currentWeaponVisual = Instantiate(currentWeapon.weaponPrefab, weaponHoldPoint);
-            currentWeaponVisual.transform.localPosition = Vector3.zero;
-            currentWeaponVisual.transform.localRotation = Quaternion.identity;
-            currentWeaponVisual.transform.localScale = Vector3.one;
             leftHandAnchor = currentWeaponVisual.transform.Find("LeftHandAnchor");
             rightHandAnchor = currentWeaponVisual.transform.Find("RightHandAnchor");
-
-            if (leftHandAnchor != null && rightHandAnchor != null)  
+            if (leftHandAnchor != null && rightHandAnchor != null)
             {
                 leftHandTransform.transform.SetParent(leftHandAnchor, false);
                 rightHandTransform.transform.SetParent(rightHandAnchor, false);
             }
-            else
-            {
-                Debug.LogWarning("Missing hand anchors on weapon prefab: " + currentWeapon.Weaponname);
-            }
+            else Debug.LogWarning("Missing hand anchors on weapon prefab: " + currentWeapon.Weaponname);
+
 
         }
-        else
-        {
-            Debug.LogWarning("Weapon prefab missing for: " + currentWeapon.Weaponname);
-        }
+        else Debug.LogWarning("Weapon prefab missing for: " + currentWeapon.Weaponname);
+
     }
 
     public void OnPrevious(InputAction.CallbackContext context)
@@ -229,10 +238,13 @@ public class Player : MonoBehaviour
         FacingDirection *= -1;
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
-    public Transform GetFireOrigin()
+
+    public Transform GetFirePoint()
     {
         if (currentWeaponVisual == null) throw new NullReferenceException("fireOrigin is null");
         return currentWeaponVisual.transform.Find("fireOrigin");
     }
+
+
 }
 

@@ -16,7 +16,7 @@ using UnityEngine;
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (player.InputHandler.FireInput && player.AttackState.CanFire())
+        if (player.InputHandler.FireInput)
         {
             stateMachine.ChangeState(player.AttackState);
         }

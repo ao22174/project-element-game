@@ -11,7 +11,7 @@ public abstract class BuffData : ScriptableObject
     [SerializeField] public ElementType element;
     [SerializeField] public string buffDescription ="Lorem Ipsum";
     
-    public abstract Buff CreateBuffInstance();
+    public abstract Buff CreateBuffInstance(IWeaponUser user);
 
 
 }

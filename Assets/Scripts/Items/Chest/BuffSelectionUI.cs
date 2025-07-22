@@ -11,18 +11,18 @@ public class BuffSelectionUI : MonoBehaviour
 
     [SerializeField] private GameObject buffButtonPrefab;
     [SerializeField] private Transform buttonContainer;
-    [SerializeField] private List<BuffData> allBuffs;
     [SerializeField] public RectTransform chestSpawnPoint;
+
     public Transform buffCardContainer;   // set to the HorizontalLayoutGroup object
 
     private Action onBuffSelectedCallback = null!;
 
-    private void Awake()
+    public void Awake()
     {
-        Instance = this;
-        gameObject.SetActive(false);
+        buffCardContainer.gameObject.SetActive(false);   
     }
-    private System.Collections.IEnumerator AnimateToFinalPosition(RectTransform cardRect)
+
+    private System.Collections.IEnumerator AnimateToFinalPosition(RectTransform cardRect, Button button)
     {
         // Wait until end of frame so layout can update
         yield return new WaitForEndOfFrame();
@@ -35,18 +35,23 @@ public class BuffSelectionUI : MonoBehaviour
 
         // Animate
         cardRect.DOMove(finalPos, 0.6f).SetEase(Ease.OutBack);
+       button.interactable = true;  // disable button initially
+
+
     }
 
     public void ShowBuffs(Action onBuffSelected)
     {
         onBuffSelectedCallback = onBuffSelected;
-        gameObject.SetActive(true);
+        buffCardContainer.gameObject.SetActive(true);
         ClearButtons();
 
-        List<BuffData> selected = GetRandomBuffs(3);
+        List<BuffData> selected = BuffManager.Instance.GetRandomBuffs(3);
         foreach (BuffData buff in selected)
         {
             GameObject buttonGO = Instantiate(buffButtonPrefab, buttonContainer);
+            Button button = buttonGO.GetComponent<Button>();
+            button.interactable = false;
             BuffCard buffCard = buttonGO.GetComponentInChildren<BuffCard>();
             buffCard.SetBuffCard(buff.element, buff.buffSpirte, buff.buffName, buff.buffDescription);
 
@@ -54,7 +59,7 @@ public class BuffSelectionUI : MonoBehaviour
             cardRect.position = chestSpawnPoint.position;
 
             // Delay the movement animation so layout can calculate
-            StartCoroutine(AnimateToFinalPosition(cardRect));
+            StartCoroutine(AnimateToFinalPosition(cardRect, button));
 
             buttonGO.GetComponent<Button>().onClick.AddListener(() => SelectBuff(buff));
         }
@@ -63,11 +68,11 @@ public class BuffSelectionUI : MonoBehaviour
     private void SelectBuff(BuffData buff)
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        player.buffs.AddBuff(buff.CreateBuffInstance()); // Adjust to your structure
-
-        gameObject.SetActive(false);
+        player.buffs.AddBuff(buff.CreateBuffInstance(player)); // Adjust to your structure
         ClearButtons();
         onBuffSelectedCallback?.Invoke();
+        buffCardContainer.gameObject.SetActive(false);   
+
     }
 
     private void ClearButtons()
@@ -76,20 +81,5 @@ public class BuffSelectionUI : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-    }
-
-    private List<BuffData> GetRandomBuffs(int count)
-    {
-        List<BuffData> copy = new List<BuffData>(allBuffs);
-        List<BuffData> selected = new List<BuffData>();
-
-        for (int i = 0; i < count && copy.Count > 0; i++)
-        {
-            int index = UnityEngine.Random.Range(0, copy.Count);
-            selected.Add(copy[index]);
-            copy.RemoveAt(index);
-        }
-
-        return selected;
     }
 }

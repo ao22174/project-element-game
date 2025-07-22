@@ -17,9 +17,9 @@ Plan of Cleanup
 
 
 */
-public class ChaserChase : BaseChaseState
+public class ShooterChase : BaseChaseState
 {
-    public ChaserChase(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName) { }
+    public ShooterChase(Entity entity, FiniteStateMachine finiteStateMachine, string animBoolName) : base(entity, finiteStateMachine, animBoolName) { }
 
     public override void Enter()
     {

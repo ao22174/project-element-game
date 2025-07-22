@@ -14,6 +14,9 @@ public abstract class Entity : MonoBehaviour
     // --- GLOBAL STATES ---
     public EntityAttackFreezeState attackFrozenState;
     public FreezeState frozenState;
+
+    public State freezeAttackReturnState;
+    public State freezeReturnState;
     // --- ENEMY CORE ---
     public Rigidbody2D rb { get; private set; } = null!;
     public Animator anim { get; private set; } = null!;
@@ -25,8 +28,6 @@ public abstract class Entity : MonoBehaviour
     
     // --- ENEMY DYNAMIC INFO ---
     public float currentHealth;
-
-    public virtual EntityAttackIdleState GetAttackIdleState() => null;
 
 
     public virtual void Start()
@@ -56,28 +57,37 @@ public abstract class Entity : MonoBehaviour
 
     void UpdatePath()
     {
-        Debug.Log("updating");
         if (player == null || seeker == null) return;
-        Debug.Log("attemping");
         seeker.StartPath(transform.position, player.position, OnPathComplete);
     }
 
-    public virtual void HitBullet(float damage, Vector2 direction)
+    public virtual void Hit(float damage, GameObject sourceObj, OwnedBy source)
     {
         currentHealth -= damage;
+        if (source == OwnedBy.Player) OnHit();
         if (currentHealth <= 0)
         {
             enemySpawner.UpdateAlive(this);
+            onDeath(sourceObj, source);
             Destroy(this.gameObject);
+
         }
+    }
+
+    public virtual void OnHit()
+    {
+
+    }
+
+    public virtual void onDeath(GameObject sourceObj, OwnedBy source)
+    {
+        CombatEvents.EnemyKilled(new EnemyDeathInfo(entityData, sourceObj, source, transform.position, type: this.GetType().Name, -currentHealth));
     }
 
     private void OnPathComplete(Path p)
     {
-        Debug.Log("gets here");
         if (!p.error)
         {
-            Debug.Log("woor");
             path = p;
         }
     }
@@ -104,7 +114,6 @@ public abstract class Entity : MonoBehaviour
         frozenState.setDuration(duration);
         attackFrozenState.setDuration(duration);
 
-        Debug.Log("Freezing for: " + duration + " seconds");
         stateMachine.ChangeState(frozenState);
         attackStateMachine.ChangeState(attackFrozenState);
     }
@@ -115,7 +124,6 @@ public abstract class Entity : MonoBehaviour
         if (stateMachine.currentState != null && attackStateMachine.currentState != null)
 
         {
-            Debug.Log("updatei");
             stateMachine.currentState.LogicUpdate();
             attackStateMachine.currentState.LogicUpdate();
         }

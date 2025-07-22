@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class RampUPData: BuffData
 {
-    [SerializeField] public float maxAttackSpeedBeforeReset =1f;
-    [SerializeField] public float increments = 0.1f;
-    public override Buff CreateBuffInstance()
+    [SerializeField] public float maxAttackSpeedBeforeReset =20f;
+    [SerializeField] public float increments = 1f;
+    public override Buff CreateBuffInstance(IWeaponUser user)
     {
-        return new RampingAttackSpeedBuff { buffData = this };
+        return new RampingAttackSpeedBuff { buffData = this, user = user };
     }
 
 }

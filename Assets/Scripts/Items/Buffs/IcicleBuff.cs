@@ -19,7 +19,9 @@ public class IcicleBuff : Buff
         ProjectileFreezer bullet = projectileGO.GetComponent<ProjectileFreezer>();
         if (bullet != null)
         {
-            bullet.Initialize(target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.duration, OwnedBy.Player);
+            if (user == null) Debug.Log("wanker");
+            if (user is Player) Debug.Log("coolio");
+            bullet.Initialize(target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.duration, user);
             cooldownEndTime = Time.time + data.coolDown;
         }
     }

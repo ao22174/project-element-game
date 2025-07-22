@@ -5,7 +5,7 @@ using UnityEngine;
 public class FreezeState : State
 {
     float frozenTil;
-    bool isFrozen => Time.time < frozenTil;
+    public bool isFrozen => Time.time < frozenTil;
     GameObject iceCube = null!;
     public FreezeState(Entity entity, FiniteStateMachine stateMachine, string animBoolName) : base(entity, stateMachine, animBoolName)
     {
@@ -27,8 +27,8 @@ public class FreezeState : State
     {
         base.LogicUpdate();
 
-        // if (isFrozen) return;
-        // stateMachine.ChangeState(entity.idleState);
+        if (isFrozen) return;
+        stateMachine.ChangeState(entity.freezeReturnState);
         
 
     }

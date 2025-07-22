@@ -10,6 +10,7 @@ TagManager:
   - Rooms
   - RoomGen
   - Enemy
+  - BuffManager
   layers:
   - Default
   - TransparentFX
