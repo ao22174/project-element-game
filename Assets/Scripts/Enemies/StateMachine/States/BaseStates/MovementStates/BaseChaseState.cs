@@ -1,21 +1,6 @@
 
 using UnityEngine;
 using Pathfinding;
-
-/*
-Plan of Cleanup
-1. Organisation of State Machines
-- WanderState rename to RangeMoveState, will constantly move to the player until they are both in LOS and in range, then switches to the stationary state 
-- New state StationaryState, will just stand there if the player is close enough, when player out of LOS or too far, enter RangeMoveState
-- New State of AttackedState, will get knocked back
-
-2. Detachment of attacking
-- Attacking will be its own statemachine
-- Attacking independent of Movement
-- Linked by distance/range/behaviour
-
-
-*/
 public class BaseChaseState : State
 {
 
@@ -52,20 +37,16 @@ public class BaseChaseState : State
     public void ChasePlayer()
     {
         float playerDist = Vector2.Distance(entity.player.position, entity.transform.position);
-        Debug.Log("trying to chase");
-        if (playerDist > entity.entityData.attackRange + 0.5f || !entity.PlayerInSight())
+        if (playerDist > entity.EntityData.attackRange + 0.5f || !entity.PlayerInSight())
         {
-            Debug.Log("get here");
             if (entity.path == null)
             {
-                Debug.Log("path is null");
-                return;
+                return; 
                 }
             ;
             if (currentWaypoint >= entity.path.vectorPath.Count) return;
-            Debug.Log("moving");
             Vector2 direction = ((Vector2)entity.path.vectorPath[currentWaypoint] - entity.rb.position).normalized;
-            Vector2 force = direction * entity.entityData.movementSpeed;
+            Vector2 force = direction * entity.EntityData.movementSpeed;
 
             entity.rb.linearVelocity = force;
 
@@ -73,7 +54,7 @@ public class BaseChaseState : State
             if (waypointDistance < nextWaypointDistance) currentWaypoint++;
 
         }
-        else if (playerDist <= entity.entityData.attackRange && entity.PlayerInSight())
+        else if (playerDist <= entity.EntityData.attackRange && entity.PlayerInSight())
         {
             entity.rb.linearVelocity = Vector2.zero;
         }

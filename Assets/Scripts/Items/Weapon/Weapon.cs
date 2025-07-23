@@ -7,26 +7,22 @@ public abstract class Weapon
     public WeaponData data;
     protected IWeaponUser? owner;
     public float damage;
+    public int elementBuildup;
     public string Weaponname;
     protected WeaponType weaponType;
     public ElementType elementType;
     public float cooldown;
-    public bool CanAttack() => Time.time >= attackTime + GetEffectiveCooldown();
     public float attackTime;
     public GameObject weaponPrefab;
 
     float GetEffectiveCooldown()
     {
         if (owner is Player player)
-        {
-            return cooldown / (1+ player.stats.attackSpeedBonus);
-        }
+            return cooldown / (1 + player.stats.attackSpeedBonus);
 
         else if (owner is Entity entity)
-        {
-            return cooldown + entity.entityData.attackCooldown;
-        }
-
+            return cooldown + entity.EntityData.attackCooldown;
+        
         else return cooldown;
     }
     public Weapon(WeaponData data, IWeaponUser? owner = null)
@@ -39,17 +35,15 @@ public abstract class Weapon
         elementType = data.elementType;
         cooldown = data.cooldown;
         weaponPrefab = data.weaponPrefab;
-    }
-
-
-    public virtual void Attack(Vector2 direction)
-    {
-        
+        elementBuildup = data.elementBuildup;
     }
     
+
+
+    public virtual void Attack(Vector2 direction) { }
     public abstract float CalculateDamage();
-    public void SetOwner(IWeaponUser? owner)
-    {
-        this.owner = owner;
-    }
+    public void SetOwner(IWeaponUser? owner) => this.owner = owner;
+    public bool CanAttack() => Time.time >= attackTime + GetEffectiveCooldown();
+
+    
 }

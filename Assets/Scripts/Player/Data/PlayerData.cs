@@ -3,9 +3,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "newPlayerData", menuName ="Data/Player Data/ Base Data")]
-    public class PlayerData : ScriptableObject
+    public class PlayerData : CoreData
     {
-        [Serialize] public float movementSpeed;
+        [Header("Additional Player Movement Settings")]
         [Serialize] public float dashSpeed;
         [Serialize] public float dashCooldown;
         [Serialize] public float dashDuration;

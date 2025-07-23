@@ -20,13 +20,13 @@ public class EnemyDeathInfo
     public string enemyType;
     public float overkillDamage;
 
-    public EnemyDeathInfo(EntityData enemy, GameObject killer, OwnedBy source, Vector2 position, string type, float overkill = 0f)
+    public EnemyDeathInfo(EntityData enemy, GameObject killer, OwnedBy source, Vector2 position, string enemyType, float overkillDamage = 0f)
     {
         this.source = source;
         this.enemy = enemy;
         this.killer = killer;
         this.position = position;
-        this.enemyType = type;
-        this.overkillDamage = overkill;
+        this.enemyType = enemyType;
+        this.overkillDamage = overkillDamage;
     }
 }

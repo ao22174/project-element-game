@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Scripting;
+using ElementProject.gameEnums;
 
 public class IcicleBuff : Buff
 {
@@ -11,17 +11,13 @@ public class IcicleBuff : Buff
     {
         float random = Random.Range(0f, 1f);
         FrostArrowBuff data = (FrostArrowBuff)buffData;
-        if (random > data.chanceToProc) return;
-
-        if (OnCooldown) return;
+        if (random > data.chanceToProc || OnCooldown) return;
         Quaternion rotation = Quaternion.AngleAxis(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg, Vector3.forward);
         GameObject projectileGO = GameObject.Instantiate(data.freezeProjectile, target.transform.position, rotation);
-        ProjectileFreezer bullet = projectileGO.GetComponent<ProjectileFreezer>();
+        ProjectileIceArrow bullet = projectileGO.GetComponent<ProjectileIceArrow>();
         if (bullet != null)
         {
-            if (user == null) Debug.Log("wanker");
-            if (user is Player) Debug.Log("coolio");
-            bullet.Initialize(target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.duration, user);
+            bullet.Initialize(new BulletInfo(target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.elementBuildup, ElementType.Frost, user), data.duration);
             cooldownEndTime = Time.time + data.coolDown;
         }
     }

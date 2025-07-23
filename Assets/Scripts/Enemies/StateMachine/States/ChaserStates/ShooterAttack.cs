@@ -33,7 +33,7 @@ public override void Enter()
 
     public override void OnAttack()
     {
-        if (entity.entityData.projectilePrefab == null) return;
+        if (entity.EntityData.projectilePrefab == null) return;
         Vector2 direction = (entity.player.position - entity.transform.position).normalized;
         
         chaser.weapon.Attack(direction);

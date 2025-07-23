@@ -81,8 +81,7 @@ public class EnemySpawner : MonoBehaviour
 
             GameObject newSpawn = Instantiate(entityDatas[0].enemyPrefab, spawnPos, Quaternion.identity);
             Entity entity = newSpawn.GetComponent<Entity>();
-            entity.entityData = entityDatas[0];
-            entity.enemySpawner = this;
+            entity.InitializeEnemy(entityDatas[0], this);
             entities.Add(entity);
         }
 

@@ -14,25 +14,14 @@ public enum BehaviourType
     Stationary,
 }
 
-[CreateAssetMenu(fileName = "NewEntityData", menuName = "Data/Enemy Data/Base Data")]
-public class EntityData : ScriptableObject
+public class EntityData : CoreData
 {
+    [Header("Entity Based Information")]
     [Header("Basic Info")]
-    public string entityName = "Enemy";
     [SerializeField]public GameObject enemyPrefab;
     [SerializeField]public ElementType elementType = ElementType.None;
     [SerializeField]public BehaviourType behaviourType = BehaviourType.Wander;
-    [SerializeField]public RuntimeAnimatorController animator;
 
-    [Header("Conditions")]
-    public float freezeResistance = 0.8f;
-    public float stunResistance = 0.6f;    
-    public float poisonResistance = 0.4f;
-    
-
-    [Header("Health & Combat")]
-    public float healthPoints = 10f;
-    public float damage = 1f;
     public float attackCooldown = 1.5f;
     public float attackRange = 4f;
     public bool usesProjectile = true;
@@ -41,7 +30,6 @@ public class EntityData : ScriptableObject
     public bool aimAtPlayer = true;
 
     [Header("Movement Settings")]
-    public float movementSpeed = 2f;
     public float wanderRadius = 5f;
     public float orbitDistance = 3f;
     public float chargeSpeed = 7f;

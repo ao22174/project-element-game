@@ -7,6 +7,5 @@ public class ProjectileWeaponData : WeaponData
     public float projectileSpeed;
     public int projectileCount;
     public float spreadAngle;
-
     public float projectileLifetime;
 }

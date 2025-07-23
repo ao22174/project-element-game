@@ -442,13 +442,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da2b601fea6d534a934f143bdb2edf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickup: {fileID: 4185433097835877990}
   playerData: {fileID: 11400000, guid: 163c5e5cb873eb241b8597a337b7907f, type: 2}
   currentWeaponIndex: 0
   weaponHoldPoint: {fileID: 7460655235767545952}
   currentHealth: 0
   isInvincible: 0
   heartDisplay: {fileID: 0}
-  maxHealth: 100
   startingWeapon: {fileID: 0}
   rightHandTransform: {fileID: 2850840676527305443}
   leftHandTransform: {fileID: 2850840676527305443}
@@ -660,7 +660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e43e8ac7a84692842ba657550ecc2bdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nearbyWeapons: []
+  inputHandler: {fileID: 2381681986901670531}
 --- !u!58 &3998506348632047099
 CircleCollider2D:
   m_ObjectHideFlags: 0

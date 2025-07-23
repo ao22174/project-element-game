@@ -8,24 +8,22 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using ElementProject.gameEnums;
 
-public class Player : MonoBehaviour, IWeaponUser
+public class Player : MonoBehaviour, IWeaponUser, IFreezable
 {
     //STATE MACHINE LOGIC
-    public PlayerStateMachine StateMachine { get; private set; }
-    public PlayerStateMachine AttackStateMachine { get; private set; }
-    public PlayerIdleState IdleState { get; private set; }
-    public PlayerMoveState MoveState { get; private set; }
-    public PlayerDashState DashState { get; private set; }
-    public PlayerAttackState AttackState { get; private set; }
-    public PlayerAttackIdleState AttackIdleState { get; private set; }
+    public PlayerStateMachine StateMachine { get; private set; } = null!;
+    public PlayerStateMachine AttackStateMachine { get; private set; } = null!;
+    public PlayerIdleState IdleState { get; private set; } = null!;
+    public PlayerMoveState MoveState { get; private set; } = null!;
+    public PlayerDashState DashState { get; private set; } = null!;
+    public PlayerAttackState AttackState { get; private set; } = null!;
+    public PlayerAttackIdleState AttackIdleState { get; private set; } = null!;
 
     //ANIMATOR AND INPUT LOGIC
-    public Animator Anim { get; private set; }
-    public PlayerInputHandler InputHandler { get; private set; }
-    private PickupManager pickup;
-
-    [Serialize] public PlayerData playerData;
-    public Rigidbody2D RB { get; private set; }
+     [SerializeField]public Animator Anim { get; private set; }
+     [SerializeField]public PlayerInputHandler InputHandler { get; private set; }
+    [SerializeField] public PlayerData playerData;
+    [SerializeField]public Rigidbody2D RB { get; private set; }
     public int FacingDirection { get; private set; }
     public Vector2 LastInputDirection { get; set; }
 
@@ -37,10 +35,10 @@ public class Player : MonoBehaviour, IWeaponUser
 
     //WeaponVisuals
     [SerializeField] public Transform weaponHoldPoint;
+    [SerializeField] private HeartDisplay heartDisplay;
+
     private GameObject currentWeaponVisual;
-    public float currentHealth;
-    public bool isInvincible;
-    public HeartDisplay heartDisplay;
+    public HealthManager health;
     public WeaponData startingWeapon;
 
     public PlayerBuffs buffs;
@@ -52,13 +50,8 @@ public class Player : MonoBehaviour, IWeaponUser
     public Transform leftHandAnchor;
     public Transform rightHandAnchor;
 
-
-
-
-    private void Start()
+    private void Awake()
     {
-
-        // SET STATE MACHINES
         StateMachine = new PlayerStateMachine();
         AttackStateMachine = new PlayerStateMachine();
 
@@ -71,51 +64,50 @@ public class Player : MonoBehaviour, IWeaponUser
 
         buffs = new PlayerBuffs(this, gameObject);
         stats = new PlayerStatModifiers();
-
         Anim = GetComponent<Animator>();
         InputHandler = GetComponent<PlayerInputHandler>();
-        pickup = GetComponent<PickupManager>();
         RB = GetComponent<Rigidbody2D>();
 
+    }
+
+
+    private void Start()
+    {
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
+        health.Initialize(playerData.baseMaxHealth);
+        health.usesIFrames = true;
         FacingDirection = 1;
-        currentHealth = stats.MaxHealth;
-        heartDisplay.SetHearts(currentHealth, stats.MaxHealth);
         weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, this));
         EquipWeapon(currentWeaponIndex);
-
     }
 
     private void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
         AttackStateMachine.CurrentState.LogicUpdate();
-        CheckInteractIsPressed();
         if (currentWeapon != null) RotateWeaponTowardMouse(InputHandler.MousePosition);
         FlipTowardsMouse(InputHandler.MousePosition);
     }
-    private void CheckInteractIsPressed()
-    {
-        if (InputHandler.InteractInput)
-        {
-            if (pickup.nearbyWeapons.Count > 0)
-            {
-                WeaponPickup weaponPickup = pickup.nearbyWeapons[0];
-                if (weapons.Count >= 2) Drop(weapons[currentWeaponIndex], this.transform.position);
-                weaponPickup.PickupWeapon(this);
-            }
-        }
-    }
+
     void OnEnable()
     {
         CombatEvents.OnEnemyKilled += HandleEnemyKill;
+        health.onHealthModifed +=  HandleHealthChange;
     }
 
     void OnDisable()
     {
         CombatEvents.OnEnemyKilled -= HandleEnemyKill;
+        health.onHealthModifed -= HandleHealthChange;
     }
+
+    void HandleHealthChange(float currenthealth, float maxhealth)
+    {
+        heartDisplay.SetHearts(currenthealth, maxhealth);
+    }
+    
+
     private void HandleEnemyKill(EnemyDeathInfo info)
     {
         Debug.Log("kill");
@@ -126,31 +118,6 @@ public class Player : MonoBehaviour, IWeaponUser
         }
     }
 
-    public void Drop(Weapon weapon, Vector2 dropPosition)
-    {
-        WeaponPickupFactory.Create(weapon, dropPosition);
-    }
-
-
-
-    public void HealthModify(float health)
-    {
-        currentHealth += health;
-        heartDisplay.SetHearts(currentHealth, stats.MaxHealth);
-        ActivateIFrames(0.5f);
-    }
-    public void ActivateIFrames(float duration)
-    {
-        if (isInvincible) return;
-        StartCoroutine(IFrameCoroutine(duration));
-    }
-
-    private IEnumerator IFrameCoroutine(float duration)
-    {
-        isInvincible = true;
-        yield return new WaitForSeconds(duration);
-        isInvincible = false;
-    }
 
     private void FlipTowardsMouse(Vector2 mousePosition)
     {
@@ -218,7 +185,7 @@ public class Player : MonoBehaviour, IWeaponUser
         weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
 
         // Flip weapon visual's local scale on Y to mirror the sprite only
-        bool flip = (angle > 90 || angle < -90);
+        bool flip = angle > 90 || angle < -90;
         currentWeaponVisual.transform.localScale = new Vector3(1, flip ? -1 : 1, 1);
     }
 
@@ -245,6 +212,9 @@ public class Player : MonoBehaviour, IWeaponUser
         return currentWeaponVisual.transform.Find("fireOrigin");
     }
 
-
+    public void ApplyFreeze(float duration)
+    {
+        throw new NotImplementedException();
+    }
 }
 

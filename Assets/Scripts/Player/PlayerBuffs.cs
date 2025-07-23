@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ElementProject.gameEnums;
 using UnityEngine;
 
 
@@ -61,13 +62,19 @@ public class PlayerBuffs
     public void OnDash()
     {
         foreach (var buff in activeBuffs.Values)
-            buff.OnDash();
+            buff.OnDash(gameObject);
     }
 
     public void OnKill(GameObject target, Vector2 position)
     {
         foreach (var buff in activeBuffs.Values)
             buff.OnKill(target, position);
+    }
+
+    public void OnReaction(GameObject target, GameObject reactor, ElementType primary, ElementType secondary)
+    {
+        foreach (var buff in activeBuffs.Values)
+            buff.OnReaction(reactor, target, primary, secondary);
     }
 
 

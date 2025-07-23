@@ -14,7 +14,7 @@ public class FreezeState : State
     public override void Enter()
     {
         base.Enter();
-        iceCube = UnityEngine.Object.Instantiate(entity.entityData.iceCube, entity.transform.position, quaternion.identity, entity.transform);
+        iceCube = UnityEngine.Object.Instantiate(entity.EntityData.iceCube, entity.transform.position, quaternion.identity, entity.transform);
     }
 
     public override void Exit()

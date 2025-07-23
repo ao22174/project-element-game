@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 //This is the logic of a weapon on the ground. That can be picked up
-public class WeaponPickup : MonoBehaviour
+public class WeaponPickup : MonoBehaviour, IInteractable
 {
     public Weapon weapon;
 
@@ -16,19 +16,22 @@ public class WeaponPickup : MonoBehaviour
 
 
     //Handles logic when the Weapon Pickup is picked up by a player (in this case only one player)
-    public void PickupWeapon(Player player)
+    public void Interact(Player player)
     {
         if (weapon == null) throw new NullReferenceException("Cannot be null here, weapon needs to be assigned");
 
         weapon.SetOwner(player);
 
-        if (player.weapons.Count >= 2) player.weapons[player.currentWeaponIndex] = weapon;
+        if (player.weapons.Count >= 2)
+        {
+            WeaponPickupFactory.Create(player.currentWeapon, player.transform.position);
+            player.weapons[player.currentWeaponIndex] = weapon;
+        }
         else player.weapons.Add(weapon);
 
         if (player.weapons.Count == 0) player.EquipWeapon(0);
         else player.EquipWeapon(player.currentWeaponIndex);
 
         Destroy(gameObject);
-
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 using System;
-
+using ElementProject.gameEnums;
 public class Bloom : MonoBehaviour
 {
 
@@ -37,7 +37,7 @@ public class Bloom : MonoBehaviour
         Entity enemy = hit.GetComponentInParent<Entity>();
         if (enemy != null)
         {
-            enemy.Hit(damage, gameObject, OwnedBy.Player);
+            hit.GetComponentInParent<HealthManager>();
         }
     }
     GameObject explosion = GameObject.Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);

@@ -19,24 +19,30 @@ public class BuffSelectionUI : MonoBehaviour
 
     public void Awake()
     {
-        buffCardContainer.gameObject.SetActive(false);   
+        buffCardContainer.gameObject.SetActive(false);
     }
 
     private System.Collections.IEnumerator AnimateToFinalPosition(RectTransform cardRect, Button button)
     {
-        // Wait until end of frame so layout can update
         yield return new WaitForEndOfFrame();
 
-        // Now get the true layout position
+        // Stop if the card was destroyed before animation
+        if (cardRect == null || button == null)
+            yield break;
+
         Vector3 finalPos = cardRect.position;
 
-        // Start at chest spawn point again
-        cardRect.position = chestSpawnPoint.position;
+        if (cardRect != null)
+        {
+            cardRect.position = chestSpawnPoint.position;
 
-        // Animate
-        cardRect.DOMove(finalPos, 0.6f).SetEase(Ease.OutBack);
-       button.interactable = true;  // disable button initially
-
+            // Animate
+            cardRect.DOMove(finalPos, 0.6f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                if (button != null)
+                    button.interactable = true;
+            });
+        }
 
     }
 
@@ -71,7 +77,7 @@ public class BuffSelectionUI : MonoBehaviour
         player.buffs.AddBuff(buff.CreateBuffInstance(player)); // Adjust to your structure
         ClearButtons();
         onBuffSelectedCallback?.Invoke();
-        buffCardContainer.gameObject.SetActive(false);   
+        buffCardContainer.gameObject.SetActive(false);
 
     }
 

@@ -1,13 +1,14 @@
 using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
-public class BuffChest : MonoBehaviour
+public class BuffChest : MonoBehaviour, IInteractable
 {
     [SerializeField] private Animator animator;
     [SerializeField] private AudioClip openSound;
     [SerializeField] private BuffSelectionUI buffSelectionUI;
 
     public PlayerInputHandler inputHandler;
+    private bool playerNotAssigned;
 
     private bool isOpened = false;
     private bool playerInRange = false;
@@ -15,16 +16,15 @@ public class BuffChest : MonoBehaviour
     void Start()
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        inputHandler = player.InputHandler;
+        if (player != null) inputHandler = player.InputHandler;
+        else playerNotAssigned = true;
+
         buffSelectionUI = GameObject.FindGameObjectWithTag("BuffManager").GetComponent<BuffSelectionUI>();
     }
 
-    void Update()
+    public void Interact(Player player)
     {
-        if (playerInRange && !isOpened && inputHandler.InteractInput)
-        {
-            OpenChest();
-        }
+        OpenChest();
     }
 
 
@@ -38,7 +38,7 @@ public class BuffChest : MonoBehaviour
         if (openSound != null)
             AudioSource.PlayClipAtPoint(openSound, transform.position);
 
-        
+
         buffSelectionUI.ShowBuffs(() =>
         {
         });

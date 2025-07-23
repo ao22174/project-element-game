@@ -13,7 +13,6 @@ public class StationaryState : State
     public override void Enter()
     {
         base.Enter();
-        Debug.Log("Stationary Mode");
         entity.rb.linearVelocity = Vector2.zero;
     }
     public override void Exit()
@@ -23,11 +22,6 @@ public class StationaryState : State
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        // if (!entity.PlayerInSight())
-        // {
-        //     stateMachine.ChangeState(entity.wanderState);
-        // }
-        
     }
 
     

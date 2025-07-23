@@ -33,11 +33,11 @@ public class ShooterEntity : Entity, IWeaponUser
         stateMachine.Initialize(chaserIdle);
         attackStateMachine.Initialize(chaserAttackIdle);
 
-        shooterData = entityData as ShooterData;
+        shooterData = EntityData as ShooterData;
 
         if (shooterData == null)
         {
-    Debug.LogError($"Expected ShooterData, got {entityData.GetType()} on {gameObject.name}");
+            Debug.LogError($"Expected ShooterData, got {EntityData.GetType()} on {gameObject.name}");
             return;
         }
 
@@ -45,7 +45,6 @@ public class ShooterEntity : Entity, IWeaponUser
         freezeReturnState = chaserIdle;
 
         LoadWeapon(UnityEngine.Random.Range(0, shooterData.useableWeapons.Count));
-
     }
 
     public override void Update()

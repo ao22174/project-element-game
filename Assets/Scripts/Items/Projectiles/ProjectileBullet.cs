@@ -10,21 +10,24 @@ public class ProjectileBullet : Projectile
         if (collision.CompareTag("Structure"))
         {
             Destroy(gameObject);
+            return;
         }
-        if (collision.CompareTag("Player") && bulletOwner == OwnedBy.Enemy)
+        if (collision.GetComponentInParent<IWeaponUser>() is Player && bulletOwner == OwnedBy.Player)
         {
+            return;
+        }
+        if (collision.GetComponentInParent<IWeaponUser>() is Entity && bulletOwner == OwnedBy.Enemy)
+        {
+            return;
+        }
 
-            Player player = collision.gameObject.GetComponentInParent<Player>();
-            if (player.isInvincible) return;
-            player.HealthModify(-damage);
+        IDamageable damageable = collision.GetComponentInParent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.TakeDamage(new DamageInfo(gameObject, direction, element, false, bulletOwner, damage, elementBuildup));
             Destroy(gameObject);
         }
-        else if (collision.CompareTag("Enemy") && bulletOwner == OwnedBy.Player)
-        {
 
-            Entity entity = collision.gameObject.GetComponentInParent<Entity>();
-            entity.Hit(damage, gameObject, bulletOwner);
-            Destroy(gameObject);
-        }
+
     }
 }

@@ -3,10 +3,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public abstract class Entity : MonoBehaviour
+public abstract class Entity : MonoBehaviour, IFreezable
 {
     //--- DATA OF ENEMY --- 
-    public EntityData entityData;
+    [SerializeField] private EntityData entityData;
+    public EntityData EntityData => entityData;
+
     //--- STATE MACHINES --- 
     public FiniteStateMachine attackStateMachine;
     public FiniteStateMachine stateMachine;
@@ -18,19 +20,26 @@ public abstract class Entity : MonoBehaviour
     public State freezeAttackReturnState;
     public State freezeReturnState;
     // --- ENEMY CORE ---
+
+    public HealthManager healthManager;
     public Rigidbody2D rb { get; private set; } = null!;
     public Animator anim { get; private set; } = null!;
     public GameObject aliveGO { get; private set; } = null!;
     public Transform player { get; private set; } = null!;
-    public Seeker seeker;
+    [SerializeField] private Seeker seeker;
     public Path path;
     public EnemySpawner enemySpawner;
-    
+    [SerializeField] private ElementalStatus elementStatus;
+
     // --- ENEMY DYNAMIC INFO ---
     public float currentHealth;
 
-
-    public virtual void Start()
+    public void InitializeEnemy(EntityData data, EnemySpawner spawner)
+    {
+        entityData = data;
+        enemySpawner = spawner;
+    }
+    private void Awake()
     {
         // --- ASSIGN STATE MACHINES ---
         stateMachine = new FiniteStateMachine();
@@ -43,14 +52,28 @@ public abstract class Entity : MonoBehaviour
         aliveGO = transform.Find("Alive").GameObject();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        elementStatus = GetComponent<ElementalStatus>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         seeker = GetComponent<Seeker>();
 
-        currentHealth = entityData.healthPoints;
+    }
+
+    public virtual void Start()
+    {
+        
+        healthManager.Initialize(entityData.baseMaxHealth);
 
         InitializeStates();
-        if (entityData.usesPathfinding)
+        if (EntityData.usesPathfinding)
             InvokeRepeating("UpdatePath", 0f, 0.5f);
+    }
+    public void OnEnable()
+    {
+        healthManager.onDeath += OnDeath;
+    }
+    public void OnDisable()
+    {
+        healthManager.onDeath -= OnDeath;
     }
 
     protected abstract void InitializeStates();
@@ -61,27 +84,15 @@ public abstract class Entity : MonoBehaviour
         seeker.StartPath(transform.position, player.position, OnPathComplete);
     }
 
-    public virtual void Hit(float damage, GameObject sourceObj, OwnedBy source)
+    public virtual void OnHit(){}
+
+    public virtual void OnDeath(GameObject sourceObj, OwnedBy source)
     {
-        currentHealth -= damage;
-        if (source == OwnedBy.Player) OnHit();
-        if (currentHealth <= 0)
-        {
-            enemySpawner.UpdateAlive(this);
-            onDeath(sourceObj, source);
-            Destroy(this.gameObject);
+        //CHANGE THAT 0f to overflow damage later
+        enemySpawner.UpdateAlive(this);
+        CombatEvents.EnemyKilled(new EnemyDeathInfo(EntityData, sourceObj, source, transform.position, GetType().Name, 0f));
+        Destroy(gameObject);
 
-        }
-    }
-
-    public virtual void OnHit()
-    {
-
-    }
-
-    public virtual void onDeath(GameObject sourceObj, OwnedBy source)
-    {
-        CombatEvents.EnemyKilled(new EnemyDeathInfo(entityData, sourceObj, source, transform.position, type: this.GetType().Name, -currentHealth));
     }
 
     private void OnPathComplete(Path p)
@@ -96,20 +107,20 @@ public abstract class Entity : MonoBehaviour
         if (player == null) return false;
 
         float dist = Vector2.Distance(player.position, transform.position);
-        if (dist > entityData.attackRange) return false;
+        if (dist > EntityData.attackRange) return false;
 
-        if (entityData.usesLineOfSight)
+        if (EntityData.usesLineOfSight)
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position,
                                                 player.position - transform.position,
                                                 dist,
-                                                entityData.obstacleMask);
+                                                EntityData.obstacleMask);
             return hit.collider == null;
         }
         return true;
     }
 
-    public void EnterFreezeState(float duration)
+    public void ApplyFreeze(float duration)
     {
         frozenState.setDuration(duration);
         attackFrozenState.setDuration(duration);
@@ -134,9 +145,9 @@ public abstract class Entity : MonoBehaviour
 
         {
             stateMachine.currentState.PhysicsUpdate();
-        attackStateMachine.currentState.PhysicsUpdate();    
+            attackStateMachine.currentState.PhysicsUpdate();
         }
-        
+
 
     }
 
