@@ -12,9 +12,9 @@ using UnityEngine;
 
 
         [SerializeField] public float killsRequired = 3f; 
-        public override Buff CreateBuffInstance(IWeaponUser user)
+        public override Buff CreateBuffInstance()
         {
-            return new CorpseBloomBuff { buffData = this, user = user };
+            return new CorpseBloomBuff { buffData = this};
         }
 
     }

@@ -1,5 +1,6 @@
 using System;
 using ElementProject;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -12,11 +13,11 @@ public class ProjectileWeapon : Weapon
     private float projectileSpeed;
     private float projectileLifetime;
     private GameObject projectilePrefab;
-    public ProjectileWeapon(WeaponData data, IWeaponUser owner) : base(data, owner)
+
+    public ProjectileWeapon(WeaponData data, Core core) : base(data, core)
     {
         if (data is ProjectileWeaponData projData) projectileData = projData;
         else throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
-        
         projectileCount = projectileData.projectileCount;
         spreadAngle = projectileData.spreadAngle;
         projectileSpeed = projectileData.projectileSpeed;
@@ -24,41 +25,32 @@ public class ProjectileWeapon : Weapon
         projectilePrefab = projectileData.projectilePrefab;
     }
 
-    public override void Attack(Vector2 direction)
+    public override void Attack(Vector2 direction, Vector2 position)
     {
-        base.Attack(direction);
+        base.Attack(direction, position);
         if (!CanAttack()) return;
-        
+
         attackTime = Time.time;
-        if (owner == null) throw new Exception("null");
-        
+
         float startingSpread = -spreadAngle * (projectileCount - 1) / 2f;
-        projectileSpawn = owner.GetFirePoint().transform.position;
+
+
         for (int i = 0; i < projectileCount; i++)
         {
             float angle = startingSpread + (spreadAngle * i);
             Vector2 rotatedDirection = Utilities.RotateVector(direction, angle);
-            GameObject projectileGO = GameObject.Instantiate(projectilePrefab, projectileSpawn, Quaternion.identity);
+
+            GameObject projectileGO = GameObject.Instantiate(projectilePrefab, position, Quaternion.identity);
             ProjectileBullet bullet = projectileGO.GetComponent<ProjectileBullet>();
+
             if (bullet != null)
-                bullet.Initialize(new BulletInfo(projectileSpawn,rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, elementBuildup, elementType, owner));
-            
+                bullet.Initialize(new BulletInfo(core, position, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, elementBuildup, elementType, core.Faction));
         }
     }
-     
+
     public override float CalculateDamage()
     {
-    float baseDamage = damage;
-
-        if (owner is Player player)
-        {
-            baseDamage = damage * (1 + player.stats.percentAttackBonus) + player.stats.flatAttackBonus * player.stats.GetDamageBonus(elementType);
-        }
-        else if (owner is Entity)
-        {
-            Debug.LogWarning("need to implement enemy damage calculation");
-        }
-
-    return baseDamage;
-}
+        float baseDamage = damage;
+        return baseDamage;
+    }
 }

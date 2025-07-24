@@ -14,8 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: DefaultWeapon
   damage: 1
+  elementBuildup: 20
   weaponType: 0
-  elementType: 0
+  elementType: 1
   cooldown: 0.1
   weaponPrefab: {fileID: 1226723292048018740, guid: 4c6290bb9ece2cb44bcee409526703b2, type: 3}
   projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}

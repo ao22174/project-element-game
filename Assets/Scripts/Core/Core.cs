@@ -5,12 +5,22 @@ using System.Linq;
 
 public class Core : MonoBehaviour
 {
+    [SerializeField] private CoreData CoreData;
+    [SerializeField]public Faction Faction => coreData.faction;
+    public CoreData coreData => CoreData;
     private readonly List<CoreComponent> CoreComponents = new List<CoreComponent>();
 
     private void Awake()
     {
     }
 
+    private void Start()
+    {
+        foreach (CoreComponent component in CoreComponents)
+        {
+            component.Init(coreData);
+        }   
+    }
     public void LogicUpdate()
     {
         foreach (CoreComponent component in CoreComponents)

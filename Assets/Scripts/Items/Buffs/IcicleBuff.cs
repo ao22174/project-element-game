@@ -9,6 +9,7 @@ public class IcicleBuff : Buff
 
     public override void OnAttack(GameObject target, float damage, Vector2 direction)
     {
+        Core core = target.GetComponentInChildren<Core>();
         float random = Random.Range(0f, 1f);
         FrostArrowBuff data = (FrostArrowBuff)buffData;
         if (random > data.chanceToProc || OnCooldown) return;
@@ -17,7 +18,7 @@ public class IcicleBuff : Buff
         ProjectileIceArrow bullet = projectileGO.GetComponent<ProjectileIceArrow>();
         if (bullet != null)
         {
-            bullet.Initialize(new BulletInfo(target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.elementBuildup, ElementType.Frost, user), data.duration);
+            bullet.Initialize(new BulletInfo(core, target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.elementBuildup, ElementType.Frost, core.Faction), data.duration);
             cooldownEndTime = Time.time + data.coolDown;
         }
     }

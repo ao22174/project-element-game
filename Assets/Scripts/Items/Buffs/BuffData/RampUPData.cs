@@ -6,9 +6,9 @@ public class RampUPData: BuffData
 {
     [SerializeField] public float maxAttackSpeedBeforeReset =20f;
     [SerializeField] public float increments = 1f;
-    public override Buff CreateBuffInstance(IWeaponUser user)
+    public override Buff CreateBuffInstance()
     {
-        return new RampingAttackSpeedBuff { buffData = this, user = user };
+        return new RampingAttackSpeedBuff { buffData = this};
     }
 
 }

@@ -7,24 +7,20 @@ public class ProjectileBullet : Projectile
 
     protected override void HandleCollision(Collider2D collision)
     {
+            Debug.Log("Hit: " + collision.name);
         if (collision.CompareTag("Structure"))
         {
             Destroy(gameObject);
             return;
         }
-        if (collision.GetComponentInParent<IWeaponUser>() is Player && bulletOwner == OwnedBy.Player)
-        {
-            return;
-        }
-        if (collision.GetComponentInParent<IWeaponUser>() is Entity && bulletOwner == OwnedBy.Enemy)
-        {
-            return;
-        }
 
-        IDamageable damageable = collision.GetComponentInParent<IDamageable>();
+        IDamageable damageable = collision.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(new DamageInfo(gameObject, direction, element, false, bulletOwner, damage, elementBuildup));
+            if (collision.GetComponentInParent<Core>().Faction == Faction.Player && faction == Faction.Player) return;
+            if (collision.GetComponentInParent<Core>().Faction == Faction.Enemy && faction == Faction.Enemy) return;
+            Debug.Log(collision.GetComponentInParent<Core>().Faction);
+            damageable.TakeDamage(new DamageInfo(core, direction, element, false,faction, damage, elementBuildup));
             Destroy(gameObject);
         }
 

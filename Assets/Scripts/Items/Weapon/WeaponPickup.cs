@@ -19,9 +19,7 @@ public class WeaponPickup : MonoBehaviour, IInteractable
     public void Interact(Player player)
     {
         if (weapon == null) throw new NullReferenceException("Cannot be null here, weapon needs to be assigned");
-
-        weapon.SetOwner(player);
-
+        weapon.SetOwner(player.GetComponentInChildren<Core>());
         if (player.weapons.Count >= 2)
         {
             WeaponPickupFactory.Create(player.currentWeapon, player.transform.position);

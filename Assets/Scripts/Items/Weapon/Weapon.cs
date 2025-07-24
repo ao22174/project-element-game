@@ -1,11 +1,9 @@
 using System;
-using System.Runtime.InteropServices;
 using ElementProject.gameEnums;
 using UnityEngine;
 public abstract class Weapon
 {
     public WeaponData data;
-    protected IWeaponUser? owner;
     public float damage;
     public int elementBuildup;
     public string Weaponname;
@@ -14,21 +12,19 @@ public abstract class Weapon
     public float cooldown;
     public float attackTime;
     public GameObject weaponPrefab;
+    public Core core;
 
     float GetEffectiveCooldown()
     {
-        if (owner is Player player)
-            return cooldown / (1 + player.stats.attackSpeedBonus);
-
-        else if (owner is Entity entity)
-            return cooldown + entity.EntityData.attackCooldown;
-        
-        else return cooldown;
+        float atkSpeed = core.GetCoreComponent<Stats>()?.attackSpeed ?? 1f;
+        float cooldown = data.cooldown / atkSpeed;
+        return cooldown;
     }
-    public Weapon(WeaponData data, IWeaponUser? owner = null)
+    public Weapon(WeaponData data, Core core)
     {
+        this.core = core;
         this.data = data;
-        SetOwner(owner);
+        SetOwner(core);
         Weaponname = data.weaponName;
         damage = data.damage;
         weaponType = data.weaponType;
@@ -40,9 +36,9 @@ public abstract class Weapon
     
 
 
-    public virtual void Attack(Vector2 direction) { }
+    public virtual void Attack(Vector2 direction, Vector2 position) { }
     public abstract float CalculateDamage();
-    public void SetOwner(IWeaponUser? owner) => this.owner = owner;
+    public void SetOwner(Core core) => this.core = core;
     public bool CanAttack() => Time.time >= attackTime + GetEffectiveCooldown();
 
     

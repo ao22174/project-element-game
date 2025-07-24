@@ -21,7 +21,7 @@ public class PlayerAttackState : PlayerState
         
         base.LogicUpdate();
         fireDirection = player.GetFirePoint().transform.right;
-        player.currentWeapon.Attack(fireDirection);
+        player.currentWeapon.Attack(fireDirection, player.GetFirePoint().position);
         player.buffs.OnAttack(player.gameObject, player.currentWeapon.data.damage,fireDirection);
         stateMachine.ChangeState(player.AttackIdleState);
     }

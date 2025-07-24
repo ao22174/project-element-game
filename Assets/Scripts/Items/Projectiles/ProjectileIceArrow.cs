@@ -17,16 +17,14 @@ public class ProjectileIceArrow : Projectile
             Destroy(gameObject);
             return;
         }
-        var target = collision.GetComponentInParent<IWeaponUser>();
-        if ((target is Player && bulletOwner == OwnedBy.Player) || (target is Entity && bulletOwner == OwnedBy.Enemy)) return;
-
-        
-
         IDamageable damageable = collision.GetComponentInParent<IDamageable>();
         IFreezable freezable = collision.GetComponentInParent<IFreezable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(new DamageInfo(gameObject, direction, element, false, bulletOwner, damage));
+            if (collision.GetComponentInParent<Core>().Faction == Faction.Player && faction == Faction.Player) return;
+            if (collision.GetComponentInParent<Core>().Faction == Faction.Enemy && faction == Faction.Enemy) return;
+
+            damageable.TakeDamage(new DamageInfo(core, direction, element, false,faction, damage));
             if (freezable != null) freezable.ApplyFreeze(duration);
             Destroy(gameObject);
         }

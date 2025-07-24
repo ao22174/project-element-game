@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Buff
 {
     public BuffData buffData = null!;
-    public IWeaponUser user;
+    public Core core;
     public int stackCount = 1;
     public abstract string BuffName { get; }
     public virtual void OnApply(GameObject target) { }

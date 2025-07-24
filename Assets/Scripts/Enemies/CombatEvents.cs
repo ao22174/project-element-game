@@ -3,7 +3,7 @@ using System;
 
 public static class CombatEvents
 {
-    public static event Action<EnemyDeathInfo> OnEnemyKilled;
+    public static event Action<EnemyDeathInfo>? OnEnemyKilled;
 
     public static void EnemyKilled(EnemyDeathInfo info)
     {
@@ -16,13 +16,13 @@ public class EnemyDeathInfo
     public EntityData enemy;
     public GameObject killer;
     public Vector2 position;
-    public OwnedBy source;
+    public Faction faction;
     public string enemyType;
     public float overkillDamage;
 
-    public EnemyDeathInfo(EntityData enemy, GameObject killer, OwnedBy source, Vector2 position, string enemyType, float overkillDamage = 0f)
+    public EnemyDeathInfo(EntityData enemy, GameObject killer,Faction faction, Vector2 position, string enemyType, float overkillDamage = 0f)
     {
-        this.source = source;
+        this.faction = faction;
         this.enemy = enemy;
         this.killer = killer;
         this.position = position;

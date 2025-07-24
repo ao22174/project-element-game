@@ -9,6 +9,7 @@ public class Bloom : MonoBehaviour
 
     private bool armed = false;
     private float detonationTime;
+    private Core core;
     [SerializeField] private GameObject explosionPrefab;
 
     private void OnDrawGizmosSelected()
@@ -16,9 +17,10 @@ public class Bloom : MonoBehaviour
     Gizmos.color = Color.red;
     Gizmos.DrawWireSphere(transform.position, damageRadius);
 }
-    public void Initialize(float damage, float damageRadius, float detonation)
+    public void Initialize(float damage, float damageRadius, float detonation, Core core)
     {
         this.damage = damage;
+        this.core = core;
         this.damageRadius = damageRadius;
         detonationTime = Time.time + detonation;
         armed = true;
@@ -37,7 +39,7 @@ public class Bloom : MonoBehaviour
         Entity enemy = hit.GetComponentInParent<Entity>();
         if (enemy != null)
         {
-            hit.GetComponentInParent<HealthManager>();
+                hit.GetComponent<IDamageable>().TakeDamage(new DamageInfo(core, Vector2.zero, ElementType.Nature, false, core.Faction, damage));
         }
     }
     GameObject explosion = GameObject.Instantiate(explosionPrefab, gameObject.transform.position, Quaternion.identity);

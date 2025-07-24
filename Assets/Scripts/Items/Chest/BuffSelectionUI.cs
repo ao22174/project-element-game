@@ -74,7 +74,7 @@ public class BuffSelectionUI : MonoBehaviour
     private void SelectBuff(BuffData buff)
     {
         Player player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        player.buffs.AddBuff(buff.CreateBuffInstance(player)); // Adjust to your structure
+        player.buffs.AddBuff(buff.CreateBuffInstance()); // Adjust to your structure
         ClearButtons();
         onBuffSelectedCallback?.Invoke();
         buffCardContainer.gameObject.SetActive(false);

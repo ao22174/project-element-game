@@ -12,9 +12,9 @@
 
         [SerializeField] public float coolDown = 1f;
         [SerializeField] public int elementBuildup = 20;
-        public override Buff CreateBuffInstance(IWeaponUser user)
+        public override Buff CreateBuffInstance()
     {
-        return new IcicleBuff { buffData = this, user = user };
+        return new IcicleBuff { buffData = this};
     }
 
     }

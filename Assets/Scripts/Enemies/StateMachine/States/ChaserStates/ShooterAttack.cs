@@ -36,7 +36,7 @@ public override void Enter()
         if (entity.EntityData.projectilePrefab == null) return;
         Vector2 direction = (entity.player.position - entity.transform.position).normalized;
         
-        chaser.weapon.Attack(direction);
+        chaser.weapon.Attack(direction, chaser.GetFirePoint().position);
         attackTime = Time.time;
         if (chaser != null)
             stateMachine.ChangeState(chaser.chaserAttackIdle);

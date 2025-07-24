@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using ElementProject.gameEnums;
 
-public class Player : MonoBehaviour, IWeaponUser, IFreezable
+public class Player : MonoBehaviour, IFreezable
 {
     //STATE MACHINE LOGIC
     public PlayerStateMachine StateMachine { get; private set; } = null!;
@@ -35,15 +35,10 @@ public class Player : MonoBehaviour, IWeaponUser, IFreezable
 
     //WeaponVisuals
     [SerializeField] public Transform weaponHoldPoint;
-    [SerializeField] private HeartDisplay heartDisplay;
-
     private GameObject currentWeaponVisual;
-    public HealthManager health;
+    public Core core { get; private set; }
     public WeaponData startingWeapon;
-
-    public PlayerBuffs buffs;
-    public PlayerStatModifiers stats;
-
+    public Buffs buffs;
     public GameObject rightHandTransform;
     public GameObject leftHandTransform;
 
@@ -61,13 +56,11 @@ public class Player : MonoBehaviour, IWeaponUser, IFreezable
 
         AttackState = new PlayerAttackState(this, AttackStateMachine, playerData, "attack");
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
-
-        buffs = new PlayerBuffs(this, gameObject);
-        stats = new PlayerStatModifiers();
         Anim = GetComponent<Animator>();
         InputHandler = GetComponent<PlayerInputHandler>();
         RB = GetComponent<Rigidbody2D>();
-
+        core = GetComponentInChildren<Core>();
+        buffs = core.GetCoreComponent<Buffs>(ref buffs);
     }
 
 
@@ -75,10 +68,8 @@ public class Player : MonoBehaviour, IWeaponUser, IFreezable
     {
         StateMachine.Initialize(IdleState);
         AttackStateMachine.Initialize(AttackIdleState);
-        health.Initialize(playerData.baseMaxHealth);
-        health.usesIFrames = true;
         FacingDirection = 1;
-        weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, this));
+        weapons.Add(WeaponFactory.CreateWeapon(startingWeapon, core));
         EquipWeapon(currentWeaponIndex);
     }
 
@@ -93,25 +84,16 @@ public class Player : MonoBehaviour, IWeaponUser, IFreezable
     void OnEnable()
     {
         CombatEvents.OnEnemyKilled += HandleEnemyKill;
-        health.onHealthModifed +=  HandleHealthChange;
     }
 
     void OnDisable()
     {
         CombatEvents.OnEnemyKilled -= HandleEnemyKill;
-        health.onHealthModifed -= HandleHealthChange;
     }
-
-    void HandleHealthChange(float currenthealth, float maxhealth)
-    {
-        heartDisplay.SetHearts(currenthealth, maxhealth);
-    }
-    
-
     private void HandleEnemyKill(EnemyDeathInfo info)
     {
         Debug.Log("kill");
-        if (info.source == OwnedBy.Player)
+        if (info.faction == Faction.Player)
         {
             Debug.Log("by you");
             buffs.OnKill(gameObject, info.position);
@@ -205,12 +187,13 @@ public class Player : MonoBehaviour, IWeaponUser, IFreezable
         FacingDirection *= -1;
         transform.Rotate(0.0f, 180.0f, 0.0f);
     }
-
     public Transform GetFirePoint()
     {
         if (currentWeaponVisual == null) throw new NullReferenceException("fireOrigin is null");
         return currentWeaponVisual.transform.Find("fireOrigin");
     }
+
+    
 
     public void ApplyFreeze(float duration)
     {

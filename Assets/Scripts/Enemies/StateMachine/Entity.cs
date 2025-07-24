@@ -20,8 +20,7 @@ public abstract class Entity : MonoBehaviour, IFreezable
     public State freezeAttackReturnState;
     public State freezeReturnState;
     // --- ENEMY CORE ---
-
-    public HealthManager healthManager;
+    public Core core;
     public Rigidbody2D rb { get; private set; } = null!;
     public Animator anim { get; private set; } = null!;
     public GameObject aliveGO { get; private set; } = null!;
@@ -55,26 +54,18 @@ public abstract class Entity : MonoBehaviour, IFreezable
         elementStatus = GetComponent<ElementalStatus>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         seeker = GetComponent<Seeker>();
-
+        core = GetComponentInChildren<Core>();
     }
 
     public virtual void Start()
     {
-        
-        healthManager.Initialize(entityData.baseMaxHealth);
-
         InitializeStates();
         if (EntityData.usesPathfinding)
             InvokeRepeating("UpdatePath", 0f, 0.5f);
+        core.GetCoreComponent<Combat>().OnDeath +=  OnDeath;
+
     }
-    public void OnEnable()
-    {
-        healthManager.onDeath += OnDeath;
-    }
-    public void OnDisable()
-    {
-        healthManager.onDeath -= OnDeath;
-    }
+
 
     protected abstract void InitializeStates();
 
@@ -86,11 +77,13 @@ public abstract class Entity : MonoBehaviour, IFreezable
 
     public virtual void OnHit(){}
 
-    public virtual void OnDeath(GameObject sourceObj, OwnedBy source)
+    public virtual void OnDeath(DamageInfo info)
     {
+        GameObject sourceObj = info.core.transform.parent.gameObject;
+        Faction faction = info.faction;
         //CHANGE THAT 0f to overflow damage later
         enemySpawner.UpdateAlive(this);
-        CombatEvents.EnemyKilled(new EnemyDeathInfo(EntityData, sourceObj, source, transform.position, GetType().Name, 0f));
+        CombatEvents.EnemyKilled(new EnemyDeathInfo(EntityData, sourceObj, faction, transform.position, GetType().Name, 0f));
         Destroy(gameObject);
 
     }

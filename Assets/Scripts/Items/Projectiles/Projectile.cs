@@ -1,5 +1,6 @@
 using System.Threading;
 using ElementProject.gameEnums;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 public enum OwnedBy
@@ -11,6 +12,7 @@ public enum OwnedBy
 
 public struct BulletInfo
 {
+    public Core core;
     public Vector2 startPosition;
     public Vector2 direction;
     public float speed;
@@ -18,9 +20,10 @@ public struct BulletInfo
     public float lifetime;
     public int elementBuildup;
     public ElementType element;
-    public IWeaponUser bulletOwner;
+    public Faction faction;
 
     public BulletInfo(
+        Core core,
         Vector2 startPosition,
         Vector2 direction,
         float speed,
@@ -28,8 +31,9 @@ public struct BulletInfo
         float lifetime,
         int elementBuildup,
         ElementType element,
-        IWeaponUser bulletOwner)
+        Faction faction)
     {
+        this.core = core;
         this.startPosition = startPosition;
         this.direction = direction;
         this.speed = speed;
@@ -37,18 +41,19 @@ public struct BulletInfo
         this.lifetime = lifetime;
         this.elementBuildup = elementBuildup;
         this.element = element;
-        this.bulletOwner = bulletOwner;
+        this.faction = faction;
     }
 }
 public abstract class Projectile : MonoBehaviour
 {
+    protected Core core;
     protected Vector2 direction;
     protected float speed;
     protected float damage;
     protected int elementBuildup;
     protected float lifetime;
-    public ElementType element;
-    public OwnedBy bulletOwner;
+    protected ElementType element;
+    protected Faction faction;
 
     public virtual void Initialize(BulletInfo info)
     {
@@ -59,10 +64,8 @@ public abstract class Projectile : MonoBehaviour
         lifetime = info.lifetime;
         element = info.element;
         elementBuildup = info.elementBuildup;
-        if (info.bulletOwner is Player) bulletOwner = OwnedBy.Player;
-        else if (info.bulletOwner is Entity) bulletOwner = OwnedBy.Enemy;
-        else bulletOwner = OwnedBy.All;
-
+        faction = info.faction;
+        core = info.core;
 
         Destroy(gameObject, lifetime);
     }

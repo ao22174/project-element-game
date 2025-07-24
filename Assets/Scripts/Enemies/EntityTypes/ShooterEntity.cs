@@ -2,7 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class ShooterEntity : Entity, IWeaponUser
+public class ShooterEntity : Entity
 {
     // EXPECTED BEHAVIOUR --- Idle -> (On Sight) -> Idle -> (Out LOS) -> Chase
     public ShooterChase chaseState;
@@ -14,12 +14,6 @@ public class ShooterEntity : Entity, IWeaponUser
     public Transform weaponHoldPoint;
     public GameObject weaponDisplay;
     public Weapon weapon;
-
-    public Transform GetFirePoint()
-    {
-        if (weaponDisplay == null) throw new NullReferenceException("fireOrigin is null");
-        return weaponDisplay.transform.Find("fireOrigin");
-    }
 
     public override void Start()
     {
@@ -44,17 +38,19 @@ public class ShooterEntity : Entity, IWeaponUser
         freezeAttackReturnState = chaserAttackIdle;
         freezeReturnState = chaserIdle;
 
+        core = GetComponentInChildren<Core>();
         LoadWeapon(UnityEngine.Random.Range(0, shooterData.useableWeapons.Count));
     }
 
     public override void Update()
     {
         base.Update();
+        LookAtEnemy();
     }
 
     private void LoadWeapon(int index)
     {
-        weapon = WeaponFactory.CreateWeapon(shooterData.useableWeapons[index], this);
+        weapon = WeaponFactory.CreateWeapon(shooterData.useableWeapons[index], core);
         weaponDisplay = Instantiate(weapon.weaponPrefab, weaponHoldPoint);
     }
 
@@ -64,7 +60,7 @@ public class ShooterEntity : Entity, IWeaponUser
         if (!PlayerInSight()) return;
 
 
-        transform.localScale =new Vector3((player.position.x < transform.position.x) ? -1 : 1, 1, 1);
+        transform.localScale = new Vector3((player.position.x < transform.position.x) ? -1 : 1, 1, 1);
 
 
         //Rotate Weapon to player
@@ -81,6 +77,12 @@ public class ShooterEntity : Entity, IWeaponUser
     protected override void InitializeStates()
     {
 
+    }
+    
+        public Transform GetFirePoint()
+    {
+        if (weaponDisplay == null) throw new NullReferenceException("fireOrigin is null");
+        return weaponDisplay.transform.Find("fireOrigin");
     }
 
 

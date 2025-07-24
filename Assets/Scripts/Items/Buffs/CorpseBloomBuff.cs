@@ -7,12 +7,13 @@ public class CorpseBloomBuff : Buff
 
     public override void OnKill(GameObject target, Vector2 position)
     {
+        Debug.Log("corpsebloom");
         base.OnKill(target, position);
         if (buffData is not CorpseBloomData data)
             throw new InvalidCastException($"BuffData is not of type CorpseBloomData. It is {buffData.GetType().Name} instead.");
 
         GameObject bloomObj = GameObject.Instantiate(data.bloom, position, Quaternion.identity);
-        bloomObj.GetComponent<Bloom>().Initialize(data.damage, data.damageRadius, data.detonationTime);
+        bloomObj.GetComponent<Bloom>().Initialize(data.damage, data.damageRadius, data.detonationTime, core);
 
     }
 }
