@@ -13,22 +13,53 @@ MonoBehaviour:
   m_Name: ShooterData
   m_EditorClassIdentifier: 
   entityName: Enemy
+  animator: {fileID: 0}
+  faction: 1
+  resistances:
+  - element: 0
+    res: 0
+  - element: 3
+    res: 0
+  - element: 1
+    res: 0
+  - element: 5
+    res: 0
+  - element: 6
+    res: 0
+  - element: 2
+    res: 0
+  - element: 4
+    res: 0
+  bonuses:
+  - element: 0
+    bonus: 0
+  - element: 3
+    bonus: 0
+  - element: 1
+    bonus: 0
+  - element: 5
+    bonus: 0
+  - element: 6
+    bonus: 0
+  - element: 2
+    bonus: 0
+  - element: 4
+    bonus: 0
+  baseMaxHealth: 100
+  baseAttack: 1
+  baseDefense: 1
+  baseCritRate: 0
+  baseCritMultiplier: 1
+  baseAttackSpeed: 0.1
+  movementSpeed: 1
   enemyPrefab: {fileID: 3355907355030600115, guid: a56b7f7a56f53b14abdbdea112ab8fac, type: 3}
   elementType: 0
   behaviourType: 3
-  animator: {fileID: 0}
-  freezeResistance: 0.8
-  stunResistance: 0.6
-  poisonResistance: 0.4
-  healthPoints: 25
-  damage: 1
-  attackCooldown: 1
   attackRange: 2
   usesProjectile: 0
   projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
   projectileSpeed: 6
   aimAtPlayer: 1
-  movementSpeed: 1
   wanderRadius: 3
   orbitDistance: 3
   chargeSpeed: 7

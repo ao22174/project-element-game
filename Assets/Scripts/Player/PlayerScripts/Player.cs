@@ -8,7 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using ElementProject.gameEnums;
 
-public class Player : MonoBehaviour, IFreezable
+public class Player : MonoBehaviour
 {
     //STATE MACHINE LOGIC
     public PlayerStateMachine StateMachine { get; private set; } = null!;
@@ -23,7 +23,6 @@ public class Player : MonoBehaviour, IFreezable
      [SerializeField]public Animator Anim { get; private set; }
      [SerializeField]public PlayerInputHandler InputHandler { get; private set; }
     [SerializeField] public PlayerData playerData;
-    [SerializeField]public Rigidbody2D RB { get; private set; }
     public int FacingDirection { get; private set; }
     public Vector2 LastInputDirection { get; set; }
 
@@ -38,7 +37,6 @@ public class Player : MonoBehaviour, IFreezable
     private GameObject currentWeaponVisual;
     public Core core { get; private set; }
     public WeaponData startingWeapon;
-    public Buffs buffs;
     public GameObject rightHandTransform;
     public GameObject leftHandTransform;
 
@@ -58,9 +56,7 @@ public class Player : MonoBehaviour, IFreezable
         AttackIdleState = new PlayerAttackIdleState(this, AttackStateMachine, playerData, "attackIdle");
         Anim = GetComponent<Animator>();
         InputHandler = GetComponent<PlayerInputHandler>();
-        RB = GetComponent<Rigidbody2D>();
         core = GetComponentInChildren<Core>();
-        buffs = core.GetCoreComponent<Buffs>(ref buffs);
     }
 
 
@@ -75,8 +71,11 @@ public class Player : MonoBehaviour, IFreezable
 
     private void Update()
     {
+        core.LogicUpdate();
         StateMachine.CurrentState.LogicUpdate();
         AttackStateMachine.CurrentState.LogicUpdate();
+
+
         if (currentWeapon != null) RotateWeaponTowardMouse(InputHandler.MousePosition);
         FlipTowardsMouse(InputHandler.MousePosition);
     }
@@ -96,7 +95,7 @@ public class Player : MonoBehaviour, IFreezable
         if (info.faction == Faction.Player)
         {
             Debug.Log("by you");
-            buffs.OnKill(gameObject, info.position);
+           core.GetCoreComponent<Buffs>()?.OnKill(info.killer, info.position);
         }
     }
 
@@ -118,6 +117,7 @@ public class Player : MonoBehaviour, IFreezable
     {
         currentWeaponIndex = index;
         currentWeapon = weapons[index];
+        core.GetCoreComponent<UIManager>()?.weaponDisplay.SetWeapon(currentWeapon);
 
         if (currentWeaponVisual != null)
             Destroy(currentWeaponVisual);
@@ -125,6 +125,7 @@ public class Player : MonoBehaviour, IFreezable
         if (currentWeapon.weaponPrefab != null)
         {
             currentWeaponVisual = Instantiate(currentWeapon.weaponPrefab, weaponHoldPoint);
+                currentWeapon.SetInstance(currentWeaponVisual);
             leftHandAnchor = currentWeaponVisual.transform.Find("LeftHandAnchor");
             rightHandAnchor = currentWeaponVisual.transform.Find("RightHandAnchor");
             if (leftHandAnchor != null && rightHandAnchor != null)
@@ -175,13 +176,9 @@ public class Player : MonoBehaviour, IFreezable
     {
         StateMachine.CurrentState?.PhysicsUpdate();
         AttackStateMachine.CurrentState?.PhysicsUpdate();
-
-    }
-    public void SetVelocity(Vector2 velocity)
-    {
-        RB.MovePosition(RB.position + velocity * Time.fixedDeltaTime);
     }
 
+    
     public void Flip()
     {
         FacingDirection *= -1;
@@ -195,9 +192,5 @@ public class Player : MonoBehaviour, IFreezable
 
     
 
-    public void ApplyFreeze(float duration)
-    {
-        throw new NotImplementedException();
-    }
 }
 

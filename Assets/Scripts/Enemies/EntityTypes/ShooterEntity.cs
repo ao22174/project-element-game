@@ -35,9 +35,6 @@ public class ShooterEntity : Entity
             return;
         }
 
-        freezeAttackReturnState = chaserAttackIdle;
-        freezeReturnState = chaserIdle;
-
         core = GetComponentInChildren<Core>();
         LoadWeapon(UnityEngine.Random.Range(0, shooterData.useableWeapons.Count));
     }
@@ -46,6 +43,10 @@ public class ShooterEntity : Entity
     {
         base.Update();
         LookAtEnemy();
+        if (weapon.ammoCount <= 0 && weapon.maxAmmo > 0)
+        {
+            weapon.Reload();
+        }
     }
 
     private void LoadWeapon(int index)
@@ -56,22 +57,21 @@ public class ShooterEntity : Entity
 
     private void LookAtEnemy()
     {
-        //Rotate Enemy to player
+        if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
         if (!PlayerInSight()) return;
 
 
         transform.localScale = new Vector3((player.position.x < transform.position.x) ? -1 : 1, 1, 1);
 
 
-        //Rotate Weapon to player
         if (weaponDisplay == null) return;
 
-        Vector2 direction = ((Vector2)this.player.position - (Vector2)weaponHoldPoint.position).normalized;
+        Vector2 direction = ((Vector2)player.position - (Vector2)weaponHoldPoint.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
 
-        bool flip = (angle > 90 || angle < -90);
+        bool flip = angle > 90 || angle < -90;
         weaponDisplay.transform.localScale = new Vector3(flip ? -1 : 1, flip ? -1 : 1, 1);
     }
     protected override void InitializeStates()

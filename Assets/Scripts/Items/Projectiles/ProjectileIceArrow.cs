@@ -18,15 +18,22 @@ public class ProjectileIceArrow : Projectile
             return;
         }
         IDamageable damageable = collision.GetComponentInParent<IDamageable>();
-        IFreezable freezable = collision.GetComponentInParent<IFreezable>();
         if (damageable != null)
         {
-            if (collision.GetComponentInParent<Core>().Faction == Faction.Player && faction == Faction.Player) return;
-            if (collision.GetComponentInParent<Core>().Faction == Faction.Enemy && faction == Faction.Enemy) return;
+            core = collision.GetComponentInParent<Core>();
+            if (core == null) return;
+            if (core.Faction == Faction.Player && faction == Faction.Player) return;
+            if (core.Faction == Faction.Enemy && faction == Faction.Enemy) return;
+            damageable.TakeDamage(new DamageInfo(core, direction, element, false, faction, damage));
 
-            damageable.TakeDamage(new DamageInfo(core, direction, element, false,faction, damage));
-            if (freezable != null) freezable.ApplyFreeze(duration);
             Destroy(gameObject);
+            var freezeable = core.GetCoreComponent<Status>();// NEEDS TO BE CHANGED TO IFREEZABLE LATER ON
+            if (freezeable != null)
+            {
+            freezeable.ApplyFreeze(duration);
+            }
         }
+        
     }
+   
 }

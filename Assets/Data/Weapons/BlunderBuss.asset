@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponName: Blunderbuss
   damage: 1
+  elementBuildup: 100
   weaponType: 0
   elementType: 0
-  cooldown: 2
+  cooldown: 1
   weaponPrefab: {fileID: 4319457250997465452, guid: d3e73c1570a92a444a83c71a0b871532, type: 3}
+  weaponIcon: {fileID: 263259780867056974, guid: a3e32071b240a0d4a9d36a8462fc4347, type: 3}
   projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
   projectileSpeed: 10
   projectileCount: 5

@@ -27,6 +27,8 @@ public class ProjectileWeapon : Weapon
 
     public override void Attack(Vector2 direction, Vector2 position)
     {
+        
+        Debug.Log("attemping to attack");
         base.Attack(direction, position);
         if (!CanAttack()) return;
 

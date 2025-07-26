@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6620454ea661124383eb67ffc7602b6, type: 3}
   m_Name: CorpseBloom
   m_EditorClassIdentifier: 
-  buffName: CorpseBloom
-  buffSpirte: {fileID: -5965110197927942415, guid: eaf773cb6b34ef4468f8ec594630ee69, type: 3}
+  buffName: Corpse Bloom
+  buffSpirte: {fileID: 336306177017274824, guid: 1de24fe350aefe6499b67272d80720d4, type: 3}
   type: 0
-  element: 1
-  buffDescription: Lorem Ipsum
+  element: 6
+  buffDescription: Whenever you kill an enemy, plant a detonating blossom which detonates
+    and Kills enemies for 30 Damage
   bloom: {fileID: 8970704241102501798, guid: 70c06abab53ca8e44b3bb4a684827f98, type: 3}
   damage: 30
   damageRadius: 1

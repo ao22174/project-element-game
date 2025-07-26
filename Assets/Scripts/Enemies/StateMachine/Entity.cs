@@ -3,7 +3,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-public abstract class Entity : MonoBehaviour, IFreezable
+public abstract class Entity : MonoBehaviour
 {
     //--- DATA OF ENEMY --- 
     [SerializeField] private EntityData entityData;
@@ -13,12 +13,6 @@ public abstract class Entity : MonoBehaviour, IFreezable
     public FiniteStateMachine attackStateMachine;
     public FiniteStateMachine stateMachine;
 
-    // --- GLOBAL STATES ---
-    public EntityAttackFreezeState attackFrozenState;
-    public FreezeState frozenState;
-
-    public State freezeAttackReturnState;
-    public State freezeReturnState;
     // --- ENEMY CORE ---
     public Core core;
     public Rigidbody2D rb { get; private set; } = null!;
@@ -28,10 +22,8 @@ public abstract class Entity : MonoBehaviour, IFreezable
     [SerializeField] private Seeker seeker;
     public Path path;
     public EnemySpawner enemySpawner;
-    [SerializeField] private ElementalStatus elementStatus;
 
     // --- ENEMY DYNAMIC INFO ---
-    public float currentHealth;
 
     public void InitializeEnemy(EntityData data, EnemySpawner spawner)
     {
@@ -44,14 +36,10 @@ public abstract class Entity : MonoBehaviour, IFreezable
         stateMachine = new FiniteStateMachine();
         attackStateMachine = new FiniteStateMachine();
 
-        attackFrozenState = new EntityAttackFreezeState(this, attackStateMachine, "frozen");
-        frozenState = new FreezeState(this, stateMachine, "frozen");
-
         // --- ASSIGN CORE ---
         aliveGO = transform.Find("Alive").GameObject();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        elementStatus = GetComponent<ElementalStatus>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         seeker = GetComponent<Seeker>();
         core = GetComponentInChildren<Core>();
@@ -97,7 +85,7 @@ public abstract class Entity : MonoBehaviour, IFreezable
     }
     public bool PlayerInSight()
     {
-        if (player == null) return false;
+        if (player == null ) return false;
 
         float dist = Vector2.Distance(player.position, transform.position);
         if (dist > EntityData.attackRange) return false;
@@ -113,27 +101,23 @@ public abstract class Entity : MonoBehaviour, IFreezable
         return true;
     }
 
-    public void ApplyFreeze(float duration)
-    {
-        frozenState.setDuration(duration);
-        attackFrozenState.setDuration(duration);
-
-        stateMachine.ChangeState(frozenState);
-        attackStateMachine.ChangeState(attackFrozenState);
-    }
 
 
     public virtual void Update()
     {
+        if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
         if (stateMachine.currentState != null && attackStateMachine.currentState != null)
 
         {
+                    core.LogicUpdate();
+
             stateMachine.currentState.LogicUpdate();
             attackStateMachine.currentState.LogicUpdate();
         }
     }
     public virtual void FixedUpdate()
     {
+        if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
         if (stateMachine.currentState != null && attackStateMachine.currentState != null)
 
         {

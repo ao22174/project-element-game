@@ -22,7 +22,6 @@ public class EntityData : CoreData
     [SerializeField]public ElementType elementType = ElementType.None;
     [SerializeField]public BehaviourType behaviourType = BehaviourType.Wander;
 
-    public float attackCooldown = 1.5f;
     public float attackRange = 4f;
     public bool usesProjectile = true;
     public GameObject projectilePrefab;

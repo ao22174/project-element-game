@@ -3,6 +3,7 @@ using System;
 using ElementProject.gameEnums;
 using System.Collections.Generic;
 using UnityEngine.Rendering;
+using Unity.Profiling;
 
 [System.Serializable]
 public enum Faction { Player, Enemy, Neutral }
@@ -72,6 +73,7 @@ public class CoreData : ScriptableObject
     public float baseDefense = 1f;
     public float baseCritRate = 0f;
     public float baseCritMultiplier = 1f;
+    public float baseAttackSpeed = 1f;
 
     [Header("Movement Settings")]
     public float movementSpeed = 2f;

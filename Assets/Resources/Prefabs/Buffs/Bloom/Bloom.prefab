@@ -102,6 +102,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageRadius: 0
+  damageLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   explosionPrefab: {fileID: 122872745433076806, guid: f76ed48800d55cc4db25fb51c35aa50a, type: 3}
 --- !u!95 &719638783340887821
 Animator:

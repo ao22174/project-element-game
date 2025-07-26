@@ -1,5 +1,6 @@
 using UnityEngine;
 using ElementProject.gameEnums;
+using UnityEditor.Animations;
 
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
 public class WeaponData : ScriptableObject
@@ -12,5 +13,8 @@ public class WeaponData : ScriptableObject
     [SerializeField] public ElementType elementType;
     [SerializeField] public float cooldown = 1;
     [SerializeField] public GameObject weaponPrefab;
+    [SerializeField] public Sprite weaponIcon;
+    [SerializeField] public int maxAmmo = 0;  // 0 means infinite ammo, >0 means limited ammo 
+    [SerializeField] public float reloadTime = 0.5f; // Default reload time
     
 }

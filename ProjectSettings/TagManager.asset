@@ -22,7 +22,7 @@ TagManager:
   - Wall
   - Player
   - Enemy
-  - 
+  - Damageable
   - 
   - 
   - 
@@ -65,6 +65,9 @@ TagManager:
     locked: 0
   - name: WallVisual
     uniqueID: 1740721329
+    locked: 0
+  - name: DamageNumbers
+    uniqueID: 3992346551
     locked: 0
   m_RenderingLayers:
   - Default

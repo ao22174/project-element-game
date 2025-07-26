@@ -4,6 +4,8 @@ using UnityEngine;
 public class PlayerMoveState : PlayerState
 {
     protected Vector2 input;
+    private Movement movement => player.core.GetCoreComponent<Movement>();
+    private Stats stats => player.core.GetCoreComponent<Stats>();
     public PlayerMoveState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
@@ -22,8 +24,7 @@ public class PlayerMoveState : PlayerState
         input = player.InputHandler.MovementInput;  
         player.LastInputDirection = input;
 
-        player.SetVelocity(input * playerData.movementSpeed);
-        // player.CheckIfShouldFlip(input);
+        movement.SetVelocity(stats.MovementSpeed, input);
 
         if(input == Vector2.zero)
         {

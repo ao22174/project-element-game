@@ -12,8 +12,18 @@ public class FreezeReaction : Reaction
         this.duration = duration;
     }
 
-    public override void Apply(GameObject target, GameObject? source = null)
+    public override void Apply(Core core, GameObject? source = null)
     {
-        target.GetComponent<IFreezable>().ApplyFreeze(2f);
-    }
+        Debug.Log($"Applying {ReactionName} reaction to {core.name} for {duration} seconds.");
+        IFreezable freezable = core.gameObject.GetComponentInChildren<IFreezable>();
+        if (freezable != null)
+        {
+            Debug.Log("attempting to freeze");
+            freezable.ApplyFreeze(duration);
+        }
+        else
+        {
+            Debug.LogWarning($"{core.name} does not implement IFreezable interface.");
+        }
+            }
 }
