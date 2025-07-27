@@ -7,5 +7,7 @@ public class ProjectileWeaponData : WeaponData
     public float projectileSpeed;
     public int projectileCount;
     public float spreadAngle;
-    public float projectileLifetime;
+    public float projectileLifetime = 5f;
+    public float RandomSpread = 0f;
+    [SerializeField]public GameObject muzzleFlashPrefab = null!;
 }

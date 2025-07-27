@@ -13,6 +13,9 @@ public class ProjectileWeapon : Weapon
     private float projectileSpeed;
     private float projectileLifetime;
     private GameObject projectilePrefab;
+    private float randomSpread;
+
+    private GameObject muzzleFlashPrefab;
 
     public ProjectileWeapon(WeaponData data, Core core) : base(data, core)
     {
@@ -23,14 +26,17 @@ public class ProjectileWeapon : Weapon
         projectileSpeed = projectileData.projectileSpeed;
         projectileLifetime = projectileData.projectileLifetime;
         projectilePrefab = projectileData.projectilePrefab;
+        randomSpread = projectileData.RandomSpread;
+        muzzleFlashPrefab = projectileData.muzzleFlashPrefab; 
     }
 
-    public override void Attack(Vector2 direction, Vector2 position)
+    public override void Attack(Vector2 direction, Vector2 position, GameObject weaponVisual)
     {
-        
+
         Debug.Log("attemping to attack");
-        base.Attack(direction, position);
         if (!CanAttack()) return;
+        GameObject.FindObjectOfType<CameraMouseOffset>().Shake(-direction, 0.5f, 0.2f);        if (muzzleFlashPrefab != null) GameObject.Instantiate(muzzleFlashPrefab, weaponVisual.transform.Find("fireOrigin"));
+        base.Attack(direction, position);
 
         attackTime = Time.time;
 
@@ -39,7 +45,7 @@ public class ProjectileWeapon : Weapon
 
         for (int i = 0; i < projectileCount; i++)
         {
-            float angle = startingSpread + (spreadAngle * i);
+            float angle = startingSpread + (spreadAngle * i) + UnityEngine.Random.Range(-randomSpread, randomSpread);
             Vector2 rotatedDirection = Utilities.RotateVector(direction, angle);
 
             GameObject projectileGO = GameObject.Instantiate(projectilePrefab, position, Quaternion.identity);
@@ -48,6 +54,13 @@ public class ProjectileWeapon : Weapon
             if (bullet != null)
                 bullet.Initialize(new BulletInfo(core, position, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, elementBuildup, elementType, core.Faction));
         }
+         if (weaponAnimator != null)
+    {
+        weaponAnimator.transform.localRotation = Quaternion.identity; 
+        weaponAnimator.Play("WeaponRecoil", 0, 0f);
+        weaponAnimator.Update(0f); // Ensure it applies immediately
+    }
+       
     }
 
     public override float CalculateDamage()

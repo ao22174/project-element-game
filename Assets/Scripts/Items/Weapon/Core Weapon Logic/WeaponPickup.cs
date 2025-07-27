@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -18,18 +19,7 @@ public class WeaponPickup : MonoBehaviour, IInteractable
     //Handles logic when the Weapon Pickup is picked up by a player (in this case only one player)
     public void Interact(Player player)
     {
-        if (weapon == null) throw new NullReferenceException("Cannot be null here, weapon needs to be assigned");
-        weapon.SetOwner(player.GetComponentInChildren<Core>());
-        if (player.weapons.Count >= 2)
-        {
-            WeaponPickupFactory.Create(player.currentWeapon, player.transform.position);
-            player.weapons[player.currentWeaponIndex] = weapon;
-        }
-        else player.weapons.Add(weapon);
-
-        if (player.weapons.Count == 0) player.EquipWeapon(0);
-        else player.EquipWeapon(player.currentWeaponIndex);
-
+        player.weaponHandler.AddToInventory(weapon);
         Destroy(gameObject);
     }
 }

@@ -20,6 +20,7 @@ public abstract class Weapon
     public int ammoCount;
     public int maxAmmo;
     public float reloadTime = 0.5f; // Default reload time
+    public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
 
     float GetEffectiveCooldown()
     {
@@ -43,6 +44,7 @@ public abstract class Weapon
         maxAmmo = data.maxAmmo;
         ammoCount = maxAmmo;
         reloadTime = data.reloadTime > 0 ? data.reloadTime : 0.5f; // Ensure reload time is positive
+        handsNeeded = data.handsNeeded;
     }
     
     public void SetInstance(GameObject instantiatedVisual)
@@ -52,14 +54,10 @@ public abstract class Weapon
 
 
 
-    public virtual void Attack(Vector2 direction, Vector2 position)
+    public virtual void Attack(Vector2 direction, Vector2 position, GameObject? weaponVisual = null)
     {
         if (CanAttack())
         {
-            if (weaponAnimator != null)
-            {
-               weaponAnimator.Play("WeaponRecoil", 0, 0f);
-            }
             ammoCount--;
         }
     }

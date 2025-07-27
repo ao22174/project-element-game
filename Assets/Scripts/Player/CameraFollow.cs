@@ -1,38 +1,74 @@
 using UnityEngine;
 
-
 public class CameraMouseOffset : MonoBehaviour
 {
-    public Player player; // Assign the player in inspector
-    public float offsetStrength = 3f; // How far the camera can offset toward the mouse
-    public float followSpeed = 5f;    // Smoothness of camera movement
+    [Header("References")]
+    public Player player; // Assign in Inspector
+
+    [Header("Mouse Offset")]
+    public float offsetStrength = 3f;
+    public float followSpeed = 5f;
+
+    [Header("Shake")]
+    private bool shaking = false;
+    private Vector3 shakeDirection;
+    private float shakeMagnitude = 0f;
+    private float shakeEndTime = 0f;
 
     private Camera cam;
 
-    void Start()
+    private void Start()
     {
         cam = Camera.main;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        if (player == null || cam == null) return;
+        if (player == null || cam == null)
+            return;
 
-        // Get mouse position in world space
+        // Get mouse world position
         Vector3 mouseWorld = player.InputHandler.MousePosition;
         mouseWorld.z = 0f;
 
-        // Direction vector from player to mouse
+        // Calculate direction from player to mouse
         Vector3 direction = (mouseWorld - player.transform.position).normalized;
 
-        // Offset is scaled direction
+        // Offset towards mouse
         Vector3 offset = direction * offsetStrength;
 
-        // Desired camera position = player position + slight offset
-        Vector3 targetPos = player.transform.position + offset;
-        targetPos.z = transform.position.z; // Maintain original camera Z
+        // Add screen shake offset
+        Vector3 shakeOffset = GetShakeOffset();
+        offset += shakeOffset;
 
-        // Smooth movement
+        // Target camera position
+        Vector3 targetPos = player.transform.position + offset;
+        targetPos.z = transform.position.z;
+
+        // Smoothly move camera
         transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+    }
+
+    private Vector3 GetShakeOffset()
+    {
+        if (!shaking || Time.time > shakeEndTime)
+        {
+            shaking = false;
+            return Vector3.zero;
+        }
+
+        // Randomize shake within direction, jittered
+        return shakeDirection * shakeMagnitude * Random.Range(0f, 1f);
+    }
+
+    /// <summary>
+    /// Triggers a camera shake effect.
+    /// </summary>
+    public void Shake(Vector3 direction, float magnitude, float duration)
+    {
+        shaking = true;
+        shakeDirection = direction.normalized;
+        shakeMagnitude = magnitude;
+        shakeEndTime = Time.time + duration;
     }
 }

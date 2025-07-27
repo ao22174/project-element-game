@@ -2,6 +2,12 @@ using UnityEngine;
 using ElementProject.gameEnums;
 using UnityEditor.Animations;
 
+public enum HandsNeeded
+{
+    OneHanded,
+    TwoHanded
+}
+
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
 public class WeaponData : ScriptableObject
 {
@@ -16,5 +22,7 @@ public class WeaponData : ScriptableObject
     [SerializeField] public Sprite weaponIcon;
     [SerializeField] public int maxAmmo = 0;  // 0 means infinite ammo, >0 means limited ammo 
     [SerializeField] public float reloadTime = 0.5f; // Default reload time
+
+    [SerializeField] public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
     
 }

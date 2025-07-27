@@ -22,8 +22,11 @@ MonoBehaviour:
   weaponIcon: {fileID: -3232310038938315753, guid: 97fcfc59767231c42bb96ab27a3846dd, type: 3}
   maxAmmo: 30
   reloadTime: 0.5
+  handsNeeded: 1
   projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
-  projectileSpeed: 5
+  projectileSpeed: 3
   projectileCount: 1
   spreadAngle: 0
   projectileLifetime: 5
+  RandomSpread: 5
+  muzzleFlashPrefab: {fileID: 1697633085251374671, guid: af42f970b363c6844b404303175b61a4, type: 3}

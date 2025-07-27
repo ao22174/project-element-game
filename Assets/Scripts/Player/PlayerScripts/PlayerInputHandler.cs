@@ -1,10 +1,11 @@
-using TMPro;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 
 public class PlayerInputHandler : MonoBehaviour
 {
+    public event Action<int>? OnWeaponChange;
     public Vector2 MovementInput { get; private set; }
     public Vector2 MousePosition { get; private set; }
 
@@ -37,6 +38,22 @@ public class PlayerInputHandler : MonoBehaviour
     {
         FireInput = context.ReadValueAsButton(); // Works for hold and release
     }
+    public void OnPrevious(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnWeaponChange?.Invoke(0);
+        }
+    }
 
-    
+    public void OnNext(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            OnWeaponChange?.Invoke(1);
+        }
+    }
+
+
+
 }

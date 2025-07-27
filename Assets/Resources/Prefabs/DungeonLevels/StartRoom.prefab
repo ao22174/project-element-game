@@ -105,7 +105,6 @@ MonoBehaviour:
   - {fileID: 2217264404416116121}
   - {fileID: 4196763118740451768}
   doors: []
-  spawners: []
 --- !u!156049354 &6061157828047896609
 Grid:
   m_ObjectHideFlags: 0

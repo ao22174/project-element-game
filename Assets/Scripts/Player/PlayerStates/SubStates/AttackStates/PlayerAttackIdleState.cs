@@ -20,9 +20,9 @@ using UnityEngine;
         {
             stateMachine.ChangeState(player.AttackState);
         }
-        if (player.InputHandler.ReloadInput && player.currentWeapon != null && player.currentWeapon.ammoCount < player.currentWeapon.maxAmmo)
+        if (player.InputHandler.ReloadInput && player.weaponHandler.currentWeapon != null && player.weaponHandler.currentWeapon.ammoCount < player.weaponHandler.currentWeapon.maxAmmo)
         {
-            player.currentWeapon.Reload();
+            player.weaponHandler.currentWeapon.Reload();
         }
     }
     public override void PhysicsUpdate()

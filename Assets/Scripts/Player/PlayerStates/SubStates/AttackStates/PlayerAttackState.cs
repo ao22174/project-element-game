@@ -20,9 +20,9 @@ public class PlayerAttackState : PlayerState
     {
         
         base.LogicUpdate();
-        fireDirection = player.GetFirePoint().transform.right;
-        player.currentWeapon.Attack(fireDirection, player.GetFirePoint().position);
-        player.core.GetCoreComponent<Buffs>().OnAttack(player.gameObject, player.currentWeapon.data.damage,fireDirection);
+        fireDirection = player.weaponHandler.fireOrigin.transform.right;
+        player.weaponHandler.currentWeapon.Attack(fireDirection, player.weaponHandler.fireOrigin.position, player.weaponHandler.currentWeaponVisual);
+        player.core.GetCoreComponent<Buffs>().OnAttack(player.gameObject, player.weaponHandler.currentWeapon.data.damage,fireDirection);
         stateMachine.ChangeState(player.AttackIdleState);
     }
     public override void PhysicsUpdate()

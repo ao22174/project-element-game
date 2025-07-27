@@ -124,7 +124,7 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTileSide);
                             wallMap.SetTile(tilePos, doorFrameTileSide);
-                            room.prefab.doors.Add(newDoor.GetComponent<Door>());
+                            room    .prefab.doors.Add(newDoor.GetComponent<Door>());
 
                             break;
                         default:
