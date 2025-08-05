@@ -11,6 +11,7 @@ TagManager:
   - RoomGen
   - Enemy
   - BuffManager
+  - Melee
   layers:
   - Default
   - TransparentFX
@@ -48,26 +49,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Floor
+  - name: Background
     uniqueID: 2716474109
     locked: 0
-  - name: Player
-    uniqueID: 2249733623
+  - name: Foreground
+    uniqueID: 2159607331
     locked: 0
-  - name: PlayerWeapon
-    uniqueID: 2681680865
-    locked: 0
-  - name: Bullets
-    uniqueID: 473985399
-    locked: 0
-  - name: Wall
-    uniqueID: 2030977135
-    locked: 0
-  - name: WallVisual
-    uniqueID: 1740721329
-    locked: 0
-  - name: DamageNumbers
+  - name: UI
     uniqueID: 3992346551
+    locked: 0
+  - name: New Layer 4
+    uniqueID: 1108511523
     locked: 0
   m_RenderingLayers:
   - Default

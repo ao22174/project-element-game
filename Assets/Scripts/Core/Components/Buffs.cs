@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using ElementProject.gameEnums;
+using Mono.Cecil;
 
 public class Buffs : CoreComponent
 {
@@ -21,6 +22,10 @@ public class Buffs : CoreComponent
         if (activeBuffs.ContainsKey(name))
         {
             activeBuffs[name].stackCount++;
+            foreach (var buff in activeBuffs.Values)
+            {
+                buff.OnStackIncrease();
+            }
         }
         else
         {
@@ -47,10 +52,10 @@ public class Buffs : CoreComponent
             buff.OnAttack(target, damage, direction);
     }
 
-    public void OnHitEnemy(GameObject enemy)
+    public void OnHitEnemy(DamageInfo info,GameObject enemy)
     {
         foreach (var buff in activeBuffs.Values)
-            buff.OnHitEnemy(core.gameObject, enemy);
+            buff.OnHitEnemy(core.gameObject, info, enemy);
     }
 
     public void OnDash()
@@ -63,6 +68,13 @@ public class Buffs : CoreComponent
     {
         foreach (var buff in activeBuffs.Values)
             buff.OnKill(target, position);
+    }
+    public void OnActivateAura(GameObject target, GameObject reactor, ElementType element)
+    {
+        foreach (var buff in activeBuffs.Values)
+        {
+            buff.OnAuraActivate(target, reactor, element);
+        }
     }
 
     public void OnReaction(GameObject target, GameObject reactor, ElementType primary, ElementType secondary)

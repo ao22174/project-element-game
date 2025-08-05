@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e96805689681824c84569afe98c6c64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletOwner: 0
+  duration: 0
 --- !u!1 &5479990527097362779
 GameObject:
   m_ObjectHideFlags: 0
@@ -184,8 +184,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 473985399
-  m_SortingLayer: 4
+  m_SortingLayerID: -2135359965
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a1e0d7fc376f1364891057d8d29d38fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

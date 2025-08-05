@@ -3,6 +3,7 @@ using ElementProject.gameEnums;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Rendering;
+#pragma warning disable CS8618
 public abstract class Weapon
 {
     public WeaponData data;
@@ -14,25 +15,24 @@ public abstract class Weapon
     public float cooldown;
     public float attackTime;
     public GameObject weaponPrefab;
-    public Core core;
     public Sprite icon;
      public Animator weaponAnimator;
     public int ammoCount;
     public int maxAmmo;
     public float reloadTime = 0.5f; // Default reload time
     public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
+    public float scaling;
 
-    float GetEffectiveCooldown()
+    float GetEffectiveCooldown(Core ownerCore)
     {
-        float atkSpeed = core.GetCoreComponent<Stats>()?.attackSpeed ?? 1f;
+        float atkSpeed = ownerCore.GetCoreComponent<Stats>()?.AttackSpeed ?? 1f;
         float cooldown = data.cooldown / atkSpeed;
         return cooldown;
     }
-    public Weapon(WeaponData data, Core core)
+    public Weapon(WeaponData data)
     {
-        this.core = core;
         this.data = data;
-        SetOwner(core);
+        scaling = data.scaling;
         Weaponname = data.weaponName;
         damage = data.damage;
         weaponType = data.weaponType;
@@ -54,15 +54,13 @@ public abstract class Weapon
 
 
 
-    public virtual void Attack(Vector2 direction, Vector2 position, GameObject? weaponVisual = null)
+    public virtual void Attack(Vector2 direction, Vector2 position, Core ownerCore, GameObject? weaponVisual = null)
     {
-        if (CanAttack())
+        if (CanAttack(ownerCore))
         {
             ammoCount--;
         }
     }
-    public abstract float CalculateDamage();
-    public void SetOwner(Core core) => this.core = core;
 
     public virtual void Reload()
     {
@@ -71,10 +69,10 @@ public abstract class Weapon
             ammoCount = data.maxAmmo;
         }
     }
-    public bool CanAttack()
+    public bool CanAttack(Core ownerCore)
     {
-        var status = core.GetComponent<Status>();
+        var status = ownerCore.GetComponent<Status>();
         bool isFrozen = status != null && status.IsFrozen;
-        return !isFrozen && Time.time >= attackTime + GetEffectiveCooldown() && (ammoCount > 0 || maxAmmo == 0);
+        return !isFrozen && Time.time >= attackTime + GetEffectiveCooldown(ownerCore) && (ammoCount > 0 || maxAmmo == 0);
     }
 }

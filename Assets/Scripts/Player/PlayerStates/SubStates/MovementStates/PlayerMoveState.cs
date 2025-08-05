@@ -22,8 +22,6 @@ public class PlayerMoveState : PlayerState
     {
         base.LogicUpdate();
         input = player.InputHandler.MovementInput;  
-        player.LastInputDirection = input;
-
         movement.SetVelocity(stats.MovementSpeed, input);
 
         if(input == Vector2.zero)

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 public class Combat : CoreComponent, IDamageable
 {
-    
+    public Faction Faction => core.Faction;
     public event Action<DamageInfo>? OnTakeDamage;
     public event Action<DamageInfo>? OnDeath;
     [SerializeField] private GameObject damageNumberPrefab;
@@ -23,11 +23,17 @@ public class Combat : CoreComponent, IDamageable
         Stats?.DecreaseHealth(info.amount);
         if (info.elementBuildup > 0)
         {
-            Status?.ApplyElementalBuildup(info.element, info.elementBuildup);
+            Status?.ApplyElementalBuildup(info.element, info.elementBuildup, info.sourceCore);
         }
-        UIManager?.ShowDamageNumber(info.amount.ToString(), info.element);  
-        OnTakeDamage?.Invoke(info);
-        
+        UIManager?.ShowDamageNumber(info.amount, info.element);
+        UIManager?.Flash(); 
+        Debug.Log(info.sourceCore.Faction);
+        info.sourceCore.GetCoreComponent<Buffs>().OnHitEnemy(info, gameObject);
+        Animator anim = GetComponentInParent<Animator>();
+if (anim != null)
+{
+    anim.SetTrigger("Hit");
+}
         if (stats?.CurrentHealth < 0)
         {
             OnDeath?.Invoke(info);

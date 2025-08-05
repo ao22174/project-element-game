@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00801246689c61428c3297dc55d7d72, type: 3}
+  m_Name: KillHungry
+  m_EditorClassIdentifier: 
+  buffName: Kill hungry
+  buffSpirte: {fileID: 312729559261727252, guid: 444aa4f07ceeafa40bfd092cc06f4f01, type: 3}
+  type: 0
+  element: 7
+  buffDescription: Gain 5 (+1 per stack) attack per enemy killed. Stacks removed
+    if removed
+  attackIncreaseOnKill: 5
+  attackIncreaseOnKillPerStack: 1

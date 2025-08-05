@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
+#pragma warning disable CS8618
 public class WeaponHandler : MonoBehaviour
 {
     [Header("Weapon Visuals")]
@@ -8,6 +9,7 @@ public class WeaponHandler : MonoBehaviour
     public Transform fireOrigin;
     public Transform oneHandedHoldPoint;
     public Transform twoHandedHoldPoint;
+    public Transform twoHandedMeleeHoldPoint;
     public GameObject rightHandTransform;
     public GameObject leftHandTransform;
     public Animator animator;
@@ -16,19 +18,20 @@ public class WeaponHandler : MonoBehaviour
     public List<Weapon> weapons = new();
     public Weapon currentWeapon;
     public int currentWeaponIndex;
+    private bool canAttack = true;
+    private bool canWeaponSwap = true;
     public Core core;
 
     public void Initialize(WeaponData weaponData, Core core)
     {
         this.core = core;
         animator = GetComponent<Animator>();
-        weapons.Add(WeaponFactory.CreateWeapon(weaponData, core));
+        weapons.Add(WeaponFactory.CreateWeapon(weaponData));
         EquipWeapon(currentWeaponIndex);
     }
 
     public void AddToInventory(Weapon weapon)
     {
-        weapon.SetOwner(core);
         if (weapons.Count >= 2) // If full inventory
         {
             WeaponPickupFactory.Create(currentWeapon, transform.position);
@@ -40,16 +43,29 @@ public class WeaponHandler : MonoBehaviour
         else EquipWeapon(currentWeaponIndex);
 
     }
+    public void SheatheWeapon()
+    {
+        currentWeaponVisual.SetActive(false);
+        canAttack = false;
+        canWeaponSwap = false;
+    }
+    public void UnsheatheWeapon()
+    {
+        currentWeaponVisual.SetActive(true);
+        canAttack = true;
+        canWeaponSwap = true;
+    }
     public void EquipWeapon(int index)
     {
-        if(index < 0 || index >= weapons.Count)
+        if (!canWeaponSwap) return;
+        if (index < 0 || index >= weapons.Count)
         {
             Debug.LogWarning("Invalid weapon index: " + index);
             return;
         }
         currentWeaponIndex = index;
         currentWeapon = weapons[index];
-        core.GetCoreComponent<UIManager>()?.weaponDisplay.SetWeapon(currentWeapon);
+        core.GetCoreComponent<UIManager>()?.weaponDisplay?.SetWeapon(currentWeapon);
 
         if (currentWeaponVisual != null)
             Destroy(currentWeaponVisual);
@@ -58,11 +74,16 @@ public class WeaponHandler : MonoBehaviour
         {
             if (currentWeapon.handsNeeded == HandsNeeded.TwoHanded)
             {
+                if (currentWeapon is MeleeWeapon)
+                {
+                    currentWeaponVisual = Instantiate(currentWeapon.weaponPrefab, twoHandedMeleeHoldPoint);
+                }
+                else
+                    currentWeaponVisual = Instantiate(currentWeapon.weaponPrefab, twoHandedHoldPoint);
                 leftHandTransform.SetActive(true);
                 rightHandTransform.SetActive(true);
                 animator.SetInteger("HandsNeeded", 2);
 
-                currentWeaponVisual = Instantiate(currentWeapon.weaponPrefab, twoHandedHoldPoint);
 
             }
             else if (currentWeapon.handsNeeded == HandsNeeded.OneHanded)
@@ -96,6 +117,25 @@ public class WeaponHandler : MonoBehaviour
 
         }
         else Debug.LogWarning("Weapon prefab missing for: " + currentWeapon.Weaponname);
+    }
+    public void Attack()
+    {
+        if (!canAttack) return;
+        if (currentWeapon is MeleeWeapon meleeWeapon)
+        {
+            meleeWeapon.Attack(transform.right, transform.position,core, currentWeaponVisual);
+            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damage, currentWeaponVisual.transform.right);
 
+        }
+        else if (currentWeapon is ProjectileWeapon projectileWeapon)
+        {
+            projectileWeapon.Attack(fireOrigin.right, fireOrigin.position,core, currentWeaponVisual);
+            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damage, fireOrigin.right);
+
+        }
+        else
+        {
+            Debug.LogWarning("Current weapon is not a Melee or Projectile weapon.");
+        }
     }
 }

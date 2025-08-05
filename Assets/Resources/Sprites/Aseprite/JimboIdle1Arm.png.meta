@@ -137,12 +137,12 @@ TextureImporter:
       name: JimboIdle1Arm_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 21
+        y: 18
+        width: 20
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -159,34 +159,12 @@ TextureImporter:
       name: JimboIdle1Arm_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: afb1bd2ca2cd23df0800000000000000
-      internalID: -201856957062374406
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: JimboIdle1Arm_2
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 85
+        y: 18
+        width: 20
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -200,37 +178,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JimboIdle1Arm_3
+      name: JimboIdle1Arm_2
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: aaf0f580c615ddc90800000000000000
-      internalID: -7143463909500973142
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: JimboIdle1Arm_4
-      rect:
-        serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 149
+        y: 18
+        width: 20
+        height: 29
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -244,15 +200,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: JimboIdle1Arm_5
+      name: JimboIdle1Arm_3
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 213
+        y: 18
+        width: 20
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -261,6 +217,50 @@ TextureImporter:
       bones: []
       spriteID: bbe5d90983a58cdd0800000000000000
       internalID: -2465621596994445637
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JimboIdle1Arm_4
+      rect:
+        serializedVersion: 2
+        x: 277
+        y: 18
+        width: 20
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad0f8e05e81724241920ef706dff2ee0
+      internalID: 860290063
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: JimboIdle1Arm_5
+      rect:
+        serializedVersion: 2
+        x: 341
+        y: 18
+        width: 20
+        height: 28
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1a52430db57c07447b6332fdbd87a856
+      internalID: -420114578
       vertices: []
       indices: 
       edges: []
@@ -279,14 +279,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       JimboIdle1Arm_0: 3059769729366569078
-      JimboIdle1Arm_1: -201856957062374406
-      JimboIdle1Arm_2: -5369369555266979481
-      JimboIdle1Arm_3: -7143463909500973142
-      JimboIdle1Arm_4: 7103962907753884106
-      JimboIdle1Arm_5: -2465621596994445637
+      JimboIdle1Arm_1: -5369369555266979481
+      JimboIdle1Arm_2: 7103962907753884106
+      JimboIdle1Arm_3: -2465621596994445637
+      JimboIdle1Arm_4: 860290063
+      JimboIdle1Arm_5: -420114578
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

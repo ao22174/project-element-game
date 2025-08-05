@@ -5,33 +5,34 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+#pragma warning disable CS8618
 
 //PLANS, generate room, connect that room into system, choose a random door, generate next room, add these rooms 
 public class DungeonManager : MonoBehaviour
 {
-    public RoomData[] Rooms;
-    private bool startingRoomUsed = false;
-    public List<RoomInstance> roomInstances = new List<RoomInstance>();
-    public Dictionary<Vector2Int, RoomInstance> macroGrid = new();
+    [SerializeField]public RoomData[] Rooms;
+    [SerializeField]private bool startingRoomUsed = false;
+    [SerializeField]public List<RoomInstance> roomInstances = new List<RoomInstance>();
+    [SerializeField]public Dictionary<Vector2Int, RoomInstance> macroGrid = new();
 
-    public Vector2Int macroGridSize = new Vector2Int(4, 4);
-    public int roomCount = 8;
-    public TileBase floorTile;
-    public TileBase wallTile;
-    public GameObject sideDoorObj;
+   [SerializeField] public Vector2Int macroGridSize = new Vector2Int(4, 4);
+    [SerializeField]public int roomCount = 8;
+    [SerializeField]public TileBase floorTile;
+    [SerializeField]public TileBase wallTile;
+    [SerializeField]public GameObject sideDoorObj;
 
-    public RoomData startingRoom;
-    public RoomData finalRoom;
-    public GameObject doorObj;
-    public List<RectInt> attemptedRoomBounds = new List<RectInt>();
-    public int attempts;
-    public GameObject hallwayUp;
-    public GameObject hallwaySide;
-    public TileBase doorVisualTile;
-    public TileBase doorFrameTile;
+    [SerializeField]public RoomData startingRoom;
+    [SerializeField]public RoomData finalRoom;
+    [SerializeField]public GameObject doorObj;
+    [SerializeField]public List<RectInt> attemptedRoomBounds = new List<RectInt>();
+    [SerializeField]public int attempts;
+    [SerializeField]public GameObject hallwayUp;
+    [SerializeField]public GameObject hallwaySide;
+    [SerializeField]public TileBase doorVisualTile;
+    [SerializeField]public TileBase doorFrameTile;
 
-    public TileBase doorFrameTileSide;
-    public TileBase doorVisualTileSide;
+    [SerializeField]public TileBase doorFrameTileSide;
+    [SerializeField] public TileBase doorVisualTileSide;
     private int minX = int.MaxValue;
     private int maxX = int.MinValue;
     private int minY = int.MaxValue;

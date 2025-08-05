@@ -17,7 +17,7 @@ public class FrostArrow : Buff
         ProjectileIceArrow bullet = projectileGO.GetComponent<ProjectileIceArrow>();
         if (bullet != null)
         {
-            bullet.Initialize(new BulletInfo(core, target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.elementBuildup, ElementType.Frost, core.Faction), data.duration);
+            bullet.Initialize(new BulletInfo(core, null, target.transform.position, direction, data.arrowSpeed, data.arrowDamage, 2f, data.elementBuildup, ElementType.Frost, core.Faction), data.duration);
             cooldownEndTime = Time.time + data.coolDown;
         }
     }

@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Tilemaps;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+#pragma warning disable CS8618
 
 public class RoomPrefab : MonoBehaviour
 {
@@ -8,6 +11,19 @@ public class RoomPrefab : MonoBehaviour
     public List<Door> doors;
 
     DoorAnchor selectedDoor;
+
+    public TileBase topRoomTile;
+    public TileBase topRoomVanity;
+    public TileBase rightRoomTile;
+    public TileBase leftRoomTile;
+    public TileBase bottomRoomTile;
+
+    public TileBase cornerTL;
+    public TileBase cornerTR;
+    public TileBase cornerBL;
+    public TileBase cornerBR;
+
+
     public DoorAnchor GetDoor(DoorDirection dir)
     {
 
@@ -17,7 +33,7 @@ public class RoomPrefab : MonoBehaviour
             {
                 selectedDoor = door;
             }
-            
+
         }
         return selectedDoor;
     }

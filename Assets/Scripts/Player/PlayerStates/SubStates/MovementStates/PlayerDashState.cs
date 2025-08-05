@@ -13,21 +13,27 @@ public class PlayerDashState : PlayerState
     }
     public override void Enter()
     {
+        player.weaponHandler.SheatheWeapon();
         base.Enter();
-        dashDirection = player.LastInputDirection;  
+       dashDirection = player.LastInputDirection;
+
+        if (dashDirection == Vector2.zero)
+                dashDirection = Vector2.right; // or Vector2.right, or whatever makes sense
         dashStartTime = Time.time;
-        movement.SetVelocity(playerData.dashSpeed, dashDirection);
     }
     public override void Exit()
     {
+         player.weaponHandler.UnsheatheWeapon();
+
         base.Exit();
+
     }
     public override void LogicUpdate()
     {
         base.LogicUpdate();
         if(Time.time >= dashStartTime + playerData.dashDuration)
         {
-            dashEndTime = Time.time;
+            movement.SetVelocity(0f, Vector2.zero);
             stateMachine.ChangeState(player.MoveState);
         }
     }
@@ -43,7 +49,7 @@ public class PlayerDashState : PlayerState
 
     public bool CheckIfCanDash()
     {
-        return Time.time >= dashEndTime + playerData.dashCooldown;
+        return Time.time >= dashStartTime + playerData.dashCooldown;
     }
 }
 

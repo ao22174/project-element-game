@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+#pragma warning disable CS8618
 
 public class PlayerInputHandler : MonoBehaviour
 {

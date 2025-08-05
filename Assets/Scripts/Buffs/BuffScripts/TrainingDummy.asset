@@ -46,8 +46,8 @@ MonoBehaviour:
   - element: 4
     bonus: 0
   baseMaxHealth: 2000
-  baseAttack: 1
-  baseDefense: 1
+  baseAttack: 100
+  baseDefense: 100
   baseCritRate: 0
   baseCritMultiplier: 1
   baseAttackSpeed: 1

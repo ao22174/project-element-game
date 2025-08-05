@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
+#pragma warning disable CS8618
 public class WeaponDisplay : MonoBehaviour
 {
     [SerializeField] private Image weaponIcon;

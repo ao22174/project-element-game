@@ -11,7 +11,7 @@ public abstract class Buff
     public virtual void OnRemove(GameObject target) { }
     public virtual void OnUpdate(GameObject target) { }
     public virtual void OnAttack(GameObject target, float damage, Vector2 direction = default ){ }
-    public virtual void OnHitEnemy(GameObject target, GameObject enemy) { }
+    public virtual void OnHitEnemy(GameObject target, DamageInfo info,GameObject enemy) { }
 
     public virtual void OnAuraActivate(GameObject target, GameObject enemy, ElementType element){}
     public virtual void OnReaction(GameObject target, GameObject enemy, ElementType baseElement, ElementType triggerElement){}
@@ -22,10 +22,10 @@ public abstract class Buff
 
     public virtual void OnApplyElement(GameObject target, ElementType element, float damage)
     {
-
     }
+    
+    public virtual void OnStackIncrease(){}
 
-    public virtual void OnKill(GameObject target, Vector2 position) {    }
-
+    public virtual void OnKill(GameObject target, Vector2 position) { }
     public virtual void OnAttacked(GameObject target, GameObject? enemy = null, int damageTaken = 0) { }
 }

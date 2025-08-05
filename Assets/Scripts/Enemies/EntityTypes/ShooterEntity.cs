@@ -9,11 +9,12 @@ public class ShooterEntity : Entity
     public ShooterIdle chaserIdle;
     public ShooterAttack chaserAttack;
     public ShooterAttackIdle chaserAttackIdle;
+    public SpriteRenderer spriteRenderer;
 
-    public ShooterData shooterData;
+    public ShooterData? shooterData;
     public Transform weaponHoldPoint;
-    public GameObject weaponDisplay;
-    public Weapon weapon;
+    public WeaponHandler weaponHandler;
+    public Transform pivotPoint;
 
     public override void Start()
     {
@@ -28,6 +29,7 @@ public class ShooterEntity : Entity
         attackStateMachine.Initialize(chaserAttackIdle);
 
         shooterData = EntityData as ShooterData;
+        weaponHandler = GetComponent<WeaponHandler>();
 
         if (shooterData == null)
         {
@@ -42,48 +44,43 @@ public class ShooterEntity : Entity
     public override void Update()
     {
         base.Update();
-        LookAtEnemy();
-        if (weapon.ammoCount <= 0 && weapon.maxAmmo > 0)
+        LookAtEnemy(weaponHandler.currentWeaponVisual, spriteRenderer, pivotPoint );
+        if (weaponHandler.currentWeapon.ammoCount <= 0 && weaponHandler.currentWeapon.maxAmmo > 0)
         {
-            weapon.Reload();
+            weaponHandler.currentWeapon.Reload();
         }
     }
 
     private void LoadWeapon(int index)
     {
-        weapon = WeaponFactory.CreateWeapon(shooterData.useableWeapons[index], core);
-        weaponDisplay = Instantiate(weapon.weaponPrefab, weaponHoldPoint);
+        weaponHandler.Initialize(shooterData.useableWeapons[index], core);
     }
 
-    private void LookAtEnemy()
+    private void LookAtEnemy(GameObject weaponVisual, SpriteRenderer bodySprite, Transform pivotPoint)
     {
         if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
         if (!PlayerInSight()) return;
 
-
-        transform.localScale = new Vector3((player.position.x < transform.position.x) ? -1 : 1, 1, 1);
-
-
-        if (weaponDisplay == null) return;
+        if (weaponVisual == null) return;
 
         Vector2 direction = ((Vector2)player.position - (Vector2)weaponHoldPoint.position).normalized;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        weaponHoldPoint.rotation = Quaternion.Euler(0, 0, angle);
+        pivotPoint.rotation = Quaternion.Euler(0, 0, angle);
 
         bool flip = angle > 90 || angle < -90;
-        weaponDisplay.transform.localScale = new Vector3(flip ? -1 : 1, flip ? -1 : 1, 1);
+        if (weaponVisual != null)
+            weaponVisual.transform.localScale = new Vector3(1, flip ? -1 : 1, 1);
+
+        bodySprite.flipX = flip;
+    
     }
+
     protected override void InitializeStates()
     {
 
     }
     
-        public Transform GetFirePoint()
-    {
-        if (weaponDisplay == null) throw new NullReferenceException("fireOrigin is null");
-        return weaponDisplay.transform.Find("fireOrigin");
-    }
+        
 
 
 }

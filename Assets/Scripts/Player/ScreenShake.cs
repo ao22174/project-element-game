@@ -1,13 +1,13 @@
 using System.Collections;
 using UnityEngine;
-
+#pragma warning disable CS8618
 public class ScreenShake : MonoBehaviour
 {
     public static ScreenShake Instance { get; private set; }
 
     private Transform cam;
     private Vector3 originalPos;
-    private Coroutine shakeRoutine;
+    private Coroutine? shakeRoutine;
 
     [Header("Defaults")]
     public float defaultDuration = 0.1f;

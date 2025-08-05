@@ -1,5 +1,5 @@
 using UnityEngine;
-
+#pragma warning disable CS8618
 
 public class Player : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     //Player Controller Components
     [SerializeField] public Animator Anim { get; private set; }
     [SerializeField] public PlayerInputHandler InputHandler { get; private set; }
-    [SerializeField] public PlayerData playerData {get; private set; }
+    [SerializeField] public PlayerData playerData;
     [SerializeField] public AimController aimController { get; private set;   }
     [SerializeField]public WeaponHandler weaponHandler { get; private set; }
 

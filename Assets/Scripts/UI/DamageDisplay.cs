@@ -1,7 +1,9 @@
+using System;
 using ElementProject.gameEnums;
+using Unity.Mathematics;
 using TMPro;
 using UnityEngine;
-
+#pragma warning disable CS8618
 public class DamageDisplay : MonoBehaviour
 {
     public TextMeshPro text;
@@ -10,7 +12,9 @@ public class DamageDisplay : MonoBehaviour
 
     public void Show(float amount, ElementType? element = ElementType.None)
     {
-        text.text = amount.ToString();
+        float roundedAmount = Mathf.FloorToInt(amount);
+        text.text = roundedAmount.ToString();
+        
         SetElement(element);
         Destroy(gameObject, lifetime);
     }

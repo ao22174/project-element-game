@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+#pragma warning disable CS8618
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -78,10 +80,11 @@ public class EnemySpawner : MonoBehaviour
                 UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
                 UnityEngine.Random.Range(bounds.min.y, bounds.max.y)
             );
+            int enemyChosen = UnityEngine.Random.Range(0, entityDatas.Length);
 
-            GameObject newSpawn = Instantiate(entityDatas[0].enemyPrefab, spawnPos, Quaternion.identity);
+            GameObject newSpawn = Instantiate(entityDatas[enemyChosen].enemyPrefab, spawnPos, Quaternion.identity);
             Entity entity = newSpawn.GetComponent<Entity>();
-            entity.InitializeEnemy(entityDatas[0], this);
+            entity.InitializeEnemy(entityDatas[enemyChosen], this);
             entities.Add(entity);
         }
 

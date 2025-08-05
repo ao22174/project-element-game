@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class WeaponPickupSpawner : MonoBehaviour
 {
@@ -24,6 +23,6 @@ public class WeaponPickupSpawner : MonoBehaviour
         // Pick random test data
         WeaponData randomData = testWeaponDataPool[Random.Range(0, testWeaponDataPool.Length)];
 
-        pickup.Initialize(WeaponFactory.CreateWeapon(randomData, null));
+        pickup.Initialize(WeaponFactory.CreateWeapon(randomData));
     }
 }

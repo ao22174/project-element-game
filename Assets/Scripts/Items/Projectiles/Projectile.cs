@@ -12,7 +12,8 @@ public enum OwnedBy
 
 public struct BulletInfo
 {
-    public Core core;
+    public Weapon? weapon;
+    public Core ownerCore;
     public Vector2 startPosition;
     public Vector2 direction;
     public float speed;
@@ -23,7 +24,8 @@ public struct BulletInfo
     public Faction faction;
 
     public BulletInfo(
-        Core core,
+        Core ownerCore,
+       Weapon? weapon,
         Vector2 startPosition,
         Vector2 direction,
         float speed,
@@ -33,7 +35,8 @@ public struct BulletInfo
         ElementType element,
         Faction faction)
     {
-        this.core = core;
+        this.ownerCore = ownerCore;
+        this.weapon = weapon;
         this.startPosition = startPosition;
         this.direction = direction;
         this.speed = speed;
@@ -46,7 +49,6 @@ public struct BulletInfo
 }
 public abstract class Projectile : MonoBehaviour
 {
-    protected Core core;
     protected Vector2 direction;
     protected float speed;
     protected float damage;
@@ -54,9 +56,13 @@ public abstract class Projectile : MonoBehaviour
     protected float lifetime;
     protected ElementType element;
     protected Faction faction;
+    protected Weapon? weapon;
+    protected Core ownerCore;
 
     public virtual void Initialize(BulletInfo info)
     {
+        weapon = info.weapon;
+        ownerCore = info.ownerCore;
         transform.position = info.startPosition;
         direction = info.direction.normalized;
         speed = info.speed;
@@ -65,12 +71,11 @@ public abstract class Projectile : MonoBehaviour
         element = info.element;
         elementBuildup = info.elementBuildup;
         faction = info.faction;
-        core = info.core;
 
         Destroy(gameObject, lifetime);
     }
 
-    void Update()
+    void FixedUpdate()
     {
         transform.position += (Vector3)(direction * speed * Time.deltaTime);
         CustomUpdate();

@@ -41,8 +41,8 @@ public class BaseChaseState : State
         {
             if (entity.path == null)
             {
-                return; 
-                }
+                return;
+            }
             ;
             if (currentWaypoint >= entity.path.vectorPath.Count) return;
             Vector2 direction = ((Vector2)entity.path.vectorPath[currentWaypoint] - entity.rb.position).normalized;

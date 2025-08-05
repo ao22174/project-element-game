@@ -6,7 +6,7 @@ using System.Threading;
 public struct DamageInfo
 {
     public float amount;
-    public Core core;
+    public Core sourceCore;
     public Faction faction;
     public Vector2 direction;
     public ElementType element;
@@ -16,7 +16,7 @@ public struct DamageInfo
     public DamageInfo(Core core = null, Vector2 direction = default, ElementType element = ElementType.None, bool isCrit = false, Faction faction = Faction.Neutral, float amount = 0f, int elementBuildup = 0)
     {
         this.amount = amount;
-        this.core = core;
+        this.sourceCore = core;
         this.faction = faction;
         this.direction = direction;
         this.element = element;
@@ -26,5 +26,6 @@ public struct DamageInfo
 }
 public interface IDamageable
 {
+    public Faction Faction { get; }
     void TakeDamage(DamageInfo info);
 }

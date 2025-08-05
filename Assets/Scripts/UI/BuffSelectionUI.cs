@@ -2,9 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using TMPro;
 using DG.Tweening;
-
+#pragma warning disable CS8618
 public class BuffSelectionUI : MonoBehaviour
 {
     public static BuffSelectionUI Instance;

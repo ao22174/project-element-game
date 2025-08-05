@@ -1,6 +1,7 @@
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+#pragma warning disable CS8618
 
 
 public abstract class Entity : MonoBehaviour
@@ -22,6 +23,7 @@ public abstract class Entity : MonoBehaviour
     [SerializeField] private Seeker seeker;
     public Path path;
     public EnemySpawner enemySpawner;
+    public bool canRotate = false;
 
     // --- ENEMY DYNAMIC INFO ---
 
@@ -50,7 +52,8 @@ public abstract class Entity : MonoBehaviour
         InitializeStates();
         if (EntityData.usesPathfinding)
             InvokeRepeating("UpdatePath", 0f, 0.5f);
-        core.GetCoreComponent<Combat>().OnDeath +=  OnDeath;
+        core.GetCoreComponent<Combat>().OnDeath += OnDeath;
+        core.GetCoreComponent<Combat>().OnTakeDamage += OnHit;
 
     }
 
@@ -63,14 +66,17 @@ public abstract class Entity : MonoBehaviour
         seeker.StartPath(transform.position, player.position, OnPathComplete);
     }
 
-    public virtual void OnHit(){}
+    public virtual void OnHit(DamageInfo info)
+    {
+        info.sourceCore.GetCoreComponent<Buffs>().OnHitEnemy(info, gameObject);
+    }
 
     public virtual void OnDeath(DamageInfo info)
     {
-        GameObject sourceObj = info.core.transform.parent.gameObject;
+        GameObject sourceObj = info.sourceCore.transform.parent.gameObject;
         Faction faction = info.faction;
         //CHANGE THAT 0f to overflow damage later
-        enemySpawner.UpdateAlive(this);
+        enemySpawner?.UpdateAlive(this);
         CombatEvents.EnemyKilled(new EnemyDeathInfo(EntityData, sourceObj, faction, transform.position, GetType().Name, 0f));
         Destroy(gameObject);
 
@@ -106,23 +112,43 @@ public abstract class Entity : MonoBehaviour
     public virtual void Update()
     {
         if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
-        if (stateMachine.currentState != null && attackStateMachine.currentState != null)
-
+        if (stateMachine.currentState != null)
         {
-                    core.LogicUpdate();
-
+            core.LogicUpdate();
             stateMachine.currentState.LogicUpdate();
+        }
+        if (attackStateMachine.currentState != null)
+        {
             attackStateMachine.currentState.LogicUpdate();
+        }
+        if (PlayerInSight() && canRotate)
+        {
+            lookAtPlayer();    
+        }
+    }
+
+    public void lookAtPlayer()
+    {
+        if (player.position.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (player.position.x <= transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
         }
     }
     public virtual void FixedUpdate()
     {
         if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
-        if (stateMachine.currentState != null && attackStateMachine.currentState != null)
-
+        if (stateMachine.currentState != null)
         {
-            stateMachine.currentState.PhysicsUpdate();
-            attackStateMachine.currentState.PhysicsUpdate();
+            core.LogicUpdate();
+            stateMachine.currentState.LogicUpdate();
+        }
+        if (attackStateMachine.currentState != null)
+        {
+            attackStateMachine.currentState.LogicUpdate();
         }
 
 

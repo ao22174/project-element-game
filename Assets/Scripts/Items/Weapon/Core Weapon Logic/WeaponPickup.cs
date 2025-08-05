@@ -1,5 +1,4 @@
-using System;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 
@@ -11,7 +10,6 @@ public class WeaponPickup : MonoBehaviour, IInteractable
     public void Initialize(Weapon weapon)
     {
         this.weapon = weapon;
-        this.weapon.SetOwner(null);
         GetComponent<SpriteRenderer>().sprite = weapon.weaponPrefab.GetComponent<SpriteRenderer>().sprite;
     }
 

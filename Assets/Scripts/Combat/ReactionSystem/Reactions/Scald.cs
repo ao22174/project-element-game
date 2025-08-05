@@ -2,11 +2,12 @@ using UnityEngine;
 using System.Collections;
 using ElementProject.gameEnums;
 
-//WATER + ICE
+//Water + FIRE
 public class ScaldReaction : Reaction
 {
     public override string ReactionName => "Scald";
-    private float totalDamage;
+    public override float baseDamage => totalDamage;
+    float totalDamage;
     private float duration;
     private int ticks = 5; // Number of ticks
 
@@ -16,15 +17,15 @@ public class ScaldReaction : Reaction
         this.duration = duration;
     }
 
-    public override void Apply(Core core, GameObject? source = null)
+    public override void Apply(Core core, Core source)
     {
-        core.StartCoroutine(ApplyScaldDoT(core, totalDamage, duration, ticks));
+        core.StartCoroutine(ApplyScaldDoT(core, duration, ticks, source));
     }
 
-    private IEnumerator ApplyScaldDoT(Core core, float totalDamage, float duration, int ticks)
+    private IEnumerator ApplyScaldDoT(Core core, float duration, int ticks, Core source)
     {
         float tickInterval = duration / ticks;
-        float damagePerTick = totalDamage / ticks;
+        float damagePerTick = DamageCalculator.CalculateReactionDamage(source, this, core) / ticks;
         for (int i = 0; i < ticks; i++)
         {
             var combat = core.GetCoreComponent<Combat>();
@@ -34,7 +35,7 @@ public class ScaldReaction : Reaction
                {
                    amount = damagePerTick,
                    element = ElementType.Fire,
-                   core = core
+                   sourceCore = source
                 });
             }
             yield return new WaitForSeconds(tickInterval);

@@ -2,11 +2,10 @@ using System;
 using ElementProject;
 using Unity.VisualScripting;
 using UnityEngine;
-
+#pragma warning disable CS8618
 
 public class ProjectileWeapon : Weapon
 {
-    Vector2 projectileSpawn;
     private ProjectileWeaponData projectileData;
     private int projectileCount;
     private float spreadAngle;
@@ -17,7 +16,7 @@ public class ProjectileWeapon : Weapon
 
     private GameObject muzzleFlashPrefab;
 
-    public ProjectileWeapon(WeaponData data, Core core) : base(data, core)
+    public ProjectileWeapon(WeaponData data) : base(data)
     {
         if (data is ProjectileWeaponData projData) projectileData = projData;
         else throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
@@ -30,13 +29,14 @@ public class ProjectileWeapon : Weapon
         muzzleFlashPrefab = projectileData.muzzleFlashPrefab; 
     }
 
-    public override void Attack(Vector2 direction, Vector2 position, GameObject weaponVisual)
+    public override void Attack(Vector2 direction, Vector2 position, Core ownerCore,GameObject weaponVisual)
     {
 
         Debug.Log("attemping to attack");
-        if (!CanAttack()) return;
-        GameObject.FindObjectOfType<CameraMouseOffset>().Shake(-direction, 0.5f, 0.2f);        if (muzzleFlashPrefab != null) GameObject.Instantiate(muzzleFlashPrefab, weaponVisual.transform.Find("fireOrigin"));
-        base.Attack(direction, position);
+        if (!CanAttack(ownerCore)) return;
+        GameObject.FindObjectOfType<CameraMouseOffset>().Shake(-direction, 0.5f, 0.2f);
+        if (muzzleFlashPrefab != null) GameObject.Instantiate(muzzleFlashPrefab, weaponVisual.transform.Find("fireOrigin"));
+        base.Attack(direction, position, ownerCore);
 
         attackTime = Time.time;
 
@@ -52,7 +52,7 @@ public class ProjectileWeapon : Weapon
             ProjectileBullet bullet = projectileGO.GetComponent<ProjectileBullet>();
 
             if (bullet != null)
-                bullet.Initialize(new BulletInfo(core, position, rotatedDirection, projectileSpeed, CalculateDamage(), projectileLifetime, elementBuildup, elementType, core.Faction));
+                bullet.Initialize(new BulletInfo(ownerCore,this, position, rotatedDirection, projectileSpeed, damage, projectileLifetime, elementBuildup, elementType, ownerCore.Faction));
         }
          if (weaponAnimator != null)
     {
@@ -63,9 +63,4 @@ public class ProjectileWeapon : Weapon
        
     }
 
-    public override float CalculateDamage()
-    {
-        float baseDamage = damage;
-        return baseDamage;
-    }
 }

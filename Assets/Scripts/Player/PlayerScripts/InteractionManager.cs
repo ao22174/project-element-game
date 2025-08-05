@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+#pragma warning disable CS8618
 public class InteractionManager : MonoBehaviour
 {
 

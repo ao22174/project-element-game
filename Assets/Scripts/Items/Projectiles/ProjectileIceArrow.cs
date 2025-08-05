@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 
 public class ProjectileIceArrow : Projectile
@@ -20,19 +21,24 @@ public class ProjectileIceArrow : Projectile
         IDamageable damageable = collision.GetComponentInParent<IDamageable>();
         if (damageable != null)
         {
-            core = collision.GetComponentInParent<Core>();
-            if (core == null) return;
-            if (core.Faction == Faction.Player && faction == Faction.Player) return;
-            if (core.Faction == Faction.Enemy && faction == Faction.Enemy) return;
-            damageable.TakeDamage(new DamageInfo(core, direction, element, false, faction, damage));
-
+            Core hitCore = collision.GetComponentInParent<Core>();
+            if (hitCore != null)
+            {
+                if (hitCore.Faction == Faction.Player && faction == Faction.Player) return;
+                if (hitCore.Faction == Faction.Enemy && faction == Faction.Enemy) return;
+                Debug.Log(collision.GetComponentInParent<Core>().Faction);
+                damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction,
+                 DamageCalculator.CalulateBuffDamage(ownerCore, damage, ElementProject.gameEnums.ElementType.Frost, hitCore), elementBuildup));
+            }
             Destroy(gameObject);
-            var freezeable = core.GetCoreComponent<Status>();// NEEDS TO BE CHANGED TO IFREEZABLE LATER ON
+            var freezeable = hitCore.GetCoreComponent<Status>();// NEEDS TO BE CHANGED TO IFREEZABLE LATER ON
             if (freezeable != null)
             {
-            freezeable.ApplyFreeze(duration);
+                freezeable.ApplyFreeze(duration);
             }
+
         }
+        
         
     }
    

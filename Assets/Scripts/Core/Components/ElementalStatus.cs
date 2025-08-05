@@ -15,49 +15,46 @@ public class ElementalStatus : CoreComponent
 
     private Dictionary<ElementType, ElementalBuildup> buildups = new();
     private ElementType currentAura = ElementType.None;
-    [SerializeField] GameObject waterIndicator;
     [SerializeField] private float buildupThreshold = 100f;
 
     private void Start()
     {
-        if (waterIndicator != null) waterIndicator.SetActive(false);
         currentAura = ElementType.None;
+        UIManager?.ShowElementalIndicator(false);
         buildups.Clear(); 
     }
-    private void Update()
-    {
-        if (currentAura != ElementType.None && waterIndicator != null)
-        {
-            waterIndicator.SetActive(true);
-        }
-        else
-        {
-            waterIndicator?.SetActive(false);
-        }
-    }
-    public void ApplyElementalBuildup(ElementType type, float amount)
+   
+    
+    public void ApplyElementalBuildup(ElementType type, float amount, Core sourceCore)
     {
         if (!buildups.ContainsKey(type) && type != ElementType.None)
+        
             buildups[type] = new ElementalBuildup { Amount = 0, DecayRate = 10f };
-
-        buildups[type].Amount += amount;
-
-        if (buildups[type].Amount >= buildupThreshold)
+            
+        if (buildups.ContainsKey(type))
         {
-            ApplyAura(type);
-            buildups[type].Amount = 0;
+            buildups[type].Amount += amount;
+
+            if (buildups[type].Amount >= buildupThreshold)
+            {
+                ApplyAura(type, sourceCore);
+                buildups[type].Amount = 0;
+            }
         }
+        
     }
 
-    private void ApplyAura(ElementType type)
+    private void ApplyAura(ElementType type, Core source)
     {
         if (currentAura != ElementType.None && currentAura != type)
         {
             Debug.Log($"Triggering reaction: {currentAura} + {type}");
-            UIManager?.ShowDamageNumber(ElementalReactionSystem.GetReactionName(currentAura,type), type);
+            UIManager?.ShowDamageNumber(ElementalReactionSystem.GetReactionName(currentAura, type), type);
 
-            ElementalReactionSystem.TryTriggerReaction(core, null, currentAura, type);
-             currentAura = ElementType.None;
+            ElementalReactionSystem.TryTriggerReaction(core, source, currentAura, type);
+            UIManager?.ShowElementalIndicator(false);
+
+            currentAura = ElementType.None;
         }
 
 
@@ -65,6 +62,9 @@ public class ElementalStatus : CoreComponent
         {
             currentAura = type;
             Debug.Log($"Aura applied: {type}");
+            UIManager?.SetElementIcon(type);
+            UIManager?.ShowElementalIndicator(true);
+            
         }
     }
 

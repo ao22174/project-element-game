@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-
+#pragma warning disable CS8618
 public class HeartDisplay : MonoBehaviour
 {
     public GameObject heartPrefab;

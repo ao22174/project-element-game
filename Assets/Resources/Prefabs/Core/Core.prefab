@@ -210,7 +210,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 220b2e2020067064d8188306040fbf51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterIndicator: {fileID: 0}
   buildupThreshold: 100
 --- !u!1 &7141430548755750403
 GameObject:
@@ -263,7 +262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71bc507e7d5ee884e8704bfecf63d327, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CoreData: {fileID: 11400000, guid: 163c5e5cb873eb241b8597a337b7907f, type: 2}
+  CoreData: {fileID: 0}
 --- !u!1 &7462070841275485235
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,6 +308,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heartDisplay: {fileID: 0}
+  weaponDisplay: {fileID: 0}
+  elementalIndicator: {fileID: 0}
+  elementIcons:
+  - element: 0
+    sprite: {fileID: 4474963689064364539, guid: 339c81cc168edc24e924e3d9832f93bf, type: 3}
+  - element: 1
+    sprite: {fileID: 1006458614444423011, guid: 9b094ea2edaf9f643b818baaff1c286c, type: 3}
+  - element: 2
+    sprite: {fileID: 2790452394573233772, guid: 8090640f0003fad4d9d0fb0c391251de, type: 3}
+  - element: 3
+    sprite: {fileID: 4448967390159473940, guid: b88096ca60ac4d84e89cbf652c61c616, type: 3}
+  - element: 5
+    sprite: {fileID: 4088848619650372737, guid: 315681f105b418642ad5a5c601ea089b, type: 3}
+  - element: 6
+    sprite: {fileID: 1637884734263498029, guid: f9cbb0f7b6982b340a680970ca0c5eba, type: 3}
+  - element: 4
+    sprite: {fileID: -5822339149007249051, guid: b8fc372c5f5df4245a7aa311fa578ecd, type: 3}
+  damageNumberPrefab: {fileID: 6658302305586224679, guid: d1c481caaf427d044a9b87cc2ab116ba, type: 3}
+  spriteRenderer: {fileID: 0}
+  defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  flashMaterial: {fileID: 2100000, guid: 6b685fc1580ec024ea444c0a723dee8a, type: 2}
+  flashDuration: 0.1
 --- !u!1 &7787225353081698131
 GameObject:
   m_ObjectHideFlags: 0
@@ -353,6 +374,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41f52d1de3ff6d34e8f02c98fcac04b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MaxHealth: 0
+  CurrentHealth: 0
+  baseAttack: 0
+  baseDefense: 0
+  baseCritRate: 0
+  baseCritMultiplier: 0
+  baseAttackSpeed: 0
+  baseMovementSpeed: 0
 --- !u!1 &8120217293108105170
 GameObject:
   m_ObjectHideFlags: 0

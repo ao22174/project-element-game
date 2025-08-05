@@ -22,7 +22,7 @@ public class WeaponData : ScriptableObject
     [SerializeField] public Sprite weaponIcon;
     [SerializeField] public int maxAmmo = 0;  // 0 means infinite ammo, >0 means limited ammo 
     [SerializeField] public float reloadTime = 0.5f; // Default reload time
-
+    [SerializeField] public float scaling = 1f;
     [SerializeField] public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
     
 }

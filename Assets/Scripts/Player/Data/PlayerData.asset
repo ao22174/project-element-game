@@ -46,12 +46,12 @@ MonoBehaviour:
   - element: 4
     bonus: 0
   baseMaxHealth: 100
-  baseAttack: 1
-  baseDefense: 1
+  baseAttack: 100
+  baseDefense: 100
   baseCritRate: 0
   baseCritMultiplier: 1
   baseAttackSpeed: 1
-  movementSpeed: 1.5
+  movementSpeed: 2
   dashSpeed: 4
-  dashCooldown: 1
-  dashDuration: 0.2
+  dashCooldown: 0.7
+  dashDuration: 0.3

@@ -23,9 +23,13 @@ public class State
     public virtual void Enter()
     {
         startTime = Time.time;
+                entity.anim.SetBool(animBoolName, true);
+
     }
     public virtual void Exit()
     {
+
+        entity.anim.SetBool(animBoolName, false);
 
     }
 
