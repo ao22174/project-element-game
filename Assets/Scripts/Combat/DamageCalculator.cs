@@ -13,8 +13,8 @@ public static class DamageCalculator
         float baseAttack = attackerStats.Attack;
         float weaponScaling = weapon.scaling;
         float weaponDamage = weapon.damage;
-        float critMultiplier = isCrit ? 1+ attackerStats.CritMultiplier : 1f;
-        float elementalBonus = 1+ attackerStats.GetDamageBonus(weapon.elementType);
+        float critMultiplier = isCrit ? 1 + attackerStats.CritMultiplier : 1f;
+        float elementalBonus = 1 + attackerStats.GetDamageBonus(weapon.elementType);
 
         float damageBeforeDefense = (baseAttack * weaponScaling + weaponDamage) * critMultiplier * elementalBonus;
 
@@ -85,7 +85,7 @@ public static class DamageCalculator
 
     public static float CalulateBuffDamage(Core attackerCore, float baseDamage, ElementType elementType, Core? defenderCore)
     {
-         float defenseScaling = 1000f;
+        float defenseScaling = 1000f;
         float buffAttackScaling = 0.5f;
         Stats attackerStats = attackerCore.GetCoreComponent<Stats>();
         Stats defenderStats = defenderCore?.GetCoreComponent<Stats>();
@@ -100,4 +100,22 @@ public static class DamageCalculator
         float finalDamage = buffDamage * defenseReduction;
         return finalDamage;
     }
+
+    public static float CalculateGenericDamage(Core attackerCore, float scaling, ElementType elementType, Core? defenderCore)
+    {
+        float defenseScaling = 1000f;
+        Stats attackerStats = attackerCore.GetCoreComponent<Stats>();
+        Stats defenderStats = defenderCore?.GetCoreComponent<Stats>();
+        float buffDamage = scaling* attackerStats.Attack * (attackerStats.GetDamageBonus(elementType) + 1);
+        float defenseReduction = 1f;
+        if (defenderStats != null)
+        {
+            float defense = defenderStats.Defense;
+            float resistance = defenderStats.GetResistance(elementType);
+            defenseReduction = (1 - (defense / (defense + defenseScaling))) * (1 - resistance);
+        }
+        float finalDamage = buffDamage * defenseReduction;
+        return finalDamage;
+    }
+
 }

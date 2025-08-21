@@ -27,7 +27,7 @@ public class ChargerWindup : State
         {
             charger.stateMachine.ChangeState(charger.chargeState);
         }
-        else if (playerDist > charger.chargerData.attackRange)
+        else if (playerDist > charger.chargerData.UnChargeRange)
         {
             charger.stateMachine.ChangeState(charger.idleState);
         }

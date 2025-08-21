@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     [SerializeField] public PlayerData playerData;
     [SerializeField] public AimController aimController { get; private set;   }
     [SerializeField]public WeaponHandler weaponHandler { get; private set; }
+    [SerializeField] public GameObject dust;
+    [SerializeField] public Transform dustSpawn;
 
     //Potentially replace with List of Weapons, for modularity in weapon amount
     public Core core { get; private set; }

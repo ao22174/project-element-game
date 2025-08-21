@@ -75,6 +75,9 @@ public class CoreData : ScriptableObject
     public float baseCritMultiplier = 1f;
     public float baseAttackSpeed = 1f;
 
+
     [Header("Movement Settings")]
     public float movementSpeed = 2f;
+    public bool canKnockback = true;
+    public bool canFreeze = true;
 }

@@ -6,7 +6,7 @@ public class BuffChest : MonoBehaviour, IInteractable
     [SerializeField] private Animator animator;
     [SerializeField] private AudioClip openSound;
     [SerializeField] private BuffSelectionUI buffSelectionUI;
-    private bool  isOpened;
+    private bool isOpened;
 
     public PlayerInputHandler inputHandler;
 
@@ -29,16 +29,18 @@ public class BuffChest : MonoBehaviour, IInteractable
 
     private void OpenChest()
     {
-        Debug.Log("Opening");
-    
-        animator?.SetTrigger("Open");
-
         if (openSound != null)
             AudioSource.PlayClipAtPoint(openSound, transform.position);
 
-
+        // Pass a callback to ShowBuffs that destroys the chest when buff is chosen
         buffSelectionUI.ShowBuffs(() =>
         {
+            animator?.SetTrigger("Open");
         });
+    }
+
+    public void OnDestroy()
+    {
+        Destroy(gameObject);
     }
 }

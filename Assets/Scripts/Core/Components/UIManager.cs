@@ -47,7 +47,7 @@ public class UIManager : CoreComponent
             float xOffset = UnityEngine.Random.Range(-0.1f, 0.1f);
             float yOffset = UnityEngine.Random.Range(-0.1f, 0.1f);
             Vector3 position = new Vector3(transform.position.x + xOffset, transform.position.y + yOffset, 0);
-            GameObject damageNumber = Instantiate(damageNumberPrefab, position, Quaternion.identity, transform);
+            GameObject damageNumber = Instantiate(damageNumberPrefab, position, Quaternion.identity);
             DamageDisplay display = damageNumber.GetComponent<DamageDisplay>();
             display.Show(amount, element);
         }

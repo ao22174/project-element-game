@@ -14,8 +14,10 @@ public class ChargerCharge : State
     {
         base.Enter();
         charger.canRotate = false;
+        charger.core.GetCoreComponent<Movement>().canKnockback = false;
         chargeDirection = (entity.player.position - entity.transform.position).normalized;
         charger.core.GetCoreComponent<Movement>().SetVelocity(charger.chargerData.chargeSpeed, chargeDirection);
+        charger.hurtbox.gameObject.SetActive(true);
         chargeStartTime = Time.time;
 
     }
@@ -23,6 +25,8 @@ public class ChargerCharge : State
     {
         base.Exit();
                 charger.canRotate = true;
+        charger.core.GetCoreComponent<Movement>().canKnockback = true;
+        charger.hurtbox.gameObject.SetActive(false);    
 
         charger.core.GetCoreComponent<Movement>().SetVelocityZero();
     }

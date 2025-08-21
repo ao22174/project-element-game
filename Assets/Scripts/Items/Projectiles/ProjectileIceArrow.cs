@@ -27,15 +27,16 @@ public class ProjectileIceArrow : Projectile
                 if (hitCore.Faction == Faction.Player && faction == Faction.Player) return;
                 if (hitCore.Faction == Faction.Enemy && faction == Faction.Enemy) return;
                 Debug.Log(collision.GetComponentInParent<Core>().Faction);
-                damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction,
-                 DamageCalculator.CalulateBuffDamage(ownerCore, damage, ElementProject.gameEnums.ElementType.Frost, hitCore), elementBuildup));
-            }
-            Destroy(gameObject);
-            var freezeable = hitCore.GetCoreComponent<Status>();// NEEDS TO BE CHANGED TO IFREEZABLE LATER ON
+                var freezeable = hitCore.GetCoreComponent<Status>();// NEEDS TO BE CHANGED TO IFREEZABLE LATER ON
             if (freezeable != null)
             {
                 freezeable.ApplyFreeze(duration);
             }
+            }
+            damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction,
+                 DamageCalculator.CalulateBuffDamage(ownerCore, damage, ElementProject.gameEnums.ElementType.Frost, hitCore), elementBuildup));
+            Destroy(gameObject);
+            
 
         }
         

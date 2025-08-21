@@ -26,14 +26,19 @@ public class Combat : CoreComponent, IDamageable
             Status?.ApplyElementalBuildup(info.element, info.elementBuildup, info.sourceCore);
         }
         UIManager?.ShowDamageNumber(info.amount, info.element);
-        UIManager?.Flash(); 
+        UIManager?.Flash();
         Debug.Log(info.sourceCore.Faction);
         info.sourceCore.GetCoreComponent<Buffs>().OnHitEnemy(info, gameObject);
+        if (core.GetCoreComponent<Movement>().canKnockback)
+        {
+                    core.GetCoreComponent<Movement>()?.Knockback(0.5f, info.direction);
+    
+        }
         Animator anim = GetComponentInParent<Animator>();
-if (anim != null)
-{
-    anim.SetTrigger("Hit");
-}
+        if (anim != null)
+        {
+            anim.SetTrigger("Hit");
+        }
         if (stats?.CurrentHealth < 0)
         {
             OnDeath?.Invoke(info);

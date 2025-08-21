@@ -78,10 +78,6 @@ public class MeleeHitbox : MonoBehaviour
                  weapon.elementBuildup));
             }
             else target.TakeDamage(new DamageInfo(attackerCore, dir, weapon.elementType, false, attackerCore.Faction, weapon.damage, weapon.elementBuildup));
-            if (other.attachedRigidbody != null)
-            {
-                other.attachedRigidbody.AddForce(dir * knockback, ForceMode2D.Impulse);
-            }
         }
     }
 }

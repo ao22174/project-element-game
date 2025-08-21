@@ -46,14 +46,16 @@ MonoBehaviour:
   - element: 4
     bonus: 0
   baseMaxHealth: 100
-  baseAttack: 1
-  baseDefense: 1
+  baseAttack: 100
+  baseDefense: 100
   baseCritRate: 0
   baseCritMultiplier: 1
   baseAttackSpeed: 1
   movementSpeed: 2
+  canKnockback: 1
+  canFreeze: 1
   enemyPrefab: {fileID: 945241946810748273, guid: a64f573bac6819447a5b18cd8a3b7114, type: 3}
-  elementType: 0
+  elementType: 7
   behaviourType: 0
   attackRange: 2
   usesProjectile: 0
@@ -86,3 +88,6 @@ MonoBehaviour:
   chargeWindupTime: 2
   chargeRestTime: 2
   chargeDuration: 1
+  chargeDamageScaling: 0.1
+  chargeBuildup: 0
+  UnChargeRange: 3

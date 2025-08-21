@@ -1,11 +1,20 @@
 using UnityEngine;
 using ElementProject.gameEnums;
 using UnityEditor.Animations;
+using Unity.Burst.Intrinsics;
 
 public enum HandsNeeded
 {
     OneHanded,
     TwoHanded
+}
+public enum Rarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary
 }
 
 [CreateAssetMenu(fileName = "WeaponData", menuName = "Scriptable Objects/WeaponData")]
@@ -13,6 +22,7 @@ public class WeaponData : ScriptableObject
 {
     [SerializeField] public string weaponName = "DefaultWeapon";
     [SerializeField] public int damage = 1;
+    [SerializeField] public Rarity rarity = Rarity.Common;
 
     [SerializeField] public int elementBuildup = 1;
     [SerializeField] public WeaponType weaponType;

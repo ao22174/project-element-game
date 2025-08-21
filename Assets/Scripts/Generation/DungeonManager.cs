@@ -10,28 +10,34 @@ using UnityEngine.Tilemaps;
 //PLANS, generate room, connect that room into system, choose a random door, generate next room, add these rooms 
 public class DungeonManager : MonoBehaviour
 {
-    [SerializeField]public RoomData[] Rooms;
-    [SerializeField]private bool startingRoomUsed = false;
-    [SerializeField]public List<RoomInstance> roomInstances = new List<RoomInstance>();
-    [SerializeField]public Dictionary<Vector2Int, RoomInstance> macroGrid = new();
+    [SerializeField] public RoomData[] Rooms;
+    [SerializeField] private bool startingRoomUsed = false;
+    [SerializeField] public List<RoomInstance> roomInstances = new List<RoomInstance>();
+    [SerializeField] public Dictionary<Vector2Int, RoomInstance> macroGrid = new();
 
-   [SerializeField] public Vector2Int macroGridSize = new Vector2Int(4, 4);
-    [SerializeField]public int roomCount = 8;
-    [SerializeField]public TileBase floorTile;
-    [SerializeField]public TileBase wallTile;
-    [SerializeField]public GameObject sideDoorObj;
+    [SerializeField] public Vector2Int macroGridSize = new Vector2Int(4, 4);
+    [SerializeField] public int roomCount = 8;
+    [SerializeField] public TileBase floorTile;
+    [SerializeField] public TileBase wallTileN;
+    [SerializeField] public TileBase wallTileS;
+    [SerializeField] public TileBase wallTileE;
 
-    [SerializeField]public RoomData startingRoom;
-    [SerializeField]public RoomData finalRoom;
-    [SerializeField]public GameObject doorObj;
-    [SerializeField]public List<RectInt> attemptedRoomBounds = new List<RectInt>();
-    [SerializeField]public int attempts;
-    [SerializeField]public GameObject hallwayUp;
-    [SerializeField]public GameObject hallwaySide;
-    [SerializeField]public TileBase doorVisualTile;
-    [SerializeField]public TileBase doorFrameTile;
+    [SerializeField] public TileBase wallTileW;
 
-    [SerializeField]public TileBase doorFrameTileSide;
+
+    [SerializeField] public GameObject sideDoorObj;
+
+    [SerializeField] public RoomData startingRoom;
+    [SerializeField] public RoomData finalRoom;
+    [SerializeField] public GameObject doorObj;
+    [SerializeField] public List<RectInt> attemptedRoomBounds = new List<RectInt>();
+    [SerializeField] public int attempts;
+    [SerializeField] public GameObject hallwayUp;
+    [SerializeField] public GameObject hallwaySide;
+    [SerializeField] public TileBase doorVisualTile;
+    [SerializeField] public TileBase doorFrameTile;
+
+    [SerializeField] public TileBase doorFrameTileSide;
     [SerializeField] public TileBase doorVisualTileSide;
     private int minX = int.MaxValue;
     private int maxX = int.MinValue;
@@ -125,7 +131,7 @@ public class DungeonManager : MonoBehaviour
                             floorMap.SetTile(tilePos, floorTile);
                             wallVisualMap.SetTile(tilePos, doorVisualTileSide);
                             wallMap.SetTile(tilePos, doorFrameTileSide);
-                            room    .prefab.doors.Add(newDoor.GetComponent<Door>());
+                            room.prefab.doors.Add(newDoor.GetComponent<Door>());
 
                             break;
                         default:
@@ -136,20 +142,142 @@ public class DungeonManager : MonoBehaviour
                 }
 
 
-                if (door.direction == DoorDirection.North) tilePos = new Vector3Int(localPos.x, localPos.y - 1, 0);
-                else if (door.direction == DoorDirection.East) tilePos = new Vector3Int(localPos.x - 1, localPos.y, 0);
-                else tilePos = new Vector3Int(localPos.x, localPos.y, 0);
+                if (door.direction == DoorDirection.North)
+                    tilePos = new Vector3Int(localPos.x, localPos.y - 1, 0);
+                else if (door.direction == DoorDirection.East)
+                    tilePos = new Vector3Int(localPos.x - 1, localPos.y, 0);
+                else
+                    tilePos = new Vector3Int(localPos.x, localPos.y, 0);
 
-
-                // Optionally clear the floor under the door
+                // Remove floor under the door
                 floorMap.SetTile(tilePos, null);
 
-                // Set wall tile
-                wallMap.SetTile(tilePos, wallTile);
+                // Set wall tile based on direction
+                switch (door.direction)
+                {
+                    case DoorDirection.North:
+                        wallMap.SetTile(tilePos, wallTileN);
+                        break;
+                    case DoorDirection.South:
+                        wallMap.SetTile(tilePos, wallTileS);
+                        break;
+                    case DoorDirection.East:
+                        wallMap.SetTile(tilePos, wallTileE);
+                        break;
+                    case DoorDirection.West:
+                        wallMap.SetTile(tilePos, wallTileW);
+                        break;
+                }
+
+                // Clear visual wall layer if needed
                 wallVisualMap.SetTile(tilePos, null);
             }
         }
     }
+    public RoomData treasureRoom;
+
+public void GenerateTreasureRoom()
+{
+    attempts = 0;
+    while (attempts < 200)
+    {
+        // Pick a random existing room, avoiding the starting room and boss room
+        RoomInstance randomRoom = roomInstances[Random.Range(1, roomInstances.Count)];
+
+        // Skip if it’s the final (boss) room
+        if (randomRoom.data == finalRoom)
+        {
+            attempts++;
+            continue;
+        }
+
+        // Skip if no unconnected doors
+        if (!randomRoom.HasUnconnectedDoor())
+        {
+            attempts++;
+            continue;
+        }
+
+        // Pick a random door
+        DoorAnchor randomDoor = randomRoom.doorAnchors[Random.Range(0, randomRoom.doorAnchors.Count)];
+
+        // If the chosen door is already connected, skip
+        if (randomDoor.isConnected)
+        {
+            attempts++;
+            continue;
+        }
+
+        Vector2Int targetMacroPos = randomRoom.macroGridPos + DoorDirToMacro(randomDoor);
+
+        // Skip if already occupied
+        if (macroGrid.ContainsKey(targetMacroPos))
+        {
+            attempts++;
+            continue;
+        }
+
+        // Ensure it’s not adjacent to the boss room
+        bool nearBoss = false;
+        foreach (Vector2Int offset in new Vector2Int[]
+        {
+            Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right
+        })
+        {
+            if (macroGrid.TryGetValue(targetMacroPos + offset, out RoomInstance neighbor))
+            {
+                if (neighbor.data == finalRoom)
+                {
+                    nearBoss = true;
+                    break;
+                }
+            }
+        }
+        if (nearBoss)
+        {
+            attempts++;
+            continue;
+        }
+
+        // Bounds check
+        DoorAnchor connectingDoor = treasureRoom.prefab.GetComponent<RoomPrefab>()
+            .GetDoor(OppositeDoor(randomDoor));
+
+        Vector2Int worldPos = CalculateNextSpawnPosition(randomDoor, treasureRoom);
+        RectInt bounds = new RectInt(worldPos.x, worldPos.y, treasureRoom.gridSize.x, treasureRoom.gridSize.y);
+
+        bool overlaps = false;
+        foreach (RoomInstance overlayedRoom in roomInstances)
+        {
+            if (overlayedRoom.bounds.Overlaps(bounds))
+            {
+                overlaps = true;
+                break;
+            }
+        }
+        if (overlaps)
+        {
+            attempts++;
+            continue;
+        }
+
+        // Instantiate treasure room
+        GameObject roomObj = Instantiate(treasureRoom.prefab, (Vector3Int)worldPos, Quaternion.identity);
+        randomDoor.isConnected = true;
+        DoorAnchor treasureDoor = roomObj.GetComponent<RoomPrefab>().GetDoor(OppositeDoor(randomDoor));
+        treasureDoor.isConnected = true;
+
+        // Spawn hallway
+        SpawnHallwayBetween(randomDoor, treasureDoor);
+
+        // Add to grid
+        RoomInstance currentRoom = new RoomInstance(treasureRoom, bounds, roomObj, targetMacroPos);
+        macroGrid[targetMacroPos] = currentRoom;
+        roomInstances.Add(currentRoom);
+        UpdateBounds(bounds);
+        break;
+    }
+}
 
     void SpawnHallwayBetween(DoorAnchor from, DoorAnchor to)
     {
@@ -295,6 +423,7 @@ public class DungeonManager : MonoBehaviour
             roomInstances.Add(currentRoom);
             UpdateBounds(bounds);
         }
+            GenerateTreasureRoom();
         GenerateFinalRoom();
 
     }

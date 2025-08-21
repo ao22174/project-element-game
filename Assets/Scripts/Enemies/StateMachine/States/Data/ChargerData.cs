@@ -9,4 +9,7 @@ public class ChargerData : EntityData
     public float chargeWindupTime;
     public float chargeRestTime;
     public float chargeDuration;
+    public float chargeDamageScaling;
+    public int chargeBuildup;
+    public float UnChargeRange;
 }

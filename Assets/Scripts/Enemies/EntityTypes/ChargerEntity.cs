@@ -8,6 +8,7 @@ public class ChargerEntity : Entity
     public ChargerWindup windupState;
     public ChargerRest restState;
     public ChargerAttackIdle attackIdleState;
+    public Collider2D hurtbox;
 
 
     public override void Start()

@@ -29,9 +29,10 @@ public class ProjectileBullet : Projectile
                 if (hitCore.Faction == Faction.Player && faction == Faction.Player) return;
                 if (hitCore.Faction == Faction.Enemy && faction == Faction.Enemy) return;
                 Debug.Log(collision.GetComponentInParent<Core>().Faction);
-                damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction, DamageCalculator.CalculateWeaponDamage(ownerCore, weapon, hitCore), elementBuildup));
 
             }
+            damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction, DamageCalculator.CalculateWeaponDamage(ownerCore, weapon, hitCore), elementBuildup));
+
                         Destroy(gameObject);
 
         }

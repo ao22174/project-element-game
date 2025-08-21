@@ -48,7 +48,10 @@ public class ProjectileWeapon : Weapon
             float angle = startingSpread + (spreadAngle * i) + UnityEngine.Random.Range(-randomSpread, randomSpread);
             Vector2 rotatedDirection = Utilities.RotateVector(direction, angle);
 
-            GameObject projectileGO = GameObject.Instantiate(projectilePrefab, position, Quaternion.identity);
+            float zRotation = Mathf.Atan2(rotatedDirection.y, rotatedDirection.x) * Mathf.Rad2Deg;
+Quaternion rot = Quaternion.Euler(0, 0, zRotation);
+
+GameObject projectileGO = GameObject.Instantiate(projectilePrefab, position, rot);
             ProjectileBullet bullet = projectileGO.GetComponent<ProjectileBullet>();
 
             if (bullet != null)

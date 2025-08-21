@@ -52,6 +52,8 @@ MonoBehaviour:
   baseCritMultiplier: 1
   baseAttackSpeed: 1
   movementSpeed: 2
+  canKnockback: 1
+  canFreeze: 1
   dashSpeed: 4
   dashCooldown: 0.7
   dashDuration: 0.3

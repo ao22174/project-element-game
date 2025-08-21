@@ -531,63 +531,6 @@ MonoBehaviour:
   defaultMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   flashMaterial: {fileID: 2100000, guid: 6b685fc1580ec024ea444c0a723dee8a, type: 2}
   flashDuration: 0.1
---- !u!1001 &385504167
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.7907038
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.1998677
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 261562482876880592, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2619298547949882643, guid: b5eb48e767948f54296199485109d87f, type: 3}
-      propertyPath: m_Name
-      value: StartRoom
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b5eb48e767948f54296199485109d87f, type: 3}
 --- !u!1 &447540550
 GameObject:
   m_ObjectHideFlags: 0
@@ -599,6 +542,7 @@ GameObject:
   - component: {fileID: 447540552}
   - component: {fileID: 447540551}
   - component: {fileID: 447540553}
+  - component: {fileID: 447540554}
   m_Layer: 0
   m_Name: TrainingDummy
   m_TagString: Untagged
@@ -714,6 +658,33 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.06390643}
   m_Radius: 0.07171893
+--- !u!50 &447540554
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447540550}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 6
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &477722094
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,15 +878,15 @@ Camera:
   m_LensShift: {x: 0, y: 0}
   m_NormalizedViewPortRect:
     serializedVersion: 2
-    x: 0.001843318
+    x: 0
     y: 0
-    width: 0.9953917
-    height: 1
+    width: 0.9990244
+    height: 0.9982669
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 1.640625
+  orthographic size: 2.25
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -940,7 +911,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 5, z: -9}
+  m_LocalPosition: {x: 3.87, y: 6.37, z: -9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -960,7 +931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
   m_AssetsPPU: 64
-  m_RefResolutionX: 320
+  m_RefResolutionX: 480
   m_RefResolutionY: 180
   m_CropFrame: 0
   m_GridSnapping: 2
@@ -1043,6 +1014,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ce46937f173a84997feb0e9abd68db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canKnockback: 0
 --- !u!1 &607901154
 GameObject:
   m_ObjectHideFlags: 0
@@ -1835,11 +1807,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7f93be7a3b203f542b4cf3c21135fef1, type: 2}
   - {fileID: 11400000, guid: 3a791ddb84574b84f917d266713a4e18, type: 2}
   - {fileID: 11400000, guid: 11fb136d278b71540a03013079c72e5f, type: 2}
+  - {fileID: 11400000, guid: c2eb1564862f2704da6ebf7c9e0195de, type: 2}
   startingRoomUsed: 0
   macroGridSize: {x: 4, y: 4}
   roomCount: 8
   floorTile: {fileID: 11400000, guid: 04dae90b2aff5094c8c73c5050fd86b7, type: 2}
-  wallTile: {fileID: 11400000, guid: 952657f0241fcd0449ad691ad9917e6a, type: 2}
+  wallTileN: {fileID: 11400000, guid: 1775a97b469257f489ce679ef8d8078f, type: 2}
+  wallTileS: {fileID: 11400000, guid: 8eefb7e09ac18874783f79d09efe4c39, type: 2}
+  wallTileE: {fileID: 11400000, guid: 25798d3e3edf27b40aaeffdb004a499e, type: 2}
+  wallTileW: {fileID: 11400000, guid: f28d69c5b7f5cba4aa5fe9d385a69875, type: 2}
   sideDoorObj: {fileID: 2506588567764297217, guid: b1133b6bc585ccc4fa339e2c18b7ff49, type: 3}
   startingRoom: {fileID: 11400000, guid: 7f93be7a3b203f542b4cf3c21135fef1, type: 2}
   finalRoom: {fileID: 11400000, guid: e4a556d9be296504487ff41f63d8bb67, type: 2}
@@ -1852,6 +1828,7 @@ MonoBehaviour:
   doorFrameTile: {fileID: 11400000, guid: 1828500062af64f4d8a2414e08221dfa, type: 2}
   doorFrameTileSide: {fileID: 11400000, guid: 142bb1b66be23554faed3f3f4bc88a78, type: 2}
   doorVisualTileSide: {fileID: 11400000, guid: c2cfe514d3b8c9b42adcf58c460d6ef6, type: 2}
+  treasureRoom: {fileID: 11400000, guid: 2cd7c1b3446a0dd418c42a7ad2c89a32, type: 2}
 --- !u!4 &1714846471
 Transform:
   m_ObjectHideFlags: 0
@@ -3030,4 +3007,3 @@ SceneRoots:
   - {fileID: 1320097823}
   - {fileID: 447540552}
   - {fileID: 1370922011}
-  - {fileID: 385504167}
