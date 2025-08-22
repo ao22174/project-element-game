@@ -1,6 +1,7 @@
 using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections.Generic;
 #pragma warning disable CS8618
 
 
@@ -24,6 +25,8 @@ public abstract class Entity : MonoBehaviour
     public Path path;
     public EnemySpawner enemySpawner;
     public bool canRotate = false;
+    public List<IAttackBehavior> attackBehaviors = new List<IAttackBehavior>();
+    public List<IStartupBehaviour> startupBehaviours = new List<IStartupBehaviour>();
 
     // --- ENEMY DYNAMIC INFO ---
 
@@ -32,7 +35,7 @@ public abstract class Entity : MonoBehaviour
         entityData = data;
         enemySpawner = spawner;
     }
-    private void Awake()
+    public virtual void Awake()
     {
         // --- ASSIGN STATE MACHINES ---
         stateMachine = new FiniteStateMachine();
@@ -45,6 +48,10 @@ public abstract class Entity : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         seeker = GetComponent<Seeker>();
         core = GetComponentInChildren<Core>();
+
+    // Collect behaviours automatically
+    attackBehaviors = new List<IAttackBehavior>(GetComponentsInChildren<IAttackBehavior>());
+    startupBehaviours = new List<IStartupBehaviour>(GetComponentsInChildren<IStartupBehaviour>());
     }
 
     public virtual void Start()
@@ -54,6 +61,11 @@ public abstract class Entity : MonoBehaviour
             InvokeRepeating("UpdatePath", 0f, 0.5f);
         core.GetCoreComponent<Combat>().OnDeath += OnDeath;
         core.GetCoreComponent<Combat>().OnTakeDamage += OnHit;
+
+        foreach (IStartupBehaviour startupBehaviour in startupBehaviours)
+        {
+            startupBehaviour.OnStart();
+        }
 
     }
 

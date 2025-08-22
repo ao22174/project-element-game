@@ -135,8 +135,9 @@ GameObject:
   - component: {fileID: 5032523951527142431}
   - component: {fileID: 908968518215865757}
   - component: {fileID: 3902803029256859272}
+  - component: {fileID: 3411414654189790338}
   m_Layer: 9
-  m_Name: Enemy
+  m_Name: SkellyGunner
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -349,9 +350,6 @@ MonoBehaviour:
   canRotate: 0
   spriteRenderer: {fileID: 2021464117515897585}
   shooterData: {fileID: 11400000, guid: 640044ee3e4017b40b8e9ddf7f1f4d6b, type: 2}
-  weaponHoldPoint: {fileID: 3755288677772689822}
-  weaponHandler: {fileID: 908968518215865757}
-  pivotPoint: {fileID: 2850163563625068701}
 --- !u!114 &908968518215865757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -386,6 +384,27 @@ SortingGroup:
   m_SortingLayer: 2
   m_SortingOrder: 2
   m_SortAtRoot: 0
+--- !u!114 &3411414654189790338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355907355030600115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e37e8b609843f446bfc962b025cad2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponHoldPoint: {fileID: 3755288677772689822}
+  weaponHandler: {fileID: 908968518215865757}
+  pivotPoint: {fileID: 2850163563625068701}
+  spriteRenderer: {fileID: 2021464117515897585}
+  useableWeapons:
+  - {fileID: 11400000, guid: 8c1083c69c6eeba4c93e927a503549e1, type: 2}
+  - {fileID: 11400000, guid: 03e401af124c0ca448ad0dda5fd3aa85, type: 2}
+  - {fileID: 11400000, guid: 90d7da3dd9d03f14886a9495e2de4ff1, type: 2}
+  ownerCore: {fileID: 4644664352088073285}
 --- !u!1 &4435104693657581548
 GameObject:
   m_ObjectHideFlags: 0

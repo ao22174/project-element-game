@@ -33,10 +33,10 @@ public override void Enter()
 
     public override void OnAttack()
     {
-        if (entity.EntityData.projectilePrefab == null) return;
-        Vector2 direction = (entity.player.position - entity.transform.position).normalized;
-        
-        chaser.weaponHandler.currentWeapon.Attack(direction, chaser.weaponHandler.fireOrigin.position,chaser.core ,chaser.weaponHandler.currentWeaponVisual);
+        foreach (IAttackBehavior attack in chaser.attackBehaviors)
+        {
+            attack.DoAttack();
+        }
         attackTime = Time.time;
         if (chaser != null)
             stateMachine.ChangeState(chaser.chaserAttackIdle);

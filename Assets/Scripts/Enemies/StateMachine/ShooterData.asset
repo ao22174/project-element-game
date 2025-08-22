@@ -50,8 +50,10 @@ MonoBehaviour:
   baseDefense: 1
   baseCritRate: 0
   baseCritMultiplier: 1
-  baseAttackSpeed: 0.1
+  baseAttackSpeed: 1
   movementSpeed: 1
+  canKnockback: 1
+  canFreeze: 1
   enemyPrefab: {fileID: 3355907355030600115, guid: a56b7f7a56f53b14abdbdea112ab8fac, type: 3}
   elementType: 0
   behaviourType: 3
@@ -83,7 +85,3 @@ MonoBehaviour:
   isBoss: 0
   phaseChangeHealthThreshold: 0.5
   minionsToSummon: []
-  useableWeapons:
-  - {fileID: 11400000, guid: 8c1083c69c6eeba4c93e927a503549e1, type: 2}
-  - {fileID: 11400000, guid: 03e401af124c0ca448ad0dda5fd3aa85, type: 2}
-  - {fileID: 11400000, guid: 90d7da3dd9d03f14886a9495e2de4ff1, type: 2}
