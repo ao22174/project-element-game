@@ -4,16 +4,17 @@ using UnityEditor.Rendering;
 public class Melt : Reaction
 {
     public override string ReactionName => "Melt";
-    public override float baseDamage => 20f;
+    public override float baseScaling => 0.2f;
     public Melt()
     {
 
     }
     public override void Apply(Core core, Core source = null)
     {
+        CombatStats stats = source.GetCoreComponent<Stats>().GetCombatStats(ElementType.Fire);
         core.GetCoreComponent<Combat>()?.TakeDamage(new DamageInfo
         {
-            amount =DamageCalculator.CalculateReactionDamage(source, this, core),
+            amount =DamageCalculator.CalculateReactionDamage(stats, baseScaling, ElementType.Fire, ElementType.Frost, core),
             element = ElementType.Fire,
             sourceCore = source
         });
@@ -21,7 +22,7 @@ public class Melt : Reaction
         {
             core.GetCoreComponent<Combat>()?.TakeDamage(new DamageInfo
             {
-                amount =DamageCalculator.CalculateReactionDamage(source, this, core),
+            amount =DamageCalculator.CalculateReactionDamage(stats, baseScaling, ElementType.Fire, ElementType.Frost, core),
                 element = ElementType.Fire,
                 sourceCore = source
             });

@@ -25,7 +25,7 @@ public class MeleeWeapon : Weapon
 
     }
 
-    public override void Attack(Vector2 direction, Vector2 position, Core ownerCore, GameObject? weaponVisual)
+    public override void Attack(Vector2 direction, Vector2 position, Core ownerCore,CombatStats combatStats, GameObject? weaponVisual)
     {
         if (!CanAttack(ownerCore)) return;
         if (weaponVisual == null)
@@ -51,7 +51,7 @@ public class MeleeWeapon : Weapon
  
         var meleeHitbox = hitboxObj.GetComponent<MeleeHitbox>();
         if (meleeHitbox != null)
-          meleeHitbox.ActivateHitbox(attackDelay, attackDuration,  knockbackForce, this, ownerCore);
+          meleeHitbox.ActivateHitbox(attackDelay, attackDuration,  knockbackForce, damageScaling, combatStats, elementType, elementBuildup, ownerCore);
 }
 
     

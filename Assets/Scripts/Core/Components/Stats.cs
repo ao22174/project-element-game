@@ -53,8 +53,9 @@ public class Stats : CoreComponent
     private float percentMovementSpeedBonus;
     public float MovementSpeed => (baseMovementSpeed + flatMovementSpeedBonus) * (1 + percentMovementSpeedBonus);
 
-    private Dictionary<ElementType, float> resistances;
-    private Dictionary<ElementType, float> damageBonuses;
+    private Dictionary<ElementType, float> resistances = new();
+    private Dictionary<ElementType, float> damageBonuses = new();
+
 
     protected override void Awake()
     {
@@ -81,6 +82,11 @@ public class Stats : CoreComponent
 
         resistances = data.resistances.ToDictionary(r => r.element, r => Mathf.Clamp01(r.res));
         damageBonuses = data.bonuses.ToDictionary(b => b.element, b => b.bonus);
+    }
+
+    public CombatStats GetCombatStats(ElementType element)
+    {
+        return new CombatStats(Attack, CritMultiplier, GetDamageBonus(element));
     }
 
     public void DecreaseHealth(float amount)

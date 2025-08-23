@@ -6,14 +6,14 @@ using ElementProject.gameEnums;
 public class ScaldReaction : Reaction
 {
     public override string ReactionName => "Scald";
-    public override float baseDamage => totalDamage;
-    float totalDamage;
+    public override float baseScaling => totalScaling;
+    float totalScaling;
     private float duration;
     private int ticks = 5; // Number of ticks
 
-    public ScaldReaction(float totalDamage, float duration)
+    public ScaldReaction(float totalScaling, float duration)
     {
-        this.totalDamage = totalDamage;
+        this.totalScaling = totalScaling;
         this.duration = duration;
     }
 
@@ -24,8 +24,10 @@ public class ScaldReaction : Reaction
 
     private IEnumerator ApplyScaldDoT(Core core, float duration, int ticks, Core source)
     {
+        CombatStats stats = source.GetCoreComponent<Stats>().GetCombatStats(ElementType.Fire);
+
         float tickInterval = duration / ticks;
-        float damagePerTick = DamageCalculator.CalculateReactionDamage(source, this, core) / ticks;
+        float damagePerTick = DamageCalculator.CalculateReactionDamage(stats, totalScaling/ticks, ElementType.Water, ElementType.Fire, core) / ticks;
         for (int i = 0; i < ticks; i++)
         {
             var combat = core.GetCoreComponent<Combat>();

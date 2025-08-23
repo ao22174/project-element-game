@@ -9,9 +9,11 @@ public class MeleeHitbox : MonoBehaviour
     private bool isActive = false;
 
     private float knockback;
-    private Weapon weapon;
+    private float damageScaling;
+    private CombatStats combatStats;
+    private ElementType elementType;
     private Core attackerCore;
-
+    private int elementBuildup;
     private HashSet<IDamageable> alreadyHit = new();
 
     private void Awake()
@@ -21,10 +23,13 @@ public class MeleeHitbox : MonoBehaviour
         hitboxCollider.enabled = false;
     }
 
-    public void ActivateHitbox(float delay, float duration, float knockback, Weapon weapon, Core attackerCore)
+    public void ActivateHitbox(float delay, float duration, float knockback, float damageScaling, CombatStats combatStats, ElementType elementType, int elementBuildup, Core attackerCore)
     {
         this.knockback = knockback;
-        this.weapon = weapon;
+        this.elementBuildup = elementBuildup;
+        this.damageScaling = damageScaling;
+        this.combatStats = combatStats;
+        this.elementType = elementType;
         this.attackerCore = attackerCore;
 
         alreadyHit.Clear(); // clear previous hits for this swing
@@ -71,13 +76,13 @@ public class MeleeHitbox : MonoBehaviour
                 target.TakeDamage(new DamageInfo
                 (attackerCore,
                 dir,
-                weapon.elementType,
+                elementType,
                 false,
                 attackerCore.Faction,
-                 DamageCalculator.CalculateWeaponDamage(attackerCore, weapon, hitCore),
-                 weapon.elementBuildup));
+                 DamageCalculator.CalculateGenericDamage(combatStats, damageScaling, elementType, hitCore),
+                 elementBuildup));
             }
-            else target.TakeDamage(new DamageInfo(attackerCore, dir, weapon.elementType, false, attackerCore.Faction, weapon.damage, weapon.elementBuildup));
+            else target.TakeDamage(new DamageInfo(attackerCore, dir, elementType, false, attackerCore.Faction,  DamageCalculator.CalculateGenericDamage(combatStats, damageScaling, elementType, hitCore), elementBuildup));
         }
     }
 }

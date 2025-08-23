@@ -9,14 +9,16 @@ public class Explosion : MonoBehaviour
     [SerializeField] private ElementType elementType = ElementType.Fire;
     [SerializeField] private LayerMask damageLayer;
     private Core sourceCore;
+    private CombatStats combatStats;
     
-    public void Initialize(Vector2 position, float explosionRadius, float explosionDamage, ElementType elementType, LayerMask damageLayer, Core source = null)
+    public void Initialize(Vector2 position, float explosionRadius, float explosionDamage, ElementType elementType, LayerMask damageLayer, CombatStats combatStats, Core source = null)
     {
         sourceCore = source;
         this.explosionRadius = explosionRadius;
         this.explosionDamage = explosionDamage;
         this.elementType = elementType;
         this.damageLayer = damageLayer;
+        this.combatStats = combatStats;
         Detonate(position);
     }
     void Detonate(Vector2 position)
@@ -35,7 +37,7 @@ public class Explosion : MonoBehaviour
 
             IDamageable damageable = hit.GetComponent<IDamageable>();
             if (damageable != null)
-                damageable.TakeDamage(new DamageInfo(sourceCore, Vector2.zero, elementType, false, sourceCore.Faction, DamageCalculator.CalulateBuffDamage(sourceCore, explosionDamage, ElementType.Fire, hitCore)));
+                damageable.TakeDamage(new DamageInfo(sourceCore, Vector2.zero, elementType, false, sourceCore.Faction, DamageCalculator.CalculateGenericDamage(combatStats, explosionDamage, ElementType.Fire, hitCore)));
                 
         }
         Destroy(gameObject, 0.5f);

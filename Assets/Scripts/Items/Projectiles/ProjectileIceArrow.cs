@@ -34,7 +34,7 @@ public class ProjectileIceArrow : Projectile
             }
             }
             damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction,
-                 DamageCalculator.CalulateBuffDamage(ownerCore, damage, ElementProject.gameEnums.ElementType.Frost, hitCore), elementBuildup));
+                 DamageCalculator.CalculateGenericDamage(combatStats,damageScaling , element, hitCore), elementBuildup));
             Destroy(gameObject);
             
 

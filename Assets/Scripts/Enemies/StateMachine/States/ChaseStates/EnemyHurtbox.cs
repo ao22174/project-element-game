@@ -22,11 +22,13 @@ public class EnemyHurtbox : MonoBehaviour
             {
                 if (hitCore.Faction == charger.core.Faction) return;
             }
+
+            CombatStats combatStats = charger.core.GetCoreComponent<Stats>().GetCombatStats(ElementProject.gameEnums.ElementType.None);
             damageable.TakeDamage(new DamageInfo(charger.core,
                 direction,
                 charger.chargerData.elementType,
                 false,
-                Faction.Enemy, DamageCalculator.CalculateGenericDamage(charger.core,
+                Faction.Enemy, DamageCalculator.CalculateGenericDamage(combatStats,
                  charger.chargerData.chargeDamageScaling, charger.chargerData.elementType,
                  collision.GetComponentInParent<Core>()),
                  charger.chargerData.chargeBuildup));

@@ -26,7 +26,7 @@ public class Missile : HomingProjectile
     private void Explode(Vector2 position)
     {
         Explosion explosion = Instantiate(explosionPrefab, transform.position, Quaternion.identity).GetComponent<Explosion>();
-        explosion.Initialize(position, 1f, damage, element, mask, ownerCore);
+        explosion.Initialize(position, 1f, damageScaling, element, mask,combatStats, ownerCore);
         
         Destroy(gameObject);
     }

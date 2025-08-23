@@ -1,4 +1,5 @@
 using System.Data.Common;
+using ElementProject.gameEnums;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -16,7 +17,8 @@ public class ATGBuff : Buff
 
         GameObject missileObj = Object.Instantiate(missileData.missile, target.transform.position, Quaternion.identity);
         Missile missile = missileObj.GetComponent<Missile>();
-        missile.Initialize(new BulletInfo(core, null, core.transform.position, Vector2.zero, 3f, 20f, 5f, 0, ElementProject.gameEnums.ElementType.Fire, core.Faction), enemy.transform);
+        CombatStats combatStats = core.GetCoreComponent<Stats>().GetCombatStats(ElementType.Fire);
+        missile.Initialize(new BulletInfo(core, combatStats, core.transform.position, Vector2.zero, 3f, 0.5f, 5f, 0, ElementType.Fire, core.Faction), enemy.transform);
 
     }
 }

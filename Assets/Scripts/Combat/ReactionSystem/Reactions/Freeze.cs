@@ -5,7 +5,7 @@ using System;
 public class FreezeReaction : Reaction
 {
     public override string ReactionName => "Freeze";
-    public override float baseDamage => 0f;
+    public override float baseScaling => 0f;
 
     private float duration;
 

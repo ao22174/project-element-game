@@ -21,7 +21,6 @@ public enum Rarity
 public class WeaponData : ScriptableObject
 {
     [SerializeField] public string weaponName = "DefaultWeapon";
-    [SerializeField] public int damage = 1;
     [SerializeField] public Rarity rarity = Rarity.Common;
 
     [SerializeField] public int elementBuildup = 1;
@@ -32,7 +31,7 @@ public class WeaponData : ScriptableObject
     [SerializeField] public Sprite weaponIcon;
     [SerializeField] public int maxAmmo = 0;  // 0 means infinite ammo, >0 means limited ammo 
     [SerializeField] public float reloadTime = 0.5f; // Default reload time
-    [SerializeField] public float scaling = 1f;
+    [SerializeField] public float damageScaling = 1f;
     [SerializeField] public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
     
 }

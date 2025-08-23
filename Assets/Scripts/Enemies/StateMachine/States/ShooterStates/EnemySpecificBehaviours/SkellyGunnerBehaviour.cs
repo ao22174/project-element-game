@@ -72,8 +72,8 @@ public class ShooterAttackBehaviour : MonoBehaviour, IAttackBehavior, IAimBehavi
     private void FireOneShot()
     {
         Vector2 direction = ((Vector2)target.position - (Vector2)weaponHoldPoint.position).normalized;
-        CombatStats stats = ownerCore.GetCoreComponent<Stats>().GetSnapshot();
-        weaponHandler.currentWeapon.Attack(direction, weaponHandler.fireOrigin.position, stats, ownerCore.Faction);
+        CombatStats combatStats = ownerCore.GetCoreComponent<Stats>().GetCombatStats(weaponHandler.currentWeapon.elementType);
+        weaponHandler.currentWeapon.Attack(direction, weaponHandler.fireOrigin.position, ownerCore,combatStats, weaponHandler.currentWeaponVisual);
     }
 
     // --- IStartupBehaviour ---

@@ -120,17 +120,18 @@ public class WeaponHandler : MonoBehaviour
     }
     public void Attack()
     {
+        CombatStats combatStats = core.GetCoreComponent<Stats>().GetCombatStats(currentWeapon.elementType);
         if (!canAttack) return;
         if (currentWeapon is MeleeWeapon meleeWeapon)
         {
-            meleeWeapon.Attack(transform.right, transform.position,core, currentWeaponVisual);
-            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damage, currentWeaponVisual.transform.right);
+            meleeWeapon.Attack(transform.right, transform.position,core, combatStats, currentWeaponVisual);
+            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damageScaling, currentWeaponVisual.transform.right);
 
         }
         else if (currentWeapon is ProjectileWeapon projectileWeapon)
         {
-            projectileWeapon.Attack(fireOrigin.right, fireOrigin.position,core, currentWeaponVisual);
-            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damage, fireOrigin.right);
+            projectileWeapon.Attack(fireOrigin.right, fireOrigin.position,core,combatStats, currentWeaponVisual);
+            core.GetCoreComponent<Buffs>().OnAttack(gameObject, currentWeapon.data.damageScaling, fireOrigin.right);
 
         }
         else

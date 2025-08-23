@@ -12,12 +12,12 @@ public enum OwnedBy
 
 public struct BulletInfo
 {
-    public Weapon? weapon;
+    public CombatStats combatStats;
     public Core ownerCore;
     public Vector2 startPosition;
     public Vector2 direction;
     public float speed;
-    public float damage;
+    public float damageScaling;
     public float lifetime;
     public int elementBuildup;
     public ElementType element;
@@ -25,22 +25,22 @@ public struct BulletInfo
 
     public BulletInfo(
         Core ownerCore,
-       Weapon? weapon,
+        CombatStats combatStats,
         Vector2 startPosition,
         Vector2 direction,
         float speed,
-        float damage,
+        float damageScaling,
         float lifetime,
         int elementBuildup,
         ElementType element,
         Faction faction)
     {
         this.ownerCore = ownerCore;
-        this.weapon = weapon;
+        this.combatStats = combatStats;
         this.startPosition = startPosition;
         this.direction = direction;
         this.speed = speed;
-        this.damage = damage;
+        this.damageScaling = damageScaling;
         this.lifetime = lifetime;
         this.elementBuildup = elementBuildup;
         this.element = element;
@@ -51,22 +51,22 @@ public abstract class Projectile : MonoBehaviour
 {
     protected Vector2 direction;
     protected float speed;
-    protected float damage;
+    protected CombatStats combatStats;
+    protected float damageScaling;
     protected int elementBuildup;
     protected float lifetime;
     protected ElementType element;
     protected Faction faction;
-    protected Weapon? weapon;
     protected Core ownerCore;
 
     public virtual void Initialize(BulletInfo info)
     {
-        weapon = info.weapon;
         ownerCore = info.ownerCore;
+        combatStats = info.combatStats;
         transform.position = info.startPosition;
         direction = info.direction.normalized;
         speed = info.speed;
-        damage = info.damage;
+        damageScaling = info.damageScaling;
         lifetime = info.lifetime;
         element = info.element;
         elementBuildup = info.elementBuildup;

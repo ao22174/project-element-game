@@ -7,7 +7,6 @@ using UnityEngine.Rendering;
 public abstract class Weapon
 {
     public WeaponData data;
-    public float damage;
     public int elementBuildup;
     public string Weaponname;
     protected WeaponType weaponType;
@@ -21,7 +20,7 @@ public abstract class Weapon
     public int maxAmmo;
     public float reloadTime = 0.5f; // Default reload time
     public HandsNeeded handsNeeded = HandsNeeded.OneHanded;
-    public float scaling;
+    public float damageScaling;
 
     float GetEffectiveCooldown(Core ownerCore)
     {
@@ -32,9 +31,8 @@ public abstract class Weapon
     public Weapon(WeaponData data)
     {
         this.data = data;
-        scaling = data.scaling;
+        damageScaling = data.damageScaling;
         Weaponname = data.weaponName;
-        damage = data.damage;
         weaponType = data.weaponType;
         elementType = data.elementType;
         cooldown = data.cooldown;
@@ -54,7 +52,7 @@ public abstract class Weapon
 
 
 
-    public virtual void Attack(Vector2 direction, Vector2 position, Core ownerCore, GameObject? weaponVisual = null)
+    public virtual void Attack(Vector2 direction, Vector2 position, Core ownerCore, CombatStats combatStats, GameObject? weaponVisual = null)
     {
         if (CanAttack(ownerCore))
         {

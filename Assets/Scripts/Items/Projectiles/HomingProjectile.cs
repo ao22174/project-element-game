@@ -6,25 +6,25 @@ public abstract class HomingProjectile : MonoBehaviour
 {
     protected Vector2 direction;
     protected float speed;
-    protected float damage;
+    protected float damageScaling;
     protected int elementBuildup;
     protected float lifetime;
     protected ElementType element;
     protected Faction faction;
-    protected Weapon? weapon;
     protected Core ownerCore;
     protected Transform? target;
+    protected CombatStats combatStats;
     [SerializeField] private float rotateSpeed = 200f;
     [SerializeField] private float targetSearchRadius = 10f;
 
     public virtual void Initialize(BulletInfo info, Transform? target)
     {
-        weapon = info.weapon;
         ownerCore = info.ownerCore;
+        combatStats = info.combatStats;
         transform.position = info.startPosition;
         direction = info.direction.normalized;
         speed = info.speed;
-        damage = info.damage;
+        damageScaling = info.damageScaling;
         lifetime = info.lifetime;
         element = info.element;
         elementBuildup = info.elementBuildup;

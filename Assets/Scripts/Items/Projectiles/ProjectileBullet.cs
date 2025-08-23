@@ -7,7 +7,7 @@ public class ProjectileBullet : Projectile
 
     protected override void HandleCollision(Collider2D collision)
     {
-            Debug.Log("Hit: " + collision.name);
+        Debug.Log("Hit: " + collision.name);
         if (collision.CompareTag("Structure"))
         {
             Destroy(gameObject);
@@ -31,9 +31,8 @@ public class ProjectileBullet : Projectile
                 Debug.Log(collision.GetComponentInParent<Core>().Faction);
 
             }
-            damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction, DamageCalculator.CalculateWeaponDamage(ownerCore, weapon, hitCore), elementBuildup));
-
-                        Destroy(gameObject);
+            damageable.TakeDamage(new DamageInfo(ownerCore, direction, element, false, faction, DamageCalculator.CalculateGenericDamage(combatStats, damageScaling, element, hitCore), elementBuildup));
+            Destroy(gameObject);
 
         }
 
