@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 using ElementProject.gameEnums;
+using System.Collections.Generic;
+using Unity.VisualScripting;
+
+[Serializable]
 
 public enum BehaviourType
 {
@@ -10,20 +14,14 @@ public enum BehaviourType
     Stationary,
 }
 
-[CreateAssetMenu(fileName = "NewEntityData", menuName = "Data/Enemy Data/Base Data")]
-public class EntityData : ScriptableObject
+public class EntityData : CoreData
 {
+    [Header("Entity Based Information")]
     [Header("Basic Info")]
-    public string entityName = "Enemy";
-    public GameObject enemyPrefab;
-    public ElementType elementType;
-    public BehaviourType behaviourType;
-    public RuntimeAnimatorController animator;
+    [SerializeField]public GameObject enemyPrefab;
+    [SerializeField]public ElementType elementType = ElementType.None;
+    [SerializeField]public BehaviourType behaviourType = BehaviourType.Wander;
 
-    [Header("Health & Combat")]
-    public float healthPoints = 10f;
-    public float damage = 1f;
-    public float attackCooldown = 1.5f;
     public float attackRange = 4f;
     public bool usesProjectile = true;
     public GameObject projectilePrefab;
@@ -31,7 +29,6 @@ public class EntityData : ScriptableObject
     public bool aimAtPlayer = true;
 
     [Header("Movement Settings")]
-    public float movementSpeed = 2f;
     public float wanderRadius = 5f;
     public float orbitDistance = 3f;
     public float chargeSpeed = 7f;
@@ -44,14 +41,17 @@ public class EntityData : ScriptableObject
     public float awarenessRadius = 6f;
     public bool canDodge = false;
     public bool usesLineOfSight = true;
+    public bool hasPathfinding = true;
 
     [Header("Effects & Audio")]
-    public GameObject deathEffectPrefab;
-    public AudioClip attackSFX;
-    public AudioClip deathSFX;
+    [SerializeField]public GameObject deathEffectPrefab;
+    [SerializeField]public AudioClip attackSFX;
+    [SerializeField]public AudioClip deathSFX;
+
+    [SerializeField]public GameObject iceCube;
 
     [Header("Collision & Environment")]
-    public LayerMask obstacleMask;
+    [SerializeField]public LayerMask obstacleMask;
     public bool stopAtWalls = true;
     public bool usesPathfinding = false;
 

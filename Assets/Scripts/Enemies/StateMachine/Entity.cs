@@ -1,76 +1,170 @@
-using System.Collections;
-using System.Collections.Generic;
+using Pathfinding;
 using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections.Generic;
+#pragma warning disable CS8618
 
-public class Entity : MonoBehaviour
+
+public abstract class Entity : MonoBehaviour
 {
-    public EntityData entityData;
+    //--- DATA OF ENEMY --- 
+    [SerializeField] private EntityData entityData;
+    public EntityData EntityData => entityData;
+
+    //--- STATE MACHINES --- 
+    public FiniteStateMachine attackStateMachine;
     public FiniteStateMachine stateMachine;
-    public Rigidbody2D rb { get; private set; }
-    public Animator anim { get; private set; }
-    public GameObject aliveGO { get; private set; }
-    public Transform player { get; private set; }
-    public WanderState wanderState;
-    public IdleState idleState;
-    public virtual void Start()
+
+    // --- ENEMY CORE ---
+    public Core core;
+    public Rigidbody2D rb { get; private set; } = null!;
+    public Animator anim { get; private set; } = null!;
+    public GameObject aliveGO { get; private set; } = null!;
+    public Transform player { get; private set; } = null!;
+    [SerializeField] private Seeker seeker;
+    public Path path;
+    public EnemySpawner enemySpawner;
+    public bool canRotate = false;
+    public List<IAttackBehavior> attackBehaviors = new List<IAttackBehavior>();
+    public List<IStartupBehaviour> startupBehaviours = new List<IStartupBehaviour>();
+
+    // --- ENEMY DYNAMIC INFO ---
+
+    public void InitializeEnemy(EntityData data, EnemySpawner spawner)
     {
+        entityData = data;
+        enemySpawner = spawner;
+    }
+    public virtual void Awake()
+    {
+        // --- ASSIGN STATE MACHINES ---
+        stateMachine = new FiniteStateMachine();
+        attackStateMachine = new FiniteStateMachine();
+
+        // --- ASSIGN CORE ---
         aliveGO = transform.Find("Alive").GameObject();
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        seeker = GetComponent<Seeker>();
+        core = GetComponentInChildren<Core>();
 
-        stateMachine = new FiniteStateMachine();
-        wanderState = new WanderState(this, stateMachine, "isWandering");
-        idleState = new IdleState(this, stateMachine, "isWandering");
-
-
-        stateMachine.Initialize(idleState);
+    // Collect behaviours automatically
+    attackBehaviors = new List<IAttackBehavior>(GetComponentsInChildren<IAttackBehavior>());
+    startupBehaviours = new List<IStartupBehaviour>(GetComponentsInChildren<IStartupBehaviour>());
     }
 
-    [HideInInspector] public Vector2 spawnPosition;
-    [HideInInspector] public Vector2 wanderDirection;
-
-    private void OnDrawGizmos()
+    public virtual void Start()
     {
-        if (entityData == null) return;
+        InitializeStates();
+        if (EntityData.usesPathfinding)
+            InvokeRepeating("UpdatePath", 0f, 0.5f);
+        core.GetCoreComponent<Combat>().OnDeath += OnDeath;
+        core.GetCoreComponent<Combat>().OnTakeDamage += OnHit;
 
-        // Draw detection radius
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, entityData.attackRange);
-
-        // Draw wander radius
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(spawnPosition != Vector2.zero ? spawnPosition : transform.position, entityData.wanderRadius);
-
-        // Draw LOS ray
-        if (player != null && entityData.usesLineOfSight)
+        foreach (IStartupBehaviour startupBehaviour in startupBehaviours)
         {
-            Vector2 dir = player.position - transform.position;
-            float dist = dir.magnitude;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, dir.normalized, dist, entityData.obstacleMask);
-            Gizmos.color = hit.collider == null ? Color.red : Color.gray;
-            Gizmos.DrawLine(transform.position, hit.collider == null ? player.position : hit.point);
+            startupBehaviour.OnStart();
         }
 
-        // If currently in WanderState, show next movement target
-        if (stateMachine != null && stateMachine.currentState is WanderState)
+    }
+
+
+    protected abstract void InitializeStates();
+
+    void UpdatePath()
+    {
+        if (player == null || seeker == null) return;
+        seeker.StartPath(transform.position, player.position, OnPathComplete);
+    }
+
+    public virtual void OnHit(DamageInfo info)
+    {
+        info.sourceCore.GetCoreComponent<Buffs>().OnHitEnemy(info, gameObject);
+    }
+
+    public virtual void OnDeath(DamageInfo info)
+    {
+        GameObject sourceObj = info.sourceCore.transform.parent.gameObject;
+        Faction faction = info.faction;
+        //CHANGE THAT 0f to overflow damage later
+        enemySpawner?.UpdateAlive(this);
+        CombatEvents.EnemyKilled(new EnemyDeathInfo(EntityData, sourceObj, faction, transform.position, GetType().Name, 0f));
+        Destroy(gameObject);
+
+    }
+
+    private void OnPathComplete(Path p)
+    {
+        if (!p.error)
         {
-            Gizmos.color = Color.yellow;
-            Vector2 destination = (Vector2)transform.position + wanderDirection.normalized * 1.5f;
-            Gizmos.DrawLine(transform.position, destination);
-            Gizmos.DrawSphere(destination, 0.1f);
+            path = p;
         }
     }
+    public bool PlayerInSight()
+    {
+        if (player == null ) return false;
+
+        float dist = Vector2.Distance(player.position, transform.position);
+        if (dist > EntityData.attackRange) return false;
+
+        if (EntityData.usesLineOfSight)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position,
+                                                player.position - transform.position,
+                                                dist,
+                                                EntityData.obstacleMask);
+            return hit.collider == null;
+        }
+        return true;
+    }
+
+
 
     public virtual void Update()
     {
-        stateMachine.currentState.LogicUpdate();
+        if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
+        if (stateMachine.currentState != null)
+        {
+            core.LogicUpdate();
+            stateMachine.currentState.LogicUpdate();
+        }
+        if (attackStateMachine.currentState != null)
+        {
+            attackStateMachine.currentState.LogicUpdate();
+        }
+        if (PlayerInSight() && canRotate)
+        {
+            lookAtPlayer();    
+        }
+    }
+
+    public void lookAtPlayer()
+    {
+        if (player.position.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else if (player.position.x <= transform.position.x)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
     public virtual void FixedUpdate()
     {
-        stateMachine.currentState.PhysicsUpdate();
+        if (core.GetCoreComponent<Status>()?.IsFrozen ?? false) return;
+        if (stateMachine.currentState != null)
+        {
+            core.LogicUpdate();
+            stateMachine.currentState.LogicUpdate();
+        }
+        if (attackStateMachine.currentState != null)
+        {
+            attackStateMachine.currentState.LogicUpdate();
+        }
+
+
     }
-    
+
 
 }

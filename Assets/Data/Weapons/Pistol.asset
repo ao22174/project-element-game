@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32e38537a08437b4293ad6459a81c3ac, type: 3}
+  m_Name: Pistol
+  m_EditorClassIdentifier: 
+  weaponName: Pistol
+  damage: 1
+  elementBuildup: 20
+  weaponType: 0
+  elementType: 4
+  cooldown: 0.75
+  weaponPrefab: {fileID: 7221176872778017528, guid: 1bc750a511254344385f47d0a567200e, type: 3}
+  weaponIcon: {fileID: 4319395737909131107, guid: 4d5b393b10811c34b87dae04a38978a1, type: 3}
+  maxAmmo: 15
+  reloadTime: 0.5
+  scaling: 0.3
+  handsNeeded: 0
+  projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
+  projectileSpeed: 3
+  projectileCount: 1
+  spreadAngle: 0
+  projectileLifetime: 5
+  RandomSpread: 10
+  muzzleFlashPrefab: {fileID: 1697633085251374671, guid: af42f970b363c6844b404303175b61a4, type: 3}

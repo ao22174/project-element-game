@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 920369ce1c42ae14da2033c8598b613f, type: 3}
+  m_Name: BossCoreData
+  m_EditorClassIdentifier: 
+  entityName: Enemy
+  animator: {fileID: 0}
+  faction: 2
+  resistances:
+  - element: 0
+    res: 0
+  - element: 3
+    res: 0
+  - element: 1
+    res: 0
+  - element: 5
+    res: 0
+  - element: 6
+    res: 0
+  - element: 2
+    res: 0
+  - element: 4
+    res: 0
+  bonuses:
+  - element: 0
+    bonus: 0
+  - element: 3
+    bonus: 0
+  - element: 1
+    bonus: 0
+  - element: 5
+    bonus: 0
+  - element: 6
+    bonus: 0
+  - element: 2
+    bonus: 0
+  - element: 4
+    bonus: 0
+  baseMaxHealth: 100
+  baseAttack: 1
+  baseDefense: 1
+  baseCritRate: 0
+  baseCritMultiplier: 1
+  baseAttackSpeed: 1
+  movementSpeed: 2
+  canKnockback: 1
+  canFreeze: 1

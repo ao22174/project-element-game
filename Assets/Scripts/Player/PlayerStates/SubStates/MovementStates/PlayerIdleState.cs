@@ -19,11 +19,15 @@ public class PlayerIdleState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        input = player.InputHandler.MovementInput;  
-        if(input != Vector2.zero)
+        input = player.InputHandler.MovementInput;
+        if (input != Vector2.zero)
         {
-           
+
             stateMachine.ChangeState(player.MoveState);
+        }
+        if(player.InputHandler.DashInput)
+        {
+            if(player.DashState.CheckIfCanDash()) stateMachine.ChangeState(player.DashState);
         }
 
     }

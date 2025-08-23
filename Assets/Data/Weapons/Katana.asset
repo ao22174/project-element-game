@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5781bc65eed40034387f6072e3c93e01, type: 3}
+  m_Name: Katana
+  m_EditorClassIdentifier: 
+  weaponName: Katana
+  damage: 30
+  elementBuildup: 0
+  weaponType: 1
+  elementType: 7
+  cooldown: 1
+  weaponPrefab: {fileID: 303288094847258326, guid: 4a2ed7525a826fc42a01d59d77cc4c31, type: 3}
+  weaponIcon: {fileID: 4089796923838250065, guid: 88a6f0c842b547d41bb2a38d83446ffb, type: 3}
+  maxAmmo: 0
+  reloadTime: 0.5
+  scaling: 1
+  handsNeeded: 1
+  attackRange: 1.5
+  attackDuration: 0.01
+  attackDelay: 0.01
+  knockbackForce: 2
+  comboCount: 1

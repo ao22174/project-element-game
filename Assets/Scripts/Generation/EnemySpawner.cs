@@ -1,35 +1,93 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-namespace ElementProject
+#pragma warning disable CS8618
+
+public class EnemySpawner : MonoBehaviour
 {
-    public class EnemySpawner : MonoBehaviour
+    [Serialize] public EntityData[] entityDatas;
+    public bool spawned = false;
+
+    public int Rounds;
+    public List<Entity> entities = new List<Entity>();
+    public int enemiesPerRound;
+    public int roundCount;
+    public GameObject chest;
+
+    RoomPrefab room;
+
+    void Start()
     {
-        [Serialize] public EntityData[] entityDatas;
-        public Vector2[] spawnPoints;
-        public bool spawned = false;
-        void Start()
+        room = gameObject.GetComponentInParent<RoomPrefab>();
+        spawned = false;
+        roundCount = 0;
+    }
+
+    void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player") && spawned == false)
         {
-            spawned = false;
+            foreach (Door door in room.doors)
+            {
+                door.Close();
+            }
+            SpawnEnemy(enemiesPerRound);
+            roundCount++;
+        }
+    }
+    public void UpdateAlive(Entity entity)
+    {
+        if (entities.Contains(entity)) entities.Remove(entity);
+        else Debug.Log("not part of this spawn");
+        if (entities.Count / enemiesPerRound < 0.67f && roundCount < Rounds)
+        {
+            SpawnEnemy(enemiesPerRound);
+            roundCount++;
         }
 
-        void OnTriggerEnter2D(UnityEngine.Collider2D collision)
+        if (roundCount >= Rounds && entities.Count == 0)
         {
-            Debug.Log("ENTRY");
-            if (collision.gameObject.CompareTag("Player") && spawned == false)
-            {
-                SpawnEnemy(10);
-            }
+            OnCompletion();
         }
-        public void SpawnEnemy(int numberOfEnemies)
+
+
+    }
+
+    public void OnCompletion()
+    {
+        foreach (Door door in room.doors)
         {
-            for (int i = 0; i < numberOfEnemies; i++)
-            {
-                Vector2 SpawnPosition = (Vector2)this.transform.position + new Vector2(UnityEngine.Random.Range(-4f, 4f), UnityEngine.Random.Range(-4f, 4f));
-                GameObject newSpawn = Instantiate(entityDatas[0].enemyPrefab, SpawnPosition, Quaternion.identity);
-                newSpawn.GetComponent<Entity>().entityData = entityDatas[0];
-            }
-            spawned = true;
+            door.Open();
         }
+        Instantiate(chest, transform);
+    }
+    public void SpawnEnemy(int numberOfEnemies)
+    {
+        Collider2D area = GetComponent<Collider2D>();
+        if (area == null)
+        {
+            Debug.LogWarning("EnemySpawner is missing a Collider2D!");
+            return;
+        }
+
+        Bounds bounds = area.bounds;
+
+        for (int i = 0; i < numberOfEnemies; i++)
+        {
+            Vector2 spawnPos = new Vector2(
+                UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+                UnityEngine.Random.Range(bounds.min.y, bounds.max.y)
+            );
+            int enemyChosen = UnityEngine.Random.Range(0, entityDatas.Length);
+
+            GameObject newSpawn = Instantiate(entityDatas[enemyChosen].enemyPrefab, spawnPos, Quaternion.identity);
+            Entity entity = newSpawn.GetComponent<Entity>();
+            entity.InitializeEnemy(entityDatas[enemyChosen], this);
+            entities.Add(entity);
+        }
+
+        spawned = true;
     }
 }

@@ -1,55 +1,69 @@
 using System;
 using ElementProject;
+using Unity.VisualScripting;
 using UnityEngine;
-
+#pragma warning disable CS8618
 
 public class ProjectileWeapon : Weapon
 {
-    Vector2 projectileSpawn;
     private ProjectileWeaponData projectileData;
     private int projectileCount;
     private float spreadAngle;
     private float projectileSpeed;
     private float projectileLifetime;
     private GameObject projectilePrefab;
-    public ProjectileWeapon(WeaponData data, Player? player) : base(data, player)
+    private float randomSpread;
+
+    private GameObject muzzleFlashPrefab;
+
+    public ProjectileWeapon(WeaponData data) : base(data)
     {
-       if (data is ProjectileWeaponData projData)
-        {
-            projectileData = projData;
-        }
-        else
-        {
-        throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
-        }
+        if (data is ProjectileWeaponData projData) projectileData = projData;
+        else throw new ArgumentException("WeaponData must be of type ProjectileWeaponData", nameof(data));
         projectileCount = projectileData.projectileCount;
         spreadAngle = projectileData.spreadAngle;
         projectileSpeed = projectileData.projectileSpeed;
         projectileLifetime = projectileData.projectileLifetime;
         projectilePrefab = projectileData.projectilePrefab;
+        randomSpread = projectileData.RandomSpread;
+        muzzleFlashPrefab = projectileData.muzzleFlashPrefab;
     }
 
-    public override void Attack(Vector2 direction)
+    public override void Attack(Vector2 direction, Vector2 position, Core ownerCore, CombatStats combatStats, GameObject weaponVisual)
     {
-        if (player == null)
-        {
-            Debug.Log("Player Does not exist");
-            return;
-        }
-        float startingSpread = -spreadAngle * (projectileCount-1)/2f;
-        projectileSpawn = player.GetFireOrigin().transform.position;
+
+        Debug.Log("attemping to attack");
+        if (!CanAttack(ownerCore)) return;
+        GameObject.FindObjectOfType<CameraMouseOffset>().Shake(-direction, 0.5f, 0.2f);
+        if (muzzleFlashPrefab != null) GameObject.Instantiate(muzzleFlashPrefab, weaponVisual.transform.Find("fireOrigin"));
+        base.Attack(direction, position, ownerCore, combatStats);
+
+        attackTime = Time.time;
+
+        float startingSpread = -spreadAngle * (projectileCount - 1) / 2f;
+
+
         for (int i = 0; i < projectileCount; i++)
         {
-            float angle = startingSpread + (spreadAngle * i);
+            float angle = startingSpread + (spreadAngle * i) + UnityEngine.Random.Range(-randomSpread, randomSpread);
             Vector2 rotatedDirection = Utilities.RotateVector(direction, angle);
-            GameObject projectileGO = GameObject.Instantiate(projectilePrefab, projectileSpawn, Quaternion.identity);
+
+            float zRotation = Mathf.Atan2(rotatedDirection.y, rotatedDirection.x) * Mathf.Rad2Deg;
+            Quaternion rot = Quaternion.Euler(0, 0, zRotation);
+
+            GameObject projectileGO = GameObject.Instantiate(projectilePrefab, position, rot);
             ProjectileBullet bullet = projectileGO.GetComponent<ProjectileBullet>();
-            Debug.DrawRay(projectileSpawn, direction * 5f, Color.red, 2f);
+
             if (bullet != null)
-            {
-                bullet.Initialize(projectileSpawn, rotatedDirection, projectileSpeed, damage, projectileLifetime);
-            }
+                bullet.Initialize(new BulletInfo(ownerCore, combatStats, position, rotatedDirection, projectileSpeed, damageScaling, projectileLifetime, elementBuildup, elementType, ownerCore.Faction));
         }
-        
+        if (weaponAnimator != null)
+        {
+            weaponAnimator.transform.localRotation = Quaternion.identity;
+            weaponAnimator.Play("WeaponRecoil", 0, 0f);
+            weaponAnimator.Update(0f); // Ensure it applies immediately
+        }
+
     }
+
 }

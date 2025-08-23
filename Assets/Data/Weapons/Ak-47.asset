@@ -12,14 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32e38537a08437b4293ad6459a81c3ac, type: 3}
   m_Name: Ak-47
   m_EditorClassIdentifier: 
-  weaponName: DefaultWeapon
+  weaponName: AK-47
   damage: 1
+  rarity: 0
+  elementBuildup: 20
   weaponType: 0
-  elementType: 0
-  cooldown: 0.1
+  elementType: 5
+  cooldown: 0.2
   weaponPrefab: {fileID: 1226723292048018740, guid: 4c6290bb9ece2cb44bcee409526703b2, type: 3}
-  projectilePrefab: {fileID: 3388336351717916793, guid: 20210f8c49d253b4cbe33bcacc37684a, type: 3}
-  projectileSpeed: 5
+  weaponIcon: {fileID: -3232310038938315753, guid: 97fcfc59767231c42bb96ab27a3846dd, type: 3}
+  maxAmmo: 30
+  reloadTime: 0.5
+  scaling: 0.2
+  handsNeeded: 1
+  projectilePrefab: {fileID: 6416496989605612797, guid: 1ff1760484618e649bc25ab0de708629, type: 3}
+  projectileSpeed: 4
   projectileCount: 1
   spreadAngle: 0
   projectileLifetime: 5
+  RandomSpread: 5
+  muzzleFlashPrefab: {fileID: 1697633085251374671, guid: af42f970b363c6844b404303175b61a4, type: 3}

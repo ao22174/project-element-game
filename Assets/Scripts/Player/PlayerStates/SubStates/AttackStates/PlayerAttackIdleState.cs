@@ -7,7 +7,6 @@ using UnityEngine;
         }
     public override void Enter()
     {
-        Debug.Log("enterintg IdleStateWeapon");
         base.Enter();
     }
     public override void Exit()
@@ -17,10 +16,13 @@ using UnityEngine;
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (player.InputHandler.FireInput && player.AttackState.CanFire())
+        if (player.InputHandler.FireInput)
         {
-            Debug.Log("Entering attack State");
             stateMachine.ChangeState(player.AttackState);
+        }
+        if (player.InputHandler.ReloadInput && player.weaponHandler.currentWeapon != null && player.weaponHandler.currentWeapon.ammoCount < player.weaponHandler.currentWeapon.maxAmmo)
+        {
+            player.weaponHandler.currentWeapon.Reload();
         }
     }
     public override void PhysicsUpdate()

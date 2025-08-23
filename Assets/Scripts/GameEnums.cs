@@ -18,6 +18,7 @@ namespace ElementProject.gameEnums
         Air,
         Frost,
         Lightning,
+        Nature,
         None,
     }
 }

@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: 444aa4f07ceeafa40bfd092cc06f4f01
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 821328880378602102
+    second: Bullwindup-Sheet_0
+  - first:
+      213: 312729559261727252
+    second: Bullwindup-Sheet_1
+  - first:
+      213: 1609817514932741233
+    second: Bullwindup-Sheet_2
+  - first:
+      213: 4270524216952407188
+    second: Bullwindup-Sheet_3
+  - first:
+      213: 2068027332569306791
+    second: Bullwindup-Sheet_4
+  - first:
+      213: -6559120861510905557
+    second: Bullwindup-Sheet_5
+  - first:
+      213: 2144550621726457428
+    second: Bullwindup-Sheet_6
+  - first:
+      213: 1371200721411902782
+    second: Bullwindup-Sheet_7
+  - first:
+      213: 4732297974604518330
+    second: Bullwindup-Sheet_8
+  - first:
+      213: -4860669429677079345
+    second: Bullwindup-Sheet_9
+  - first:
+      213: -2573292486432528507
+    second: Bullwindup-Sheet_10
+  - first:
+      213: 3795610195806719849
+    second: Bullwindup-Sheet_11
+  - first:
+      213: 205971492170972825
+    second: Bullwindup-Sheet_12
+  - first:
+      213: -4734239106499412341
+    second: Bullwindup-Sheet_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 64
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 14
+        width: 31
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6726cbed342f56b00800000000000000
+      internalID: 821328880378602102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 14
+        width: 31
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41a4f8290e9075400800000000000000
+      internalID: 312729559261727252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 143
+        y: 14
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 174a4ca2088375610800000000000000
+      internalID: 1609817514932741233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 208
+        y: 14
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 494c62c2623f34b30800000000000000
+      internalID: 4270524216952407188
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 14
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a6979fe6eb13bc10800000000000000
+      internalID: 2068027332569306791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 14
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b21d9c2045259f4a0800000000000000
+      internalID: -6559120861510905557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 396
+        y: 14
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45e39da9d69f2cd10800000000000000
+      internalID: 2144550621726457428
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 14
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3d048b8acb770310800000000000000
+      internalID: 1371200721411902782
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 525
+        y: 14
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab35a936fef7ca140800000000000000
+      internalID: 4732297974604518330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 590
+        y: 14
+        width: 30
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc44f7918ee6b8cb0800000000000000
+      internalID: -4860669429677079345
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 14
+        width: 29
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 587e1031e14d94cd0800000000000000
+      internalID: -2573292486432528507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 716
+        y: 14
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96f09e2fc57bca430800000000000000
+      internalID: 3795610195806719849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 14
+        width: 31
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99e35b81bf1cbd200800000000000000
+      internalID: 205971492170972825
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Bullwindup-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 14
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b8ef65f9d9a9c4eb0800000000000000
+      internalID: -4734239106499412341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Bullwindup-Sheet_0: 821328880378602102
+      Bullwindup-Sheet_1: 312729559261727252
+      Bullwindup-Sheet_10: -2573292486432528507
+      Bullwindup-Sheet_11: 3795610195806719849
+      Bullwindup-Sheet_12: 205971492170972825
+      Bullwindup-Sheet_13: -4734239106499412341
+      Bullwindup-Sheet_2: 1609817514932741233
+      Bullwindup-Sheet_3: 4270524216952407188
+      Bullwindup-Sheet_4: 2068027332569306791
+      Bullwindup-Sheet_5: -6559120861510905557
+      Bullwindup-Sheet_6: 2144550621726457428
+      Bullwindup-Sheet_7: 1371200721411902782
+      Bullwindup-Sheet_8: 4732297974604518330
+      Bullwindup-Sheet_9: -4860669429677079345
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
